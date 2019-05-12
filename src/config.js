@@ -33,15 +33,22 @@ const config = {
     mongo: {
       options: {
         db: {
-          safe: true
+          safe: true,
         }
+      },   
+      ssl: {
+        sslMode : true,
+        sslKeyPath : "/Users/lav/ssl/mongodb.pem",
+        sslCertPath : "/Users/lav/ssl/mongodb-cert.crt"        
       }
     }
   },
   test: { },
   development: {
     mongo: {
-      uri: 'mongodb://localhost/frozen-bo-dev',
+      uri: 'mongodb://food:maniac@51.254.221.25:27017/food_maniac_dev3',
+      uriLocal: 'mongodb://localhost/frozen-bo-dev',
+      uriRemote: 'mongodb://food:maniac@51.254.221.25:27017/food_maniac_dev3',
       options: {
         debug: true
       }
