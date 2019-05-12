@@ -36,13 +36,6 @@ const config = {
           safe: true,
         }
       },   
-      ssl: {
-        sslMode : true,
-        // sslKeyPath : "/Users/lav/ssl/mongodb.pem",
-        // sslCertPath : "/Users/lav/ssl/mongodb-cert.crt",
-        sslKeyPath : "/etc/ssl/mongodb.pem",
-        sslCertPath : "/etc/ssl/mongodb-cert.crt",      
-      }
     }
   },
   test: { },
@@ -53,14 +46,26 @@ const config = {
       uriRemote: 'mongodb://food:maniac@51.254.221.25:27017/food_maniac_dev3',
       options: {
         debug: true
-      }
+      },
+      ssl: {
+        sslMode : true,
+        sslKeyPath : "/Users/lav/ssl/mongodb.pem",
+        sslCertPath : "/Users/lav/ssl/mongodb-cert.crt",
+   
+      }      
     }
   },
   production: {
     ip: process.env.IP || undefined,
     port: process.env.PORT || 8080,
     mongo: {
-      uri: process.env.MONGODB_URI || 'mongodb://localhost/frozen-bo'
+      uri: 'mongodb://food:maniac@51.254.221.25:27017/food_maniac_dev3',
+      uriOld: process.env.MONGODB_URI || 'mongodb://localhost/frozen-bo',
+      ssl: {
+        sslMode : true,
+        sslKeyPath : "/etc/ssl/mongodb.pem",
+        sslCertPath : "/etc/ssl/mongodb-cert.crt",      
+      }
     }
   }
 }
