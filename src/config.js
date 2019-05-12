@@ -38,8 +38,10 @@ const config = {
       },   
       ssl: {
         sslMode : true,
-        sslKeyPath : "/Users/lav/ssl/mongodb.pem",
-        sslCertPath : "/Users/lav/ssl/mongodb-cert.crt"        
+        // sslKeyPath : "/Users/lav/ssl/mongodb.pem",
+        // sslCertPath : "/Users/lav/ssl/mongodb-cert.crt",
+        sslKeyPath : "/etc/ssl/mongodb.pem",
+        sslCertPath : "/etc/ssl/mongodb-cert.crt",      
       }
     }
   },
