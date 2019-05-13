@@ -1,4 +1,4 @@
-import { success, notFound } from '../../services/response/'
+import { success, notFound } from '../../services/response'
 import { Category } from '.'
 
 export const create = ({ bodymen: { body } }, res, next) =>

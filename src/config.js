@@ -32,6 +32,9 @@ const config = {
     jwtSecret: requireProcessEnv('JWT_SECRET'),
     mongo: {
       options: {
+        useNewUrlParser: true,
+        useFindAndModify: false,
+        useCreateIndex: true,
         db: {
           safe: true,
         }

@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events'
 import MongodbMemoryServer from 'mongodb-memory-server'
-import mongoose from '../src/services/mongoose'
+import { mongoose } from '../src/services/mongoose'
+
 
 EventEmitter.defaultMaxListeners = Infinity
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
@@ -32,7 +33,7 @@ beforeAll(async () => {
 })
 
 afterAll(async () => {
-  await mongoose.disconnect()
+  if( mongoose) await mongoose.disconnect()
   await mongoServer.stop()
 })
 
@@ -40,7 +41,7 @@ afterEach(async () => {
   const { collections } = mongoose.connection
   const promises = []
   Object.keys(collections).forEach((collection) => {
-    promises.push(collections[collection].remove())
+    promises.push(collections[collection].deleteMany())
   })
   await Promise.all(promises)
 })

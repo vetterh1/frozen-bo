@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 import MongodbMemoryServer from 'mongodb-memory-server'
-import mongoose from '../<%= srcDir %>/services/mongoose'
+import { mongoose } from '../<%= srcDir %>/services/mongoose'
 
 EventEmitter.defaultMaxListeners = Infinity
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000
