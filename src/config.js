@@ -44,14 +44,14 @@ const config = {
   test: { },
   development: {
     mongo: {
-      uri: 'mongodb://food:maniac@51.254.221.25:27017/food_maniac_dev3',
-      uriLocal: 'mongodb://localhost/frozen-bo-dev',
-      uriRemote: 'mongodb://food:maniac@51.254.221.25:27017/food_maniac_dev3',
+      uri: 'mongodb://frozen:gem@localhost/frozen-dev',
+      uriLocal: 'mongodb://localhost/frozen-dev',
+      uriRemote: 'mongodb://frozen:gem@51.254.221.25:27017/frozen-dev',
       options: {
         debug: true
       },
       ssl: {
-        sslMode : true,
+        sslMode : false,
         sslKeyPath : "/Users/lav/ssl/mongodb.pem",
         sslCertPath : "/Users/lav/ssl/mongodb-cert.crt",
    
@@ -62,8 +62,8 @@ const config = {
     ip: process.env.IP || undefined,
     port: process.env.PORT || 8080,
     mongo: {
-      uri: 'mongodb://food:maniac@51.254.221.25:27017/food_maniac_dev3',
-      uriOld: process.env.MONGODB_URI || 'mongodb://localhost/frozen-bo',
+      uri: 'mongodb://frozen:gem@51.254.221.25:27017/frozen',
+      uriOld: process.env.MONGODB_URI || 'mongodb://localhost/frozen',
       ssl: {
         sslMode : true,
         sslKeyPath : "/etc/ssl/mongodb.pem",
