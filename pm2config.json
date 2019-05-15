@@ -7,9 +7,8 @@
   
       // First application
       {
-        "name": "boFrozen",
-        "cwd": "/home/lve/workspace/frozen-bo/src",
-        "script": "/index.js",
+        "name"      : "boFrozen",
+        "script"    : "/home/lve/workspace/frozen-bo/src/index.js",
         "env": {
           "NODE_ENV": "development",
           "SERVER_NAME": "BoFrozen"
