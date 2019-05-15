@@ -24,6 +24,7 @@ mongo 51.254.221.25:27017/frozen-dev -u frozen -p gem --authenticationDatabase f
 Create user:
 curl -X POST http://0.0.0.0:9000/users -i -d "email=test@example.com&password=123456&access_token=S9EqDPByR2z5mnCMaRFk7b552RWaFcnn"
 curl -X POST http://51.254.221.25:8080/users -i -d "email=test@example.com&password=123456&access_token=S9EqDPByR2z5mnCMaRFk7b552RWaFcnn"
+curl -X POST http://0.0.0.0:9000/users -i -d "role=admin&email=admin@example.com&password=123456&access_token=S9EqDPByR2z5mnCMaRFk7b552RWaFcnn"
 
 
 Login user:
