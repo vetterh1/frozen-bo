@@ -8,7 +8,7 @@ import { schema } from './model'
 export Category, { schema } from './model'
 
 const router = new Router()
-const { name, label } = schema.tree
+const { name, label, id2 } = schema.tree
 
 /**
  * @api {post} /categories/initWithDefault Init categories with default list
@@ -21,7 +21,7 @@ const { name, label } = schema.tree
  * @apiError 401 admin access only.
  */
 router.post('/initWithDefault',
-  // token({ required: true, roles: ['admin'] }),
+  token({ required: true, roles: ['admin'] }),
   initWithDefault)
 
 /**
@@ -32,6 +32,7 @@ router.post('/initWithDefault',
  * @apiParam {String} access_token admin access token.
  * @apiParam name Category's name.
  * @apiParam label Category's label.
+ * @apiParam id2 Category's id2.
  * @apiSuccess {Object} category Category's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Category not found.
@@ -39,7 +40,7 @@ router.post('/initWithDefault',
  */
 router.post('/',
   token({ required: true, roles: ['admin'] }),
-  body({ name, label }),
+  body({ name, label, id2 }),
   create)
 
 /**
@@ -81,6 +82,7 @@ router.get('/:id',
  * @apiParam {String} access_token admin access token.
  * @apiParam name Category's name.
  * @apiParam label Category's label.
+ * @apiParam id2 Category's id2.
  * @apiSuccess {Object} category Category's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Category not found.
@@ -88,7 +90,7 @@ router.get('/:id',
  */
 router.put('/:id',
   token({ required: true, roles: ['admin'] }),
-  body({ name, label }),
+  body({ name, label, id2 }),
   update)
 
 /**

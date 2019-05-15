@@ -10,9 +10,9 @@ ssh lve@51.254.221.25
 
 # Connect on mongo (from app or db server):
 # as admin:
-mongo 51.254.221.25:27017/admin -u admin -p maniacPwd --authenticationDatabase admin --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
+mongo 51.254.221.25:27017/admin -u adminFrozen -p frozenPwd --authenticationDatabase admin --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
 # as regular user:
-mongo 51.254.221.25:27017/food_maniac -u food -p maniac --authenticationDatabase food_maniac --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
+mongo 51.254.221.25:27017/frozen-dev -u frozen -p gem --authenticationDatabase frozen-dev --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
 
 
 

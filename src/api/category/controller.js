@@ -16,7 +16,7 @@ export const initWithDefault = async (b, res, next) => {
     });
 
   } catch (err) {
-    console.error("err:", stringifyOnce(err));
+    // console.error("err:", stringifyOnce(err));
     await notFound(err);
     next(err);
   }
