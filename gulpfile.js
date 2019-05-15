@@ -9,6 +9,8 @@ var istanbul = require('gulp-istanbul');
 var plumber = require('gulp-plumber');
 var coveralls = require('gulp-coveralls');
 
+console.log("Gulp script...")
+
 gulp.task('lint', function () {
   return gulp.src('generators/!(templates)**/index.js')
     .pipe(excludeGitignore())

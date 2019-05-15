@@ -120,4 +120,9 @@ mongoose.connection.on('error', (err) => {
   process.exit(-1)
 })
 
+/* istanbul ignore next */
+mongoose.connection.on('connected', (status) => {
+  console.log('MongoDB connected: ' + status)
+})
+
 export { mongoose, options };
