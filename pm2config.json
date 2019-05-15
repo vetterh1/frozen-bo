@@ -1,0 +1,23 @@
+{
+    /**
+     * Application configuration section
+     * http://pm2.keymetrics.io/docs/usage/application-declaration/
+     */
+    "apps" : [
+  
+      // First application
+      {
+        "name"      : "boFrozen",
+        "script"    : "/home/lve/workspace/frozen-bo/src/index.js",
+        "env": {
+          "NODE_ENV": "development",
+          "SERVER_NAME": "BoFrozen"
+        },
+        "env_production" : {
+          "NODE_ENV": "production",
+          "SERVER_NAME": "BoFrozen"
+        }
+      }
+    ]
+  }
+  

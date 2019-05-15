@@ -5,4 +5,5 @@ git stash
 git pull
 rm -fr node_modules
 rm package-lock.json
-pm2 start src/index.js --name boFrozen --env production
+pm2 start pm2config.json --env production
+

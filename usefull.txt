@@ -11,7 +11,7 @@ ssh lve@51.254.221.25
 # Connect on mongo (from app or db server):
 # as admin:
 mongo 51.254.221.25:27017/admin -u adminFrozen -p frozenPwd --authenticationDatabase admin --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
-# as regular user:
+# as regular user (dev & prod):
 mongo 51.254.221.25:27017/frozen-dev -u frozen -p gem --authenticationDatabase frozen-dev --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
 mongo 51.254.221.25:27017/frozen -u frozen -p gem --authenticationDatabase frozen --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
 
@@ -49,7 +49,7 @@ use admin
 db.createUser({ user:"adminFrozen", pwd:"frozenPwd", roles:[{role:"root", db:"admin"}]})
 exit
 
-mongo -u adminFrozen -p frozenPwd --authenticationDatabase admin
+# Must create these users (admin & regular) for prod & dev dbs:
 use admin
 db.getUsers()
 use frozen-dev
