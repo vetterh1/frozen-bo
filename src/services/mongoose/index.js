@@ -15,6 +15,7 @@ import fs from 'fs';
 
 let sslOptions = {};
 
+/* istanbul ignore next */
 if(env !== "test") {
 
   // SSL to connect to mongo or not
@@ -94,13 +95,13 @@ const options = {
   reconnectInterval: 2000,
   bufferCommands: false, // Disable buffering of mongoose commands
   poolSize: 10, // Maintain up to 10 socket connections
-  user: 'food',
-  pass: 'maniac',
+  user: 'frozen',
+  pass: 'gem',
   ...sslOptions,
 };
 
 
-
+/* istanbul ignore next */
 Object.keys(mongo.options).forEach((key) => {
   mongoose.set(key, mongo.options[key])
 })

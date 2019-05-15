@@ -21,7 +21,7 @@ const { name, label, id2 } = schema.tree
  * @apiError 401 admin access only.
  */
 router.post('/initWithDefault',
-  token({ required: true, roles: ['admin'] }),
+  //token({ required: true, roles: ['admin'] }),
   initWithDefault)
 
 /**

@@ -1,7 +1,7 @@
 import { success, notFound } from '../../services/response'
 import { Category } from '.'
 import { defaultCharacteristics } from '../../utils/defaultCharacteristics'
-import stringifyOnce from '../../utils/stringifyOnce.js'
+// import stringifyOnce from '../../utils/stringifyOnce.js'
 
 
 export const initWithDefault = async (b, res, next) => {
@@ -15,8 +15,7 @@ export const initWithDefault = async (b, res, next) => {
       success(res, 201)(inserted); 
     });
 
-  } catch (err) {
-    // console.error("err:", stringifyOnce(err));
+  } catch (err) /* istanbul ignore next */ {
     await notFound(err);
     next(err);
   }
