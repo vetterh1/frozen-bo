@@ -4,6 +4,7 @@ import { signSync } from '../../services/jwt'
 import express from '../../services/express'
 import { User } from '../user'
 import routes, { Location } from '.'
+import { defaultCharacteristics } from '../../utils/defaultCharacteristics'
 
 const app = () => express(apiRoot, routes)
 
@@ -14,17 +15,30 @@ beforeEach(async () => {
   const admin = await User.create({ email: 'c@c.com', password: '123456', role: 'admin' })
   userSession = signSync(user.id)
   adminSession = signSync(admin.id)
-  location = await Location.create({})
+  location = await Location.create({name: 'test', label: 'test', id2: 'test'})
+})
+
+test('POST /locations/initWithDefault 201 (admin)', async () => {
+  const { status, body } = await request(app())
+    .post(`${apiRoot}/initWithDefault`)
+    .send({ access_token: adminSession })
+  expect(status).toBe(201)
+  expect(typeof body).toEqual('object')
+  expect(body.length).toEqual(defaultCharacteristics.locations.length);
+  const namesInResults = body.map(item => item.name).sort();
+  const namesInDefaults = defaultCharacteristics.locations.map(item => item.name).sort();
+  expect(namesInResults).toEqual(namesInDefaults);
 })
 
 test('POST /locations 201 (admin)', async () => {
   const { status, body } = await request(app())
     .post(`${apiRoot}`)
-    .send({ access_token: adminSession, name: 'test', label: 'test' })
+    .send({ access_token: adminSession, name: 'test', label: 'test', id2: 'test' })
   expect(status).toBe(201)
   expect(typeof body).toEqual('object')
   expect(body.name).toEqual('test')
   expect(body.label).toEqual('test')
+  expect(body.id2).toEqual('test')
 })
 
 test('POST /locations 401 (user)', async () => {
@@ -79,12 +93,13 @@ test('GET /locations/:id 404 (user)', async () => {
 test('PUT /locations/:id 200 (admin)', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${location.id}`)
-    .send({ access_token: adminSession, name: 'test', label: 'test' })
+    .send({ access_token: adminSession, name: 'test', label: 'test', id2: 'test' })
   expect(status).toBe(200)
   expect(typeof body).toEqual('object')
   expect(body.id).toEqual(location.id)
   expect(body.name).toEqual('test')
   expect(body.label).toEqual('test')
+  expect(body.id2).toEqual('test')
 })
 
 test('PUT /locations/:id 401 (user)', async () => {
@@ -103,7 +118,7 @@ test('PUT /locations/:id 401', async () => {
 test('PUT /locations/:id 404 (admin)', async () => {
   const { status } = await request(app())
     .put(apiRoot + '/123456789098765432123456')
-    .send({ access_token: adminSession, name: 'test', label: 'test' })
+    .send({ access_token: adminSession, name: 'test', label: 'test', id2: 'test' })
   expect(status).toBe(404)
 })
 

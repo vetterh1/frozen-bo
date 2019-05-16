@@ -3,7 +3,7 @@ import { Location } from '.'
 let location
 
 beforeEach(async () => {
-  location = await Location.create({ name: 'test', label: 'test' })
+  location = await Location.create({ name: 'test', label: 'test', id2: 'test' })
 })
 
 describe('view', () => {
@@ -13,6 +13,7 @@ describe('view', () => {
     expect(view.id).toBe(location.id)
     expect(view.name).toBe(location.name)
     expect(view.label).toBe(location.label)
+    expect(view.id2).toBe(location.id2)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
   })
@@ -23,6 +24,7 @@ describe('view', () => {
     expect(view.id).toBe(location.id)
     expect(view.name).toBe(location.name)
     expect(view.label).toBe(location.label)
+    expect(view.id2).toBe(location.id2)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
   })

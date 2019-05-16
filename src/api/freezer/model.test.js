@@ -3,7 +3,7 @@ import { Freezer } from '.'
 let freezer
 
 beforeEach(async () => {
-  freezer = await Freezer.create({ name: 'test', label: 'test' })
+  freezer = await Freezer.create({ name: 'test', label: 'test', id2: 'test' })
 })
 
 describe('view', () => {
@@ -12,6 +12,7 @@ describe('view', () => {
     expect(typeof view).toBe('object')
     expect(view.id).toBe(freezer.id)
     expect(view.name).toBe(freezer.name)
+    expect(view.id2).toBe(freezer.id2)
     expect(view.label).toBe(freezer.label)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
@@ -23,6 +24,7 @@ describe('view', () => {
     expect(view.id).toBe(freezer.id)
     expect(view.name).toBe(freezer.name)
     expect(view.label).toBe(freezer.label)
+    expect(view.id2).toBe(freezer.id2)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
   })

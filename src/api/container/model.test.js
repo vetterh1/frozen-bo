@@ -3,7 +3,7 @@ import { Container } from '.'
 let container
 
 beforeEach(async () => {
-  container = await Container.create({ name: 'test', label: 'test' })
+  container = await Container.create({ name: 'test', label: 'test', id2: 'test' })
 })
 
 describe('view', () => {
@@ -13,6 +13,7 @@ describe('view', () => {
     expect(view.id).toBe(container.id)
     expect(view.name).toBe(container.name)
     expect(view.label).toBe(container.label)
+    expect(view.id2).toBe(container.id2)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
   })
@@ -23,6 +24,7 @@ describe('view', () => {
     expect(view.id).toBe(container.id)
     expect(view.name).toBe(container.name)
     expect(view.label).toBe(container.label)
+    expect(view.id2).toBe(container.id2)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
   })

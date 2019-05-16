@@ -2,12 +2,26 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token } from '../../services/passport'
-import { create, index, show, update, destroy } from './controller'
+import { create, index, initWithDefault, show, update, destroy } from './controller'
 import { schema } from './model'
 export Location, { schema } from './model'
 
 const router = new Router()
-const { name, label } = schema.tree
+const { name, label, id2 } = schema.tree
+
+/**
+ * @api {post} /locations/initWithDefault Init locations with default list
+ * @apiName InitializeDefaultLocations
+ * @apiGroup Location
+ * @apiPermission admin
+ * @apiParam {String} access_token admin access token.
+ * @apiSuccess (Success 204) 204 No Content.
+ * @apiError 404 Location not found.
+ * @apiError 401 admin access only.
+ */
+router.post('/initWithDefault',
+  //token({ required: true, roles: ['admin'] }),
+  initWithDefault)
 
 /**
  * @api {post} /locations Create location
@@ -24,7 +38,7 @@ const { name, label } = schema.tree
  */
 router.post('/',
   token({ required: true, roles: ['admin'] }),
-  body({ name, label }),
+  body({ name, label, id2 }),
   create)
 
 /**
@@ -73,7 +87,7 @@ router.get('/:id',
  */
 router.put('/:id',
   token({ required: true, roles: ['admin'] }),
-  body({ name, label }),
+  body({ name, label, id2 }),
   update)
 
 /**

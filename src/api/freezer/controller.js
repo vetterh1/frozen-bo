@@ -1,5 +1,26 @@
 import { success, notFound } from '../../services/response/'
 import { Freezer } from '.'
+import { defaultCharacteristics } from '../../utils/defaultCharacteristics'
+// import stringifyOnce from '../../utils/stringifyOnce.js'
+
+
+export const initWithDefault = async (b, res, next) => {
+  try {
+    await Freezer.deleteMany();
+    let inserted = [];
+    const results = defaultCharacteristics.freezers.map( async (item) => {
+      inserted.push (await Freezer.create(item));
+    })
+    Promise.all(results).then( () => {
+      success(res, 201)(inserted); 
+    });
+
+  } catch (err) /* istanbul ignore next */ {
+    await notFound(err);
+    next(err);
+  }
+}
+
 
 export const create = ({ bodymen: { body } }, res, next) =>
   Freezer.create(body)

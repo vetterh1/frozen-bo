@@ -1,5 +1,26 @@
 import { success, notFound } from '../../services/response/'
 import { Container } from '.'
+import { defaultCharacteristics } from '../../utils/defaultCharacteristics'
+// import stringifyOnce from '../../utils/stringifyOnce.js'
+
+
+export const initWithDefault = async (b, res, next) => {
+  try {
+    await Container.deleteMany();
+    let inserted = [];
+    const results = defaultCharacteristics.containers.map( async (item) => {
+      inserted.push (await Container.create(item));
+    })
+    Promise.all(results).then( () => {
+      success(res, 201)(inserted); 
+    });
+
+  } catch (err) /* istanbul ignore next */ {
+    await notFound(err);
+    next(err);
+  }
+}
+
 
 export const create = ({ bodymen: { body } }, res, next) =>
   Container.create(body)

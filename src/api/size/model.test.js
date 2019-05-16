@@ -3,7 +3,7 @@ import { Size } from '.'
 let size
 
 beforeEach(async () => {
-  size = await Size.create({ name: 'test', label: 'test' })
+  size = await Size.create({ name: 'test', label: 'test', id2: 'test' })
 })
 
 describe('view', () => {
@@ -13,6 +13,7 @@ describe('view', () => {
     expect(view.id).toBe(size.id)
     expect(view.name).toBe(size.name)
     expect(view.label).toBe(size.label)
+    expect(view.id2).toBe(size.id2)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
   })
@@ -23,6 +24,7 @@ describe('view', () => {
     expect(view.id).toBe(size.id)
     expect(view.name).toBe(size.name)
     expect(view.label).toBe(size.label)
+    expect(view.id2).toBe(size.id2)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
   })

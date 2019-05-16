@@ -3,7 +3,7 @@ import { Color } from '.'
 let color
 
 beforeEach(async () => {
-  color = await Color.create({ name: 'test', label: 'test', parents: 'test' })
+  color = await Color.create({ name: 'test', label: 'test', id2: 'test', parents: 'test' })
 })
 
 describe('view', () => {
@@ -13,6 +13,7 @@ describe('view', () => {
     expect(view.id).toBe(color.id)
     expect(view.name).toBe(color.name)
     expect(view.label).toBe(color.label)
+    expect(view.id2).toBe(color.id2)
     expect(view.parents).toBe(color.parents)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
@@ -24,6 +25,7 @@ describe('view', () => {
     expect(view.id).toBe(color.id)
     expect(view.name).toBe(color.name)
     expect(view.label).toBe(color.label)
+    expect(view.id2).toBe(color.id2)
     expect(view.parents).toBe(color.parents)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()

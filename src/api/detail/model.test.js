@@ -3,7 +3,7 @@ import { Detail } from '.'
 let detail
 
 beforeEach(async () => {
-  detail = await Detail.create({ name: 'test', label: 'test', parents: 'test' })
+  detail = await Detail.create({ name: 'test', label: 'test', id2: 'test', parents: 'test' })
 })
 
 describe('view', () => {
@@ -13,6 +13,7 @@ describe('view', () => {
     expect(view.id).toBe(detail.id)
     expect(view.name).toBe(detail.name)
     expect(view.label).toBe(detail.label)
+    expect(view.id2).toBe(detail.id2)
     expect(view.parents).toBe(detail.parents)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
@@ -24,6 +25,7 @@ describe('view', () => {
     expect(view.id).toBe(detail.id)
     expect(view.name).toBe(detail.name)
     expect(view.label).toBe(detail.label)
+    expect(view.id2).toBe(detail.id2)
     expect(view.parents).toBe(detail.parents)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()

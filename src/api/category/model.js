@@ -6,7 +6,6 @@ const categorySchema = new Schema({
   label: { type: 'String', required: false },
   i18nName: Schema.Types.Mixed, // ex: i18n: {FR: 'Plat'}
   i18nLabel: Schema.Types.Mixed, // ex: i18n: {FR: 'Plat'}
-
 }, {
   timestamps: true, // adds createdAt and updatedAt
   toJSON: {

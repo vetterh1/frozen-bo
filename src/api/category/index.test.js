@@ -6,7 +6,6 @@ import { User } from '../user'
 import routes, { Category } from '.'
 import { defaultCharacteristics } from '../../utils/defaultCharacteristics'
 
-
 const app = () => express(apiRoot, routes)
 
 let userSession, adminSession, category
