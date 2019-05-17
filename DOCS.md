@@ -1,618 +1,711 @@
+<a name="top"></a>
 # frozen-bo v0.0.1
 
 
 
-- [Auth](#auth)
-	- [Authenticate](#authenticate)
-	- [Authenticate with Facebook](#authenticate-with-facebook)
-	- [Authenticate with Github](#authenticate-with-github)
-	- [Authenticate with Google](#authenticate-with-google)
+- [Auth](#Auth)
+	- [Authenticate](#Authenticate)
+	- [Authenticate with Facebook](#Authenticate-with-Facebook)
+	- [Authenticate with Github](#Authenticate-with-Github)
+	- [Authenticate with Google](#Authenticate-with-Google)
 	
-- [Category](#category)
-	- [Create category](#create-category)
-	- [Delete category](#delete-category)
-	- [Init categories with default list](#init-categories-with-default-list)
-	- [Retrieve categories](#retrieve-categories)
-	- [Retrieve category](#retrieve-category)
-	- [Update category](#update-category)
+- [Characteristics](#Characteristics)
+	- [Retrieve item characteristics](#Retrieve-item-characteristics)
 	
-- [Characteristics](#characteristics)
-	- [Retrieve item characteristics](#retrieve-item-characteristics)
+- [Item](#Item)
+	- [Create item](#Create-item)
+	- [Delete item](#Delete-item)
+	- [Retrieve item](#Retrieve-item)
+	- [Retrieve items](#Retrieve-items)
+	- [Update item](#Update-item)
 	
-- [Item](#item)
-	- [Create item](#create-item)
-	- [Delete item](#delete-item)
-	- [Retrieve item](#retrieve-item)
-	- [Retrieve items](#retrieve-items)
-	- [Update item](#update-item)
+- [PasswordReset](#PasswordReset)
+	- [Send email](#Send-email)
+	- [Submit password](#Submit-password)
+	- [Verify token](#Verify-token)
 	
-- [PasswordReset](#passwordreset)
-	- [Send email](#send-email)
-	- [Submit password](#submit-password)
-	- [Verify token](#verify-token)
+- [Size](#Size)
+	- [Create size](#Create-size)
+	- [Delete size](#Delete-size)
+	- [Init sizes with default list](#Init-sizes-with-default-list)
+	- [Retrieve size](#Retrieve-size)
+	- [Retrieve sizes](#Retrieve-sizes)
+	- [Update size](#Update-size)
 	
-- [Size](#size)
-	- [Create size](#create-size)
-	- [Delete size](#delete-size)
-	- [Init sizes with default list](#init-sizes-with-default-list)
-	- [Retrieve size](#retrieve-size)
-	- [Retrieve sizes](#retrieve-sizes)
-	- [Update size](#update-size)
+- [Test2](#Test2)
+	- [Create test 2](#Create-test-2)
+	- [Delete test 2](#Delete-test-2)
+	- [Retrieve test 2](#Retrieve-test-2)
+	- [Retrieve test 2 s](#Retrieve-test-2-s)
+	- [Update test 2](#Update-test-2)
 	
-- [Test2](#test2)
-	- [Create test 2](#create-test-2)
-	- [Delete test 2](#delete-test-2)
-	- [Retrieve test 2](#retrieve-test-2)
-	- [Retrieve test 2 s](#retrieve-test-2-s)
-	- [Update test 2](#update-test-2)
-	
-- [User](#user)
-	- [Create user](#create-user)
-	- [Delete user](#delete-user)
-	- [Retrieve current user](#retrieve-current-user)
-	- [Retrieve user](#retrieve-user)
-	- [Retrieve users](#retrieve-users)
-	- [Update password](#update-password)
-	- [Update user](#update-user)
+- [User](#User)
+	- [Create user](#Create-user)
+	- [Delete user](#Delete-user)
+	- [Retrieve current user](#Retrieve-current-user)
+	- [Retrieve user](#Retrieve-user)
+	- [Retrieve users](#Retrieve-users)
+	- [Update password](#Update-password)
+	- [Update user](#Update-user)
 	
 
+# <a name='Auth'></a> Auth
 
-# Auth
-
-## Authenticate
+## <a name='Authenticate'></a> Authenticate
+[Back to top](#top)
 
 
 
-	POST /auth
-
+```
+POST /auth
+```
 ### Headers
-
 | Name    | Type      | Description                          |
 |---------|-----------|--------------------------------------|
-| Authorization			| String			|  <p>Basic authorization with email and password.</p>							|
+| Authorization | String | <p>Basic authorization with email and password.</p>|
 
-### Parameters
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>Master access_token.</p> |
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>Master access_token.</p>							|
 
-## Authenticate with Facebook
+### Success 201
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| token | `String` | <p>User <code>access_token</code> to be passed to other requests.</p> |
+| user | `Object` | <p>Current user's data.</p> |
+## <a name='Authenticate-with-Facebook'></a> Authenticate with Facebook
+[Back to top](#top)
 
 
 
-	POST /auth/facebook
+```
+POST /auth/facebook
+```
 
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>Facebook user accessToken.</p> |
 
-### Parameters
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>Facebook user accessToken.</p>							|
+### Success 201
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| token | `String` | <p>User <code>access_token</code> to be passed to other requests.</p> |
+| user | `Object` | <p>Current user's data.</p> |
+## <a name='Authenticate-with-Github'></a> Authenticate with Github
+[Back to top](#top)
 
-## Authenticate with Github
 
 
+```
+POST /auth/github
+```
 
-	POST /auth/github
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>Github user accessToken.</p> |
 
 
-### Parameters
+### Success 201
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| token | `String` | <p>User <code>access_token</code> to be passed to other requests.</p> |
+| user | `Object` | <p>Current user's data.</p> |
+## <a name='Authenticate-with-Google'></a> Authenticate with Google
+[Back to top](#top)
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>Github user accessToken.</p>							|
 
-## Authenticate with Google
 
+```
+POST /auth/google
+```
 
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>Google user accessToken.</p> |
 
-	POST /auth/google
 
+### Success 201
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| token | `String` | <p>User <code>access_token</code> to be passed to other requests.</p> |
+| user | `Object` | <p>Current user's data.</p> |
+# <a name='Characteristics'></a> Characteristics
 
-### Parameters
+## <a name='Retrieve-item-characteristics'></a> Retrieve item characteristics
+[Back to top](#top)
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>Google user accessToken.</p>							|
 
-# Category
 
-## Create category
+```
+GET /characteristics
+```
 
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>user access token.</p> |
 
 
-	POST /categories
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| itemCharacteristics | `Object[]` | <p>List of item characteristics.</p> |
+# <a name='Item'></a> Item
 
+## <a name='Create-item'></a> Create item
+[Back to top](#top)
 
-### Parameters
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| name			| 			|  <p>Category's name.</p>							|
-| label			| 			|  <p>Category's label.</p>							|
-| id2			| 			|  <p>Category's id2.</p>							|
 
-## Delete category
+```
+POST /items
+```
 
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>user access token.</p> |
+| category | `` | <p>Item's category.</p> |
+| details | `` | <p>Item's details.</p> |
+| container | `` | <p>Item's container.</p> |
+| color | `` | <p>Item's color.</p> |
+| size | `` | <p>Item's size.</p> |
+| freezer | `` | <p>Item's freezer.</p> |
+| location | `` | <p>Item's location.</p> |
+| name | `` | <p>Item's name.</p> |
+| expiration | `` | <p>Item's expiration.</p> |
+
 
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| item | `Object` | <p>Item's data.</p> |
+## <a name='Delete-item'></a> Delete item
+[Back to top](#top)
 
-	DELETE /categories/:id
 
 
-### Parameters
+```
+DELETE /items/:id
+```
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>user access token.</p> |
 
-## Init categories with default list
 
+### Success 204
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| 204 | `` | <p>No Content.</p> |
+## <a name='Retrieve-item'></a> Retrieve item
+[Back to top](#top)
 
 
-	POST /categories/initWithDefault
 
+```
+GET /items/:id
+```
 
-### Parameters
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>user access token.</p> |
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
 
-## Retrieve categories
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| item | `Object` | <p>Item's data.</p> |
+## <a name='Retrieve-items'></a> Retrieve items
+[Back to top](#top)
 
 
 
-	GET /categories
+```
+GET /items
+```
 
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>user access token.</p> |
+| q | `String` | **optional**<p>Query to search.</p> |
+| page | `Number` | **optional**<p>Page number.</p>_Default value: 1_<br>_Size range: 1..30_<br> |
+| limit | `Number` | **optional**<p>Amount of returned items.</p>_Default value: 30_<br>_Size range: 1..100_<br> |
+| sort | `String[]` | **optional**<p>Order of returned items.</p>_Default value: -createdAt_<br> |
+| fields | `String[]` | **optional**<p>Fields to be returned.</p> |
 
-### Parameters
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-| q			| String			| **optional** <p>Query to search.</p>							|
-| page			| Number			| **optional** <p>Page number.</p>							|
-| limit			| Number			| **optional** <p>Amount of returned items.</p>							|
-| sort			| String[]			| **optional** <p>Order of returned items.</p>							|
-| fields			| String[]			| **optional** <p>Fields to be returned.</p>							|
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| items | `Object[]` | <p>List of items.</p> |
+## <a name='Update-item'></a> Update item
+[Back to top](#top)
 
-## Retrieve category
 
 
+```
+PUT /items/:id
+```
 
-	GET /categories/:id
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>user access token.</p> |
+| category | `` | <p>Item's category.</p> |
+| details | `` | <p>Item's details.</p> |
+| container | `` | <p>Item's container.</p> |
+| color | `` | <p>Item's color.</p> |
+| size | `` | <p>Item's size.</p> |
+| freezer | `` | <p>Item's freezer.</p> |
+| location | `` | <p>Item's location.</p> |
+| name | `` | <p>Item's name.</p> |
+| expiration | `` | <p>Item's expiration.</p> |
 
 
-### Parameters
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| item | `Object` | <p>Item's data.</p> |
+# <a name='PasswordReset'></a> PasswordReset
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
+## <a name='Send-email'></a> Send email
+[Back to top](#top)
 
-## Update category
 
 
+```
+POST /password-resets
+```
 
-	PUT /categories/:id
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| email | `String` | <p>Email address to receive the password reset token.</p> |
+| link | `String` | <p>Link to redirect user.</p> |
 
 
-### Parameters
+### Success 202
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| 202 | `` | <p>Accepted.</p> |
+## <a name='Submit-password'></a> Submit password
+[Back to top](#top)
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| name			| 			|  <p>Category's name.</p>							|
-| label			| 			|  <p>Category's label.</p>							|
-| id2			| 			|  <p>Category's id2.</p>							|
 
-# Characteristics
 
-## Retrieve item characteristics
+```
+PUT /password-resets/:token
+```
 
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| password | `String` | <p>User's new password.</p>_Size range: 6.._<br> |
 
 
-	GET /characteristics
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| user | `Object` | <p>User's data.</p> |
+## <a name='Verify-token'></a> Verify token
+[Back to top](#top)
 
 
-### Parameters
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
+```
+GET /password-resets/:token
+```
 
-# Item
 
-## Create item
 
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| token | `String` | <p>Password reset token.</p> |
+| user | `Object` | <p>User's data.</p> |
+# <a name='Size'></a> Size
 
+## <a name='Create-size'></a> Create size
+[Back to top](#top)
 
-	POST /items
 
 
-### Parameters
+```
+POST /sizes
+```
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-| category			| 			|  <p>Item's category.</p>							|
-| details			| 			|  <p>Item's details.</p>							|
-| container			| 			|  <p>Item's container.</p>							|
-| color			| 			|  <p>Item's color.</p>							|
-| size			| 			|  <p>Item's size.</p>							|
-| freezer			| 			|  <p>Item's freezer.</p>							|
-| location			| 			|  <p>Item's location.</p>							|
-| name			| 			|  <p>Item's name.</p>							|
-| expiration			| 			|  <p>Item's expiration.</p>							|
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>admin access token.</p> |
+| name | `` | <p>Size's name.</p> |
+| label | `` | <p>Size's label.</p> |
 
-## Delete item
 
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| size | `Object` | <p>Size's data.</p> |
+## <a name='Delete-size'></a> Delete size
+[Back to top](#top)
 
 
-	DELETE /items/:id
 
+```
+DELETE /sizes/:id
+```
 
-### Parameters
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>admin access token.</p> |
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
 
-## Retrieve item
+### Success 204
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| 204 | `` | <p>No Content.</p> |
+## <a name='Init-sizes-with-default-list'></a> Init sizes with default list
+[Back to top](#top)
 
 
 
-	GET /items/:id
+```
+POST /sizes/initWithDefault
+```
 
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>admin access token.</p> |
 
-### Parameters
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
+### Success 204
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| 204 | `` | <p>No Content.</p> |
+## <a name='Retrieve-size'></a> Retrieve size
+[Back to top](#top)
 
-## Retrieve items
 
 
+```
+GET /sizes/:id
+```
 
-	GET /items
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>user access token.</p> |
 
 
-### Parameters
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| size | `Object` | <p>Size's data.</p> |
+## <a name='Retrieve-sizes'></a> Retrieve sizes
+[Back to top](#top)
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-| q			| String			| **optional** <p>Query to search.</p>							|
-| page			| Number			| **optional** <p>Page number.</p>							|
-| limit			| Number			| **optional** <p>Amount of returned items.</p>							|
-| sort			| String[]			| **optional** <p>Order of returned items.</p>							|
-| fields			| String[]			| **optional** <p>Fields to be returned.</p>							|
 
-## Update item
 
+```
+GET /sizes
+```
 
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>user access token.</p> |
+| q | `String` | **optional**<p>Query to search.</p> |
+| page | `Number` | **optional**<p>Page number.</p>_Default value: 1_<br>_Size range: 1..30_<br> |
+| limit | `Number` | **optional**<p>Amount of returned items.</p>_Default value: 30_<br>_Size range: 1..100_<br> |
+| sort | `String[]` | **optional**<p>Order of returned items.</p>_Default value: -createdAt_<br> |
+| fields | `String[]` | **optional**<p>Fields to be returned.</p> |
 
-	PUT /items/:id
 
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| sizes | `Object[]` | <p>List of sizes.</p> |
+## <a name='Update-size'></a> Update size
+[Back to top](#top)
 
-### Parameters
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-| category			| 			|  <p>Item's category.</p>							|
-| details			| 			|  <p>Item's details.</p>							|
-| container			| 			|  <p>Item's container.</p>							|
-| color			| 			|  <p>Item's color.</p>							|
-| size			| 			|  <p>Item's size.</p>							|
-| freezer			| 			|  <p>Item's freezer.</p>							|
-| location			| 			|  <p>Item's location.</p>							|
-| name			| 			|  <p>Item's name.</p>							|
-| expiration			| 			|  <p>Item's expiration.</p>							|
 
-# PasswordReset
+```
+PUT /sizes/:id
+```
 
-## Send email
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>admin access token.</p> |
+| name | `` | <p>Size's name.</p> |
+| label | `` | <p>Size's label.</p> |
 
 
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| size | `Object` | <p>Size's data.</p> |
+# <a name='Test2'></a> Test2
 
-	POST /password-resets
+## <a name='Create-test-2'></a> Create test 2
+[Back to top](#top)
 
 
-### Parameters
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| email			| String			|  <p>Email address to receive the password reset token.</p>							|
-| link			| String			|  <p>Link to redirect user.</p>							|
+```
+POST /test2
+```
 
-## Submit password
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>user access token.</p> |
+| name | `` | <p>Test 2's name.</p> |
 
 
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| test2 | `Object` | <p>Test 2's data.</p> |
+## <a name='Delete-test-2'></a> Delete test 2
+[Back to top](#top)
 
-	PUT /password-resets/:token
 
 
-### Parameters
+```
+DELETE /test2/:id
+```
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| password			| String			|  <p>User's new password.</p>							|
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>user access token.</p> |
 
-## Verify token
 
+### Success 204
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| 204 | `` | <p>No Content.</p> |
+## <a name='Retrieve-test-2'></a> Retrieve test 2
+[Back to top](#top)
 
 
-	GET /password-resets/:token
 
+```
+GET /test2/:id
+```
 
-# Size
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>user access token.</p> |
 
-## Create size
 
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| test2 | `Object` | <p>Test 2's data.</p> |
+## <a name='Retrieve-test-2-s'></a> Retrieve test 2 s
+[Back to top](#top)
 
 
-	POST /sizes
 
+```
+GET /test2
+```
 
-### Parameters
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>user access token.</p> |
+| q | `String` | **optional**<p>Query to search.</p> |
+| page | `Number` | **optional**<p>Page number.</p>_Default value: 1_<br>_Size range: 1..30_<br> |
+| limit | `Number` | **optional**<p>Amount of returned items.</p>_Default value: 30_<br>_Size range: 1..100_<br> |
+| sort | `String[]` | **optional**<p>Order of returned items.</p>_Default value: -createdAt_<br> |
+| fields | `String[]` | **optional**<p>Fields to be returned.</p> |
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| name			| 			|  <p>Size's name.</p>							|
-| label			| 			|  <p>Size's label.</p>							|
 
-## Delete size
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| test2S | `Object[]` | <p>List of test 2 s.</p> |
+## <a name='Update-test-2'></a> Update test 2
+[Back to top](#top)
 
 
 
-	DELETE /sizes/:id
+```
+PUT /test2/:id
+```
 
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>user access token.</p> |
+| name | `` | <p>Test 2's name.</p> |
 
-### Parameters
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| test2 | `Object` | <p>Test 2's data.</p> |
+# <a name='User'></a> User
 
-## Init sizes with default list
+## <a name='Create-user'></a> Create user
+[Back to top](#top)
 
 
 
-	POST /sizes/initWithDefault
+```
+POST /users
+```
 
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>Master access_token.</p> |
+| email | `String` | <p>User's email.</p> |
+| password | `String` | <p>User's password.</p>_Size range: 6.._<br> |
+| name | `String` | **optional**<p>User's name.</p> |
+| picture | `String` | **optional**<p>User's picture.</p> |
+| role | `String` | **optional**<p>User's role.</p>_Default value: user_<br>_Allowed values: user,admin_ |
 
-### Parameters
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
+### Sucess 201
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| user | `Object` | <p>User's data.</p> |
+## <a name='Delete-user'></a> Delete user
+[Back to top](#top)
 
-## Retrieve size
 
 
+```
+DELETE /users/:id
+```
 
-	GET /sizes/:id
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>User access_token.</p> |
 
 
-### Parameters
+### Success 204
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| 204 | `` | <p>No Content.</p> |
+## <a name='Retrieve-current-user'></a> Retrieve current user
+[Back to top](#top)
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
 
-## Retrieve sizes
 
+```
+GET /users/me
+```
 
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>User access_token.</p> |
 
-	GET /sizes
 
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| user | `Object` | <p>User's data.</p> |
+## <a name='Retrieve-user'></a> Retrieve user
+[Back to top](#top)
 
-### Parameters
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-| q			| String			| **optional** <p>Query to search.</p>							|
-| page			| Number			| **optional** <p>Page number.</p>							|
-| limit			| Number			| **optional** <p>Amount of returned items.</p>							|
-| sort			| String[]			| **optional** <p>Order of returned items.</p>							|
-| fields			| String[]			| **optional** <p>Fields to be returned.</p>							|
 
-## Update size
+```
+GET /users/:id
+```
 
 
 
-	PUT /sizes/:id
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| user | `Object` | <p>User's data.</p> |
+## <a name='Retrieve-users'></a> Retrieve users
+[Back to top](#top)
 
 
-### Parameters
 
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| name			| 			|  <p>Size's name.</p>							|
-| label			| 			|  <p>Size's label.</p>							|
+```
+GET /users
+```
 
-# Test2
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>User access_token.</p> |
+| q | `String` | **optional**<p>Query to search.</p> |
+| page | `Number` | **optional**<p>Page number.</p>_Default value: 1_<br>_Size range: 1..30_<br> |
+| limit | `Number` | **optional**<p>Amount of returned items.</p>_Default value: 30_<br>_Size range: 1..100_<br> |
+| sort | `String[]` | **optional**<p>Order of returned items.</p>_Default value: -createdAt_<br> |
+| fields | `String[]` | **optional**<p>Fields to be returned.</p> |
 
-## Create test 2
 
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| users | `Object[]` | <p>List of users.</p> |
+## <a name='Update-password'></a> Update password
+[Back to top](#top)
 
 
-	POST /test2
 
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-| name			| 			|  <p>Test 2's name.</p>							|
-
-## Delete test 2
-
-
-
-	DELETE /test2/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-
-## Retrieve test 2
-
-
-
-	GET /test2/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-
-## Retrieve test 2 s
-
-
-
-	GET /test2
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-| q			| String			| **optional** <p>Query to search.</p>							|
-| page			| Number			| **optional** <p>Page number.</p>							|
-| limit			| Number			| **optional** <p>Amount of returned items.</p>							|
-| sort			| String[]			| **optional** <p>Order of returned items.</p>							|
-| fields			| String[]			| **optional** <p>Fields to be returned.</p>							|
-
-## Update test 2
-
-
-
-	PUT /test2/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-| name			| 			|  <p>Test 2's name.</p>							|
-
-# User
-
-## Create user
-
-
-
-	POST /users
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>Master access_token.</p>							|
-| email			| String			|  <p>User's email.</p>							|
-| password			| String			|  <p>User's password.</p>							|
-| name			| String			| **optional** <p>User's name.</p>							|
-| picture			| String			| **optional** <p>User's picture.</p>							|
-| role			| String			| **optional** <p>User's role.</p>							|
-
-## Delete user
-
-
-
-	DELETE /users/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>User access_token.</p>							|
-
-## Retrieve current user
-
-
-
-	GET /users/me
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>User access_token.</p>							|
-
-## Retrieve user
-
-
-
-	GET /users/:id
-
-
-## Retrieve users
-
-
-
-	GET /users
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>User access_token.</p>							|
-| q			| String			| **optional** <p>Query to search.</p>							|
-| page			| Number			| **optional** <p>Page number.</p>							|
-| limit			| Number			| **optional** <p>Amount of returned items.</p>							|
-| sort			| String[]			| **optional** <p>Order of returned items.</p>							|
-| fields			| String[]			| **optional** <p>Fields to be returned.</p>							|
-
-## Update password
-
-
-
-	PUT /users/:id/password
-
+```
+PUT /users/:id/password
+```
 ### Headers
-
 | Name    | Type      | Description                          |
 |---------|-----------|--------------------------------------|
-| Authorization			| String			|  <p>Basic authorization with email and password.</p>							|
+| Authorization | String | <p>Basic authorization with email and password.</p>|
 
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| password			| String			|  <p>User's new password.</p>							|
-
-## Update user
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| password | `String` | <p>User's new password.</p>_Size range: 6.._<br> |
 
 
-
-	PUT /users/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>User access_token.</p>							|
-| name			| String			| **optional** <p>User's name.</p>							|
-| picture			| String			| **optional** <p>User's picture.</p>							|
+### Success 201
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| user | `Object` | <p>User's data.</p> |
+## <a name='Update-user'></a> Update user
+[Back to top](#top)
 
 
+
+```
+PUT /users/:id
+```
+
+### Parameter Parameters
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| access_token | `String` | <p>User access_token.</p> |
+| name | `String` | **optional**<p>User's name.</p> |
+| picture | `String` | **optional**<p>User's picture.</p> |
+
+
+### Success 200
+| Name     | Type       | Description                           |
+|:---------|:-----------|:--------------------------------------|
+| user | `Object` | <p>User's data.</p> |
