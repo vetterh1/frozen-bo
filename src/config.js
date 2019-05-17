@@ -44,7 +44,8 @@ const config = {
   test: { },
   development: {
     mongo: {
-      uri: 'mongodb://frozen:gem@localhost/frozen-dev',
+      uri: 'mongodb://localhost/frozen-dev',
+      uriLocalProtected: 'mongodb://frozen:gem@localhost/frozen-dev',
       uriLocal: 'mongodb://localhost/frozen-dev',
       uriRemote: 'mongodb://frozen:gem@51.254.221.25:27017/frozen-dev',
       options: {
