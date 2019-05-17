@@ -1,20 +1,44 @@
 import { success, notFound } from '../../services/response/'
 import { Characteristics } from '.'
 import { createDefaultCategoriesInDb } from '../category/controller'
+import { createDefaultDetailsInDb } from '../detail/controller'
+import { createDefaultContainersInDb } from '../container/controller'
+import { createDefaultColorsInDb } from '../color/controller'
+import { createDefaultSizesInDb } from '../size/controller'
+import { createDefaultFreezersInDb } from '../freezer/controller'
+import { createDefaultLocationsInDb } from '../location/controller'
 import { defaultCharacteristics } from '../../utils/defaultCharacteristics'
-import stringifyOnce from '../../utils/stringifyOnce.js'
+// import stringifyOnce from '../../utils/stringifyOnce.js'
 
 
 export const initWithDefault = async (b, res, next) => {
   try {
     let categories = "";
+    let details = "";
+    let containers = "";
+    let colors = "";
+    let sizes = "";
+    let freezers = "";
+    let locations = "";
     await Characteristics.deleteMany();
     let characteristics = await Characteristics.create({version: defaultCharacteristics.version});
     const categoriesPromises = await createDefaultCategoriesInDb((data) => categories = data);
-    return Promise.all([categoriesPromises]).then(() => {
+    const detailsPromises = await createDefaultDetailsInDb((data) => details = data);
+    const containersPromises = await createDefaultContainersInDb((data) => containers = data);
+    const colorsPromises = await createDefaultColorsInDb((data) => colors = data);
+    const sizesPromises = await createDefaultSizesInDb((data) => sizes = data);
+    const freezersPromises = await createDefaultFreezersInDb((data) => freezers = data);
+    const locationsPromises = await createDefaultLocationsInDb((data) => locations = data);
+    return Promise.all([categoriesPromises, detailsPromises, containersPromises, colorsPromises, sizesPromises, freezersPromises, locationsPromises]).then(() => {
       const consolitdatedResults = {
         version: characteristics.version,
-        categories
+        categories,
+        details,
+        containers,
+        colors,
+        sizes,
+        freezers,
+        locations
       }
       success(res, 201)(consolitdatedResults);   
     });

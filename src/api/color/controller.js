@@ -4,17 +4,25 @@ import { defaultCharacteristics } from '../../utils/defaultCharacteristics'
 // import stringifyOnce from '../../utils/stringifyOnce.js'
 
 
-export const initWithDefault = async (b, res, next) => {
+export const createDefaultColorsInDb = async (done) => {
   try {
-    await Color.deleteMany();
     let inserted = [];
     const results = defaultCharacteristics.colors.map( async (item) => {
       inserted.push (await Color.create(item));
     })
-    Promise.all(results).then( () => {
-      success(res, 201)(inserted); 
-    });
+    return Promise.all(results).then(() => done(inserted));
 
+  } catch (err) /* istanbul ignore next */ {
+    throw err;
+  }
+}
+
+export const initWithDefault = async (b, res, next) => {
+  try {
+    await Color.deleteMany();
+    await createDefaultColorsInDb((data)=> {
+      success(res, 201)(data); 
+    })
   } catch (err) /* istanbul ignore next */ {
     await notFound(err);
     next(err);

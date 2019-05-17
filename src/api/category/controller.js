@@ -1,7 +1,7 @@
 import { success, notFound } from '../../services/response'
 import { Category } from '.'
 import { defaultCharacteristics } from '../../utils/defaultCharacteristics'
-import stringifyOnce from '../../utils/stringifyOnce.js'
+// import stringifyOnce from '../../utils/stringifyOnce.js'
 
 
 export const createDefaultCategoriesInDb = async (done) => {
@@ -28,25 +28,6 @@ export const initWithDefault = async (b, res, next) => {
     next(err);
   }
 }
-
-
-// export const initWithDefault = async (b, res, next) => {
-//   try {
-//     await Category.deleteMany();
-//     let inserted = [];
-//     const results = defaultCharacteristics.categories.map( async (item) => {
-//       inserted.push (await Category.create(item));
-//     })
-//     Promise.all(results).then( () => {
-//       success(res, 201)(inserted); 
-//     });
-
-//   } catch (err) /* istanbul ignore next */ {
-//     await notFound(err);
-//     next(err);
-//   }
-// }
-
 
 export const create = ({ bodymen: { body } }, res, next) =>
   Category.create(body)
