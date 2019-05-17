@@ -4,13 +4,6 @@ import auth from './auth'
 import passwordReset from './password-reset'
 import test2 from './test2'
 import item from './item'
-import category from './category'
-import detail from './detail'
-import container from './container'
-import color from './color'
-import size from './size'
-import freezer from './freezer'
-import location from './location'
 import characteristics from './characteristics'
 
 const router = new Router()
@@ -43,13 +36,6 @@ router.use('/auth', auth)
 router.use('/password-resets', passwordReset)
 router.use('/test2', test2)
 router.use('/items', item)
-router.use('/categories', category)
-router.use('/details', detail)
-router.use('/containers', container)
-router.use('/colors', color)
-router.use('/sizes', size)
-router.use('/freezers', freezer)
-router.use('/locations', location)
 router.use('/characteristics', characteristics)
 
 export default router

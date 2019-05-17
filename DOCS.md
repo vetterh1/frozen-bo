@@ -1,4 +1,4 @@
-# frozen-bo v0.0.0
+# frozen-bo v0.0.1
 
 
 
@@ -11,43 +11,13 @@
 - [Category](#category)
 	- [Create category](#create-category)
 	- [Delete category](#delete-category)
+	- [Init categories with default list](#init-categories-with-default-list)
 	- [Retrieve categories](#retrieve-categories)
 	- [Retrieve category](#retrieve-category)
 	- [Update category](#update-category)
 	
 - [Characteristics](#characteristics)
-	- [Create characteristics](#create-characteristics)
-	- [Delete characteristics](#delete-characteristics)
-	- [Retrieve characteristics](#retrieve-characteristics)
-	- [Update characteristics](#update-characteristics)
-	
-- [Color](#color)
-	- [Create color](#create-color)
-	- [Delete color](#delete-color)
-	- [Retrieve color](#retrieve-color)
-	- [Retrieve colors](#retrieve-colors)
-	- [Update color](#update-color)
-	
-- [Container](#container)
-	- [Create container](#create-container)
-	- [Delete container](#delete-container)
-	- [Retrieve container](#retrieve-container)
-	- [Retrieve containers](#retrieve-containers)
-	- [Update container](#update-container)
-	
-- [Detail](#detail)
-	- [Create detail](#create-detail)
-	- [Delete detail](#delete-detail)
-	- [Retrieve detail](#retrieve-detail)
-	- [Retrieve details](#retrieve-details)
-	- [Update detail](#update-detail)
-	
-- [Freezer](#freezer)
-	- [Create freezer](#create-freezer)
-	- [Delete freezer](#delete-freezer)
-	- [Retrieve freezer](#retrieve-freezer)
-	- [Retrieve freezers](#retrieve-freezers)
-	- [Update freezer](#update-freezer)
+	- [Retrieve item characteristics](#retrieve-item-characteristics)
 	
 - [Item](#item)
 	- [Create item](#create-item)
@@ -55,13 +25,6 @@
 	- [Retrieve item](#retrieve-item)
 	- [Retrieve items](#retrieve-items)
 	- [Update item](#update-item)
-	
-- [Location](#location)
-	- [Create location](#create-location)
-	- [Delete location](#delete-location)
-	- [Retrieve location](#retrieve-location)
-	- [Retrieve locations](#retrieve-locations)
-	- [Update location](#update-location)
 	
 - [PasswordReset](#passwordreset)
 	- [Send email](#send-email)
@@ -71,6 +34,7 @@
 - [Size](#size)
 	- [Create size](#create-size)
 	- [Delete size](#delete-size)
+	- [Init sizes with default list](#init-sizes-with-default-list)
 	- [Retrieve size](#retrieve-size)
 	- [Retrieve sizes](#retrieve-sizes)
 	- [Update size](#update-size)
@@ -81,9 +45,6 @@
 	- [Retrieve test 2](#retrieve-test-2)
 	- [Retrieve test 2 s](#retrieve-test-2-s)
 	- [Update test 2](#update-test-2)
-	
-- [Test](#test)
-	- [Retrieve tests](#retrieve-tests)
 	
 - [User](#user)
 	- [Create user](#create-user)
@@ -171,12 +132,26 @@
 | access_token			| String			|  <p>admin access token.</p>							|
 | name			| 			|  <p>Category's name.</p>							|
 | label			| 			|  <p>Category's label.</p>							|
+| id2			| 			|  <p>Category's id2.</p>							|
 
 ## Delete category
 
 
 
 	DELETE /categories/:id
+
+
+### Parameters
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| access_token			| String			|  <p>admin access token.</p>							|
+
+## Init categories with default list
+
+
+
+	POST /categories/initWithDefault
 
 
 ### Parameters
@@ -230,37 +205,11 @@
 | access_token			| String			|  <p>admin access token.</p>							|
 | name			| 			|  <p>Category's name.</p>							|
 | label			| 			|  <p>Category's label.</p>							|
+| id2			| 			|  <p>Category's id2.</p>							|
 
 # Characteristics
 
-## Create characteristics
-
-
-
-	POST /characteristics
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| version			| 			|  <p>Characteristics's version.</p>							|
-
-## Delete characteristics
-
-
-
-	DELETE /characteristics/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-
-## Retrieve characteristics
+## Retrieve item characteristics
 
 
 
@@ -272,333 +221,6 @@
 | Name    | Type      | Description                          |
 |---------|-----------|--------------------------------------|
 | access_token			| String			|  <p>user access token.</p>							|
-| q			| String			| **optional** <p>Query to search.</p>							|
-| page			| Number			| **optional** <p>Page number.</p>							|
-| limit			| Number			| **optional** <p>Amount of returned items.</p>							|
-| sort			| String[]			| **optional** <p>Order of returned items.</p>							|
-| fields			| String[]			| **optional** <p>Fields to be returned.</p>							|
-
-## Update characteristics
-
-
-
-	PUT /characteristics/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| version			| 			|  <p>Characteristics's version.</p>							|
-
-# Color
-
-## Create color
-
-
-
-	POST /colors
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| name			| 			|  <p>Color's name.</p>							|
-| label			| 			|  <p>Color's label.</p>							|
-| parents			| 			|  <p>Color's parents.</p>							|
-
-## Delete color
-
-
-
-	DELETE /colors/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-
-## Retrieve color
-
-
-
-	GET /colors/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-
-## Retrieve colors
-
-
-
-	GET /colors
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-| q			| String			| **optional** <p>Query to search.</p>							|
-| page			| Number			| **optional** <p>Page number.</p>							|
-| limit			| Number			| **optional** <p>Amount of returned items.</p>							|
-| sort			| String[]			| **optional** <p>Order of returned items.</p>							|
-| fields			| String[]			| **optional** <p>Fields to be returned.</p>							|
-
-## Update color
-
-
-
-	PUT /colors/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| name			| 			|  <p>Color's name.</p>							|
-| label			| 			|  <p>Color's label.</p>							|
-| parents			| 			|  <p>Color's parents.</p>							|
-
-# Container
-
-## Create container
-
-
-
-	POST /containers
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| name			| 			|  <p>Container's name.</p>							|
-| label			| 			|  <p>Container's label.</p>							|
-
-## Delete container
-
-
-
-	DELETE /containers/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-
-## Retrieve container
-
-
-
-	GET /containers/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-
-## Retrieve containers
-
-
-
-	GET /containers
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-| q			| String			| **optional** <p>Query to search.</p>							|
-| page			| Number			| **optional** <p>Page number.</p>							|
-| limit			| Number			| **optional** <p>Amount of returned items.</p>							|
-| sort			| String[]			| **optional** <p>Order of returned items.</p>							|
-| fields			| String[]			| **optional** <p>Fields to be returned.</p>							|
-
-## Update container
-
-
-
-	PUT /containers/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| name			| 			|  <p>Container's name.</p>							|
-| label			| 			|  <p>Container's label.</p>							|
-
-# Detail
-
-## Create detail
-
-
-
-	POST /details
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| name			| 			|  <p>Detail's name.</p>							|
-| label			| 			|  <p>Detail's label.</p>							|
-| parents			| 			|  <p>Detail's parents.</p>							|
-
-## Delete detail
-
-
-
-	DELETE /details/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-
-## Retrieve detail
-
-
-
-	GET /details/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-
-## Retrieve details
-
-
-
-	GET /details
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-| q			| String			| **optional** <p>Query to search.</p>							|
-| page			| Number			| **optional** <p>Page number.</p>							|
-| limit			| Number			| **optional** <p>Amount of returned items.</p>							|
-| sort			| String[]			| **optional** <p>Order of returned items.</p>							|
-| fields			| String[]			| **optional** <p>Fields to be returned.</p>							|
-
-## Update detail
-
-
-
-	PUT /details/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| name			| 			|  <p>Detail's name.</p>							|
-| label			| 			|  <p>Detail's label.</p>							|
-| parents			| 			|  <p>Detail's parents.</p>							|
-
-# Freezer
-
-## Create freezer
-
-
-
-	POST /freezers
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| name			| 			|  <p>Freezer's name.</p>							|
-| label			| 			|  <p>Freezer's label.</p>							|
-
-## Delete freezer
-
-
-
-	DELETE /freezers/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-
-## Retrieve freezer
-
-
-
-	GET /freezers/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-
-## Retrieve freezers
-
-
-
-	GET /freezers
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-| q			| String			| **optional** <p>Query to search.</p>							|
-| page			| Number			| **optional** <p>Page number.</p>							|
-| limit			| Number			| **optional** <p>Amount of returned items.</p>							|
-| sort			| String[]			| **optional** <p>Order of returned items.</p>							|
-| fields			| String[]			| **optional** <p>Fields to be returned.</p>							|
-
-## Update freezer
-
-
-
-	PUT /freezers/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| name			| 			|  <p>Freezer's name.</p>							|
-| label			| 			|  <p>Freezer's label.</p>							|
 
 # Item
 
@@ -690,82 +312,6 @@
 | name			| 			|  <p>Item's name.</p>							|
 | expiration			| 			|  <p>Item's expiration.</p>							|
 
-# Location
-
-## Create location
-
-
-
-	POST /locations
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| name			| 			|  <p>Location's name.</p>							|
-| label			| 			|  <p>Location's label.</p>							|
-
-## Delete location
-
-
-
-	DELETE /locations/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-
-## Retrieve location
-
-
-
-	GET /locations/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-
-## Retrieve locations
-
-
-
-	GET /locations
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>user access token.</p>							|
-| q			| String			| **optional** <p>Query to search.</p>							|
-| page			| Number			| **optional** <p>Page number.</p>							|
-| limit			| Number			| **optional** <p>Amount of returned items.</p>							|
-| sort			| String[]			| **optional** <p>Order of returned items.</p>							|
-| fields			| String[]			| **optional** <p>Fields to be returned.</p>							|
-
-## Update location
-
-
-
-	PUT /locations/:id
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| access_token			| String			|  <p>admin access token.</p>							|
-| name			| 			|  <p>Location's name.</p>							|
-| label			| 			|  <p>Location's label.</p>							|
-
 # PasswordReset
 
 ## Send email
@@ -824,6 +370,19 @@
 
 
 	DELETE /sizes/:id
+
+
+### Parameters
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| access_token			| String			|  <p>admin access token.</p>							|
+
+## Init sizes with default list
+
+
+
+	POST /sizes/initWithDefault
 
 
 ### Parameters
@@ -951,25 +510,6 @@
 |---------|-----------|--------------------------------------|
 | access_token			| String			|  <p>user access token.</p>							|
 | name			| 			|  <p>Test 2's name.</p>							|
-
-# Test
-
-## Retrieve tests
-
-
-
-	GET /test
-
-
-### Parameters
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| q			| String			| **optional** <p>Query to search.</p>							|
-| page			| Number			| **optional** <p>Page number.</p>							|
-| limit			| Number			| **optional** <p>Amount of returned items.</p>							|
-| sort			| String[]			| **optional** <p>Order of returned items.</p>							|
-| fields			| String[]			| **optional** <p>Fields to be returned.</p>							|
 
 # User
 

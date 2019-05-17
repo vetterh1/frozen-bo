@@ -1,5 +1,5 @@
 
-export const defaultCharacteristics = {
+export const itemCharacteristics = {
   version: 15,    
   categories: [
     {name: 'Bread', i18nName: {FR: 'Pain'}, label: '', i18nLabel: {FR: ''}, id2: 'B'},

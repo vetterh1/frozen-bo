@@ -4,7 +4,7 @@ import { signSync } from '../../services/jwt'
 import express from '../../services/express'
 import { User } from '../user'
 import routes, { Size } from '.'
-import { defaultCharacteristics } from '../../utils/defaultCharacteristics'
+import { itemCharacteristics } from '../../utils/itemCharacteristics'
 
 const app = () => express(apiRoot, routes)
 
@@ -24,9 +24,9 @@ test('POST /sizes/initWithDefault 201 (admin)', async () => {
     .send({ access_token: adminSession })
   expect(status).toBe(201)
   expect(typeof body).toEqual('object')
-  expect(body.length).toEqual(defaultCharacteristics.sizes.length);
+  expect(body.length).toEqual(itemCharacteristics.sizes.length);
   const namesInResults = body.map(item => item.name).sort();
-  const namesInDefaults = defaultCharacteristics.sizes.map(item => item.name).sort();
+  const namesInDefaults = itemCharacteristics.sizes.map(item => item.name).sort();
   expect(namesInResults).toEqual(namesInDefaults);
 })
 

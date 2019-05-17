@@ -1,13 +1,13 @@
 import { success, notFound } from '../../services/response/'
 import { Size } from '.'
-import { defaultCharacteristics } from '../../utils/defaultCharacteristics'
+import { itemCharacteristics } from '../../utils/itemCharacteristics'
 // import stringifyOnce from '../../utils/stringifyOnce.js'
 
 
 export const createDefaultSizesInDb = async (done) => {
   try {
     let inserted = [];
-    const results = defaultCharacteristics.sizes.map( async (item) => {
+    const results = itemCharacteristics.sizes.map( async (item) => {
       inserted.push (await Size.create(item));
     })
     return Promise.all(results).then(() => done(inserted));
