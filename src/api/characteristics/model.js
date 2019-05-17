@@ -1,9 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 
 const characteristicsSchema = new Schema({
-  version: {
-    type: String
-  }
+  version: { type: 'Integer', required: true },
 }, {
   timestamps: true,
   toJSON: {

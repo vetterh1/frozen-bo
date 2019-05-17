@@ -3,7 +3,7 @@ import { Characteristics } from '.'
 let characteristics
 
 beforeEach(async () => {
-  characteristics = await Characteristics.create({ version: 'test' })
+  characteristics = await Characteristics.create({ version: 1 })
 })
 
 describe('view', () => {
