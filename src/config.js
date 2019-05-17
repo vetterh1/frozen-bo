@@ -60,7 +60,7 @@ const config = {
   },
   production: {
     ip: process.env.IP || undefined,
-    port: process.env.PORT || 8080,
+    port: process.env.PORT || 8065,
     mongo: {
       uri: 'mongodb://frozen:gem@51.254.221.25:27017/frozen',
       uriOld: process.env.MONGODB_URI || 'mongodb://localhost/frozen',
