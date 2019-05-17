@@ -2,12 +2,26 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token } from '../../services/passport'
-import { create, index, show, update, destroy } from './controller'
+import { create, index, initWithDefault, show, update, destroy } from './controller'
 import { schema } from './model'
 export Characteristics, { schema } from './model'
 
 const router = new Router()
 const { version } = schema.tree
+
+/**
+ * @api {post} /characteristics/initWithDefault Init characteristics with default list
+ * @apiName InitializeDefaultCharacteristics
+ * @apiGroup Characteristics
+ * @apiPermission admin
+ * @apiParam {String} access_token admin access token.
+ * @apiSuccess (Success 204) 204 No Content.
+ * @apiError 404 Characteristics not found.
+ * @apiError 401 admin access only.
+ */
+router.post('/initWithDefault',
+  //token({ required: true, roles: ['admin'] }),
+  initWithDefault)
 
 /**
  * @api {post} /characteristics Create characteristics

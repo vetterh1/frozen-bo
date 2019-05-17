@@ -1,5 +1,29 @@
 import { success, notFound } from '../../services/response/'
 import { Characteristics } from '.'
+import { createDefaultCategoriesInDb } from '../category/controller'
+import { defaultCharacteristics } from '../../utils/defaultCharacteristics'
+import stringifyOnce from '../../utils/stringifyOnce.js'
+
+
+export const initWithDefault = async (b, res, next) => {
+  try {
+    let categories = "";
+    await Characteristics.deleteMany();
+    let characteristics = await Characteristics.create({version: defaultCharacteristics.version});
+    const categoriesPromises = await createDefaultCategoriesInDb((data) => categories = data);
+    return Promise.all([categoriesPromises]).then(() => {
+      const consolitdatedResults = {
+        version: characteristics.version,
+        categories
+      }
+      success(res, 201)(consolitdatedResults);   
+    });
+
+  } catch (err) /* istanbul ignore next */ {
+    await notFound(err);
+    next(err);
+  }
+}
 
 export const create = ({ bodymen: { body } }, res, next) =>
   Characteristics.create(body)
