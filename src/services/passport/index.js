@@ -11,13 +11,18 @@ import User, { schema } from '../../api/user/model'
 
 export const password = () => (req, res, next) =>
   passport.authenticate('password', { session: false }, (err, user, info) => {
+    console.log('passport.password:', err, user, info);
     if (err && err.param) {
       return res.status(400).json(err)
     } else if (err || !user) {
+      console.log('passport.password: param error 401 (err or no user):', err, user);
       return res.status(401).end()
     }
     req.logIn(user, { session: false }, (err) => {
-      if (err) return res.status(401).end()
+      if (err){
+        console.log('passport.password: login error 401 (err):', err, user);
+        return res.status(401).end()
+      }
       next()
     })
   })(req, res, next)
@@ -37,6 +42,7 @@ export const master = () =>
 export const token = ({ required, roles = User.roles } = {}) => (req, res, next) =>
   passport.authenticate('token', { session: false }, (err, user, info) => {
     if (err || (required && !user) || (required && !~roles.indexOf(user.role))) {
+      console.log('passport.authenticate: error 401 (err):', err, user);
       return res.status(401).end()
     }
     req.logIn(user, { session: false }, (err) => {

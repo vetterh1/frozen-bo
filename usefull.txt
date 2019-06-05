@@ -29,6 +29,7 @@ curl -X POST http://0.0.0.0:9000/users -i -d "role=admin&email=admin@example.com
 
 
 Login user:
+curl -X POST http://0.0.0.0:9000/auth -i -u 123@123.com:123456 -d "access_token=S9EqDPByR2z5mnCMaRFk7b552RWaFcnn"
 curl -X POST http://0.0.0.0:9000/auth -i -u test@example.com:123456 -d "access_token=S9EqDPByR2z5mnCMaRFk7b552RWaFcnn"
 
 See articles (not working):

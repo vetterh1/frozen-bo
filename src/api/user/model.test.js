@@ -38,7 +38,9 @@ describe('view', () => {
     expect(view).toBeDefined()
     expect(view.id).toBe(user.id)
     expect(view.name).toBe(user.name)
-    expect(view.picture).toBe(user.picture)
+    expect(view.email).toBe(user.email)
+    expect(view.language).toBe(user.language)
+    expect(view.houseOrder).toBe(user.houseOrder)
   })
 
   it('returns full view', () => {
@@ -47,6 +49,8 @@ describe('view', () => {
     expect(view.id).toBe(user.id)
     expect(view.name).toBe(user.name)
     expect(view.email).toBe(user.email)
+    expect(view.language).toBe(user.language)
+    expect(view.houseOrder).toBe(user.houseOrder)
     expect(view.picture).toBe(user.picture)
     expect(view.createdAt).toEqual(user.createdAt)
   })

@@ -10,7 +10,7 @@ const test2Schema = new Schema({
     type: String
   }
 }, {
-  timestamps: true,
+  timestamps: true, // adds createdAt and updatedAt
   toJSON: {
     virtuals: true,
     transform: (obj, ret) => { delete ret._id }

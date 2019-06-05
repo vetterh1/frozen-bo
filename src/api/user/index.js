@@ -7,7 +7,7 @@ import { schema } from './model'
 export User, { schema } from './model'
 
 const router = new Router()
-const { email, password, name, picture, role } = schema.tree
+const { email, password, name, language, houseOrder, picture, role } = schema.tree
 
 /**
  * @api {get} /users Retrieve users
@@ -57,6 +57,8 @@ router.get('/:id',
  * @apiParam {String} email User's email.
  * @apiParam {String{6..}} password User's password.
  * @apiParam {String} [name] User's name.
+ * @apiParam {String} [language] User's language.
+ * @apiParam {String} [houseOrder] User's house order (1: 1st user in this house, 2:...).
  * @apiParam {String} [picture] User's picture.
  * @apiParam {String=user,admin} [role=user] User's role.
  * @apiSuccess (Sucess 201) {Object} user User's data.
@@ -66,7 +68,7 @@ router.get('/:id',
  */
 router.post('/',
   master(),
-  body({ email, password, name, picture, role }),
+  body({ email, password, name, language, houseOrder, picture, role }),
   create)
 
 /**
@@ -76,6 +78,8 @@ router.post('/',
  * @apiPermission user
  * @apiParam {String} access_token User access_token.
  * @apiParam {String} [name] User's name.
+ * @apiParam {String} [language] User's language.
+ * @apiParam {String} [houseOrder] User's house order (1: 1st user in this house, 2:...).
  * @apiParam {String} [picture] User's picture.
  * @apiSuccess {Object} user User's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
@@ -84,7 +88,7 @@ router.post('/',
  */
 router.put('/:id',
   token({ required: true }),
-  body({ name, picture }),
+  body({ name, language, houseOrder, picture }),
   update)
 
 /**

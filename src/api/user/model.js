@@ -25,6 +25,12 @@ const userSchema = new Schema({
     type: String,
     index: true,
     trim: true
+  },  
+  language: {
+    type: String,
+  },
+  houseOrder: {
+    type: Number,
   },
   services: {
     facebook: String,
@@ -41,7 +47,7 @@ const userSchema = new Schema({
     trim: true
   }
 }, {
-  timestamps: true
+  timestamps: true // adds createdAt and updatedAt
 })
 
 userSchema.path('email').set(function (email) {
@@ -58,6 +64,9 @@ userSchema.path('email').set(function (email) {
 })
 
 userSchema.pre('save', function (next) {
+
+  console.log('userSchema.pre.save:', this.name, this.email, this.password);
+
   if (!this.isModified('password')) return next()
 
   /* istanbul ignore next */
@@ -72,10 +81,10 @@ userSchema.pre('save', function (next) {
 userSchema.methods = {
   view (full) {
     let view = {}
-    let fields = ['id', 'name', 'picture']
+    let fields = ['id', 'name', 'email', 'language', 'houseOrder']
 
     if (full) {
-      fields = [...fields, 'email', 'createdAt']
+      fields = [...fields, 'picture', 'createdAt']
     }
 
     fields.forEach((field) => { view[field] = this[field] })
@@ -84,6 +93,7 @@ userSchema.methods = {
   },
 
   authenticate (password) {
+    console.log('userSchema.pre.authenticate:', password, this.password);
     return bcrypt.compare(password, this.password).then((valid) => valid ? this : false)
   }
 }
