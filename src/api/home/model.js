@@ -1,11 +1,13 @@
 import mongoose, { Schema } from 'mongoose'
 
-const sizeSchema = new Schema({
+const homeSchema = new Schema({
   id2: { type: 'String', required: true },
   name: { type: 'String', required: true },
   label: { type: 'String', required: false },
-  i18nName: Schema.Types.Mixed, // ex: i18n: {FR: 'Plat'}
-  i18nLabel: Schema.Types.Mixed, // ex: i18n: {FR: 'Plat'}
+  mapCategoriesNextIds: [{
+    category: String,
+    nextId: Number
+  }]
 }, {
   timestamps: true, // adds createdAt and updatedAt
   toJSON: {
@@ -14,7 +16,7 @@ const sizeSchema = new Schema({
   }
 })
 
-sizeSchema.methods = {
+homeSchema.methods = {
   view (full) {
     const view = {
       // simple view
@@ -22,10 +24,9 @@ sizeSchema.methods = {
       id2: this.id2,
       name: this.name,
       label: this.label,
-      i18nName: this.i18nName,
-      i18nLabel: this.i18nLabel, 
+      mapCategoriesNextIds: this.mapCategoriesNextIds,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
     }
 
     return full ? {
@@ -35,7 +36,7 @@ sizeSchema.methods = {
   }
 }
 
-const model = mongoose.model('Size', sizeSchema)
+const model = mongoose.model('Home', homeSchema)
 
 export const schema = model.schema
 export default model

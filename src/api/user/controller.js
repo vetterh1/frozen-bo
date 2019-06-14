@@ -43,6 +43,7 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
     .then(notFound(res))
     .then((result) => {
       if (!result) return null
+      console.log('------------------------------------------------------------------------------------ user update 1:', result);
       const isAdmin = user.role === 'admin'
       const isSelfUpdate = user.id === result.id
       if (!isSelfUpdate && !isAdmin) {
@@ -54,8 +55,37 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
       }
       return result
     })
-    .then((user) => user ? Object.assign(user, body).save() : null)
-    .then((user) => user ? user.view(true) : null)
+    .then((user) => {
+      console.log('user update 2 user:', user, user.constructor.name);
+      console.log('user update 2 body:', body, body.constructor.name);      
+      console.log('user update 2 user properties:', Object.getOwnPropertyNames(user));
+      console.log('user update 2 body properties:', Object.getOwnPropertyNames(body));
+
+      const updatedProperties = Object.getOwnPropertyNames(body)
+      updatedProperties.forEach(element => {
+        if(body[element]) {
+          console.log('update:', element, body[element]);
+
+          user[element] = body[element]
+        } else {
+          console.log('NO update:', element, body[element]);
+        }
+      });
+      // const newUser = user ? Object.assign(user, body) : null
+      console.log('user update 2 user updated:', user, user.constructor.name);
+      console.log('user update 2 user updated properties:', Object.getOwnPropertyNames(user));
+
+      return user.save()
+
+
+      // db.users.updateOne({ _id: ObjectId("5cf7c068ed594933d1ddfcee")}, { '$set': { name: 'updated name'}})
+      // db.users.updateOne({ _id: ObjectId("5cf7c068ed594933d1ddfcee")}, { '$unset': { home: 1, homeOrder:1}})
+
+    })
+    .then((user) => {
+      console.log('user update 3:', user);
+      return user ? user.view(true) : null
+    })
     .then(success(res))
     .catch(next)
 

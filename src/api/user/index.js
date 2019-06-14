@@ -7,7 +7,7 @@ import { schema } from './model'
 export User, { schema } from './model'
 
 const router = new Router()
-const { email, password, name, language, houseOrder, picture, role } = schema.tree
+const { email, password, name, language, home, homeOrder, picture, role } = schema.tree
 
 /**
  * @api {get} /users Retrieve users
@@ -58,7 +58,6 @@ router.get('/:id',
  * @apiParam {String{6..}} password User's password.
  * @apiParam {String} [name] User's name.
  * @apiParam {String} [language] User's language.
- * @apiParam {String} [houseOrder] User's house order (1: 1st user in this house, 2:...).
  * @apiParam {String} [picture] User's picture.
  * @apiParam {String=user,admin} [role=user] User's role.
  * @apiSuccess (Sucess 201) {Object} user User's data.
@@ -68,7 +67,7 @@ router.get('/:id',
  */
 router.post('/',
   master(),
-  body({ email, password, name, language, houseOrder, picture, role }),
+  body({ email, password, name, language, picture, role }),
   create)
 
 /**
@@ -76,10 +75,12 @@ router.post('/',
  * @apiName UpdateUser
  * @apiGroup User
  * @apiPermission user
+ * @apiDescription Caution, you CANNOT update the EMAIL. But it's possible to update only one element :)
  * @apiParam {String} access_token User access_token.
  * @apiParam {String} [name] User's name.
  * @apiParam {String} [language] User's language.
- * @apiParam {String} [houseOrder] User's house order (1: 1st user in this house, 2:...).
+ * @apiParam {String} [home] User's home id .
+ * @apiParam {Number} [homeOrder] User's home order (1: 1st user in this house, 2:...).
  * @apiParam {String} [picture] User's picture.
  * @apiSuccess {Object} user User's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
@@ -88,7 +89,7 @@ router.post('/',
  */
 router.put('/:id',
   token({ required: true }),
-  body({ name, language, houseOrder, picture }),
+  body({ name, language, home, homeOrder, picture }),
   update)
 
 /**

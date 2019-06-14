@@ -2,7 +2,8 @@ import { Router } from 'express'
 import user from './user'
 import auth from './auth'
 import passwordReset from './password-reset'
-import test2 from './test2'
+// import test2 from './test2'
+import home from './home'
 import item from './item'
 import characteristics from './characteristics'
 
@@ -34,7 +35,8 @@ const router = new Router()
 router.use('/users', user)
 router.use('/auth', auth)
 router.use('/password-resets', passwordReset)
-router.use('/test2', test2)
+// router.use('/test2', test2)
+router.use('/home', home)
 router.use('/items', item)
 router.use('/characteristics', characteristics)
 

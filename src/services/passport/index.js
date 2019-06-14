@@ -11,16 +11,16 @@ import User, { schema } from '../../api/user/model'
 
 export const password = () => (req, res, next) =>
   passport.authenticate('password', { session: false }, (err, user, info) => {
-    console.log('passport.password:', err, user, info);
+    // console.log('passport.password:', err, user, info);
     if (err && err.param) {
       return res.status(400).json(err)
     } else if (err || !user) {
-      console.log('passport.password: param error 401 (err or no user):', err, user);
+      console.error('passport.password: param error 401 (err or no user):', err, user);
       return res.status(401).end()
     }
     req.logIn(user, { session: false }, (err) => {
       if (err){
-        console.log('passport.password: login error 401 (err):', err, user);
+        console.error('passport.password: login error 401 (err):', err, user);
         return res.status(401).end()
       }
       next()

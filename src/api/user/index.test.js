@@ -9,7 +9,7 @@ const app = () => express(apiRoot, routes)
 let user1, user2, admin, session1, session2, adminSession
 
 beforeEach(async () => {
-  user1 = await User.create({ name: 'user', email: 'a@a.com', password: '123456' })
+  user1 = await User.create({ name: 'user', email: 'a@a.com', password: '123456', language:'en' })
   user2 = await User.create({ name: 'user', email: 'b@b.com', password: '123456' })
   admin = await User.create({ email: 'c@c.com', password: '123456', role: 'admin' })
   session1 = signSync(user1.id)
@@ -239,10 +239,14 @@ test('PUT /users/:id 200 (user)', async () => {
 test('PUT /users/:id 200 (user)', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${user1.id}`)
-    .send({ access_token: session1, email: 'test@test.com' })
+    .send({ access_token: session1, email: 'test@test.com', home: '123456', homeOrder: 1 })
   expect(status).toBe(200)
+  console.log("update user:", body)
   expect(typeof body).toBe('object')
   expect(body.email).toBe('a@a.com')
+  expect(body.home).toBe('123456')
+  expect(body.homeOrder).toBe(1)
+  expect(body.language).toBe('en')
 })
 
 test('PUT /users/:id 200 (admin)', async () => {

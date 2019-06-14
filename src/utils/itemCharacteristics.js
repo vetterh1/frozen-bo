@@ -1,6 +1,6 @@
 
 export const itemCharacteristics = {
-  version: 17,    
+  version: 18,    
   categories: [
     {name: 'Bread', i18nName: {FR: 'Pain'}, label: '', i18nLabel: {FR: ''}, id2: 'B'},
     {name: 'Vegetables', i18nName: {FR: 'Légumes'}, label: '', i18nLabel: {FR: ''}, id2: 'V'},
@@ -53,6 +53,7 @@ export const itemCharacteristics = {
   freezers:[
       {name: 'Kitchen', i18nName: {FR: 'Cuisine'}, label: 'Kitchen freezer', i18nLabel: {FR: 'Congélateur dans la cuisine'}, id2: 'K'},
       {name: 'Basement', i18nName: {FR: 'Cave'}, label: 'Basement freezer', i18nLabel: {FR: 'Congélateur à la cave'}, id2: 'B'},
+      {name: 'Other', i18nName: {FR: 'Autre'}, label: 'Other location freezer', i18nLabel: {FR: 'Congélateur à un autre endroit'}, id2: 'O'},
   ],
   locations:[
       {name: 'Top', i18nName: {FR: 'Haut'}, label: 'Higher section', i18nLabel: {FR: 'Partie supérieure'}, id2: 'T'},
