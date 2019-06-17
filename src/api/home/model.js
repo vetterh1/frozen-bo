@@ -1,7 +1,9 @@
 import mongoose, { Schema } from 'mongoose'
+import shortid from 'shortid'
+
 
 const homeSchema = new Schema({
-  id2: { type: 'String', required: true },
+  id2: { type: 'String', default: shortid.generate },
   name: { type: 'String', required: true },
   label: { type: 'String', required: false },
   mapCategoriesNextIds: [{

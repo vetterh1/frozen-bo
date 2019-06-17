@@ -19,6 +19,20 @@ mongo 51.254.221.25:27017/frozen -u frozen -p gem --authenticationDatabase froze
 
 
 ---------------------------------------------------------------
+                PROD utilities
+---------------------------------------------------------------
+
+# update from master:
+cd workspace/frozen-bo/
+chmod 755 ./prod_update_server.sh
+./prod_update_server.sh 
+
+# tail on logs:
+pm2 log
+
+
+
+---------------------------------------------------------------
                 manual actions with curl
 ---------------------------------------------------------------
 

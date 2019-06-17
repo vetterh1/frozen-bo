@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token } from '../../services/passport'
-import { create, index, show, update, destroy } from './controller'
+import { create, index, show, showById2, update, destroy } from './controller'
 import { schema } from './model'
 export Home, { schema } from './model'
 
@@ -44,11 +44,12 @@ router.get('/',
   index)
 
 /**
- * @api {get} /homes/:id Retrieve home
- * @apiName RetrieveHome
+ * @api {get} /homes/id2/:id Retrieve home by id2
+ * @apiName RetrieveHomeById2
  * @apiGroup Home
  * @apiPermission user
  * @apiParam {String} access_token user access token.
+ * @apiParam {String} id2 Id to search.
  * @apiSuccess {Object} home Home's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Home not found.
@@ -57,6 +58,22 @@ router.get('/',
 router.get('/:id',
   token({ required: true }),
   show)
+
+/**
+ * @api {get} /homes/id2/:id Retrieve home
+ * @apiName RetrieveHome
+ * @apiGroup Home
+ * @apiPermission user
+ * @apiParam {String} access_token user access token.
+ * @apiParam {String} id2 Id2 to search.
+ * @apiSuccess {Object} home Home's data.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 404 Home not found.
+ * @apiError 401 user access only.
+ */
+router.get('/id2/:id2',
+  token({ required: true }),
+  showById2)
 
 /**
  * @api {put} /homes/:id Update home

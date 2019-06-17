@@ -23,6 +23,15 @@ export const show = ({ params }, res, next) =>
     .then(success(res))
     .catch(next)
 
+
+export const showById2 = ({ params }, res, next) =>
+    Home.findOne({id2: params.id2})
+      .then(notFound(res))
+      .then((home) => home ? home.view() : null)
+      .then(success(res))
+      .catch(next)
+  
+
 export const update = ({ bodymen: { body }, params }, res, next) =>
   Home.findById(params.id)
     .then(notFound(res))

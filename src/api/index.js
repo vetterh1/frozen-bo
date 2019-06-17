@@ -36,7 +36,7 @@ router.use('/users', user)
 router.use('/auth', auth)
 router.use('/password-resets', passwordReset)
 // router.use('/test2', test2)
-router.use('/home', home)
+router.use('/homes', home)
 router.use('/items', item)
 router.use('/characteristics', characteristics)
 

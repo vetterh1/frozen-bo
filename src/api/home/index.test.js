@@ -15,18 +15,18 @@ beforeEach(async () => {
   const anotherUser = await User.create({ email: 'b@b.com', password: '123456' })
   userSession = signSync(user.id)
   anotherSession = signSync(anotherUser.id)
-  home = await Home.create({name: 'test', label: 'test', id2: 'test'})
+  home = await Home.create({name: 'test', label: 'test', id2: 'testId2'})
 })
 
 test('POST /homes 201 (user)', async () => {
   const { status, body } = await request(app())
     .post(`${apiRoot}`)
-    .send({ access_token: userSession, name: 'test', label: 'test', id2: 'test' })
+    .send({ access_token: userSession, name: 'test', label: 'test', id2: 'testId2' })
   expect(status).toBe(201)
   expect(typeof body).toEqual('object')
   expect(body.name).toEqual('test')
   expect(body.label).toEqual('test')
-  expect(body.id2).toEqual('test')
+  expect(body.id2).toEqual('testId2')
 })
 
 test('POST /homes 401', async () => {
@@ -71,16 +71,44 @@ test('GET /homes/:id 404 (user)', async () => {
   expect(status).toBe(404)
 })
 
+
+
+
+test('GET /homes/id2/:id2 200 (user)', async () => {
+  const { status, body } = await request(app())
+    .get(`${apiRoot}/id2/${home.id2}`)
+    .query({ access_token: userSession })
+  expect(status).toBe(200)
+  expect(typeof body).toEqual('object')
+  expect(body.id2).toEqual(home.id2)
+})
+
+test('GET /homes/id2/:id2 401', async () => {
+  const { status } = await request(app())
+    .get(`${apiRoot}/id2/${home.id2}`)
+  expect(status).toBe(401)
+})
+
+test('GET /homes/id2/:id2 404 (user)', async () => {
+  const { status } = await request(app())
+    .get(apiRoot + '/id2/testId22222')
+    .query({ access_token: userSession })
+  expect(status).toBe(404)
+})
+
+
+
+
 test('PUT /homes/:id 200 (user)', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${home.id}`)
-    .send({ access_token: userSession, name: 'test', label: 'test', id2: 'test', mapCategoriesNextIds: [{category:'B', nextId:1}, {category:'V', nextId:1}, {category:'S', nextId:3}] })
+    .send({ access_token: userSession, name: 'test', label: 'test', id2: 'testId2', mapCategoriesNextIds: [{category:'B', nextId:1}, {category:'V', nextId:1}, {category:'S', nextId:3}] })
   expect(status).toBe(200)
   expect(typeof body).toEqual('object')
   expect(body.id).toEqual(home.id)
   expect(body.name).toEqual('test')
   expect(body.label).toEqual('test')
-  expect(body.id2).toEqual('test')
+  expect(body.id2).toEqual('testId2')
   body.mapCategoriesNextIds.forEach(element => { delete element._id});
   expect(body.mapCategoriesNextIds).toEqual([{category:'B', nextId:1}, {category:'V', nextId:1}, {category:'S', nextId:3}])
 })
