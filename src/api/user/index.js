@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { password as passwordAuth, master, token } from '../../services/passport'
-import { index, showMe, show, create, update, updatePassword, destroy } from './controller'
+import { index, showMe, show, create, update, joinHome, delHomeInfo, updatePassword, destroy } from './controller'
 import { schema } from './model'
 export User, { schema } from './model'
 
@@ -91,6 +91,47 @@ router.put('/:id',
   token({ required: true }),
   body({ name, language, home, homeOrder, picture }),
   update)
+
+
+
+/**
+ * @api {put} /users/:id/home/join Join user's home
+ * @apiName JoinHome
+ * @apiGroup User
+ * @apiPermission user
+ * @apiDescription Join existing home 
+ * @apiParam {String} [home] existing home id2.
+ * @apiSuccess {Object} user User's data.
+ * @apiSuccess {Object} home Home's data.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 401 Current user or admin access only.
+ * @apiError 404 User not found.
+ */
+router.put('/:id/home/join',
+  token({ required: true }),
+  body({ home }),
+  joinHome)
+
+
+
+/**
+ * @api {put} /users/:id/home/del Remove user's home info
+ * @apiName DelHome
+ * @apiGroup User
+ * @apiPermission user
+ * @apiDescription Del home info from user
+ * @apiSuccess {Object} user User's data.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 401 Current user or admin access only.
+ * @apiError 404 User not found.
+ */
+router.put('/:id/home/del',
+  token({ required: true }),
+  body({ home }),
+  delHomeInfo)
+
+
+  
 
 /**
  * @api {put} /users/:id/password Update password

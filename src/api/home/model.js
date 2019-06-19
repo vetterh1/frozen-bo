@@ -3,9 +3,10 @@ import shortid from 'shortid'
 
 
 const homeSchema = new Schema({
-  id2: { type: 'String', default: shortid.generate },
+  id2: { type: 'String', unique: true, index: true, default: shortid.generate },
   name: { type: 'String', required: true },
   label: { type: 'String', required: false },
+  nextHomeOrder: { type: 'Number', default: 0 },
   mapCategoriesNextIds: [{
     category: String,
     nextId: Number
@@ -26,6 +27,7 @@ homeSchema.methods = {
       id2: this.id2,
       name: this.name,
       label: this.label,
+      nextHomeOrder: this.nextHomeOrder,
       mapCategoriesNextIds: this.mapCategoriesNextIds,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
@@ -36,6 +38,10 @@ homeSchema.methods = {
       // add properties for a full view
     } : view
   }
+}
+
+homeSchema.statics.findById2 = function(id2) {
+  return this.findOne({ id2: id2 });
 }
 
 const model = mongoose.model('Home', homeSchema)

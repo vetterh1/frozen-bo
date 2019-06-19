@@ -2,3 +2,8 @@
                 To play in prod next install
 ---------------------------------------------------------------
 
+---- Index creation ----
+
+db.users.createIndex({email:1}, {unique:true});
+db.homes.createIndex({id2:1}, {unique:true});
+

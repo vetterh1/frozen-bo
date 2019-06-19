@@ -74,11 +74,108 @@ use frozen
 db.createUser({ user:"frozen", pwd:"gem", roles:["readWrite"] })
 db.createUser({ user:"adminFrozen", pwd:"pwdRoot", roles: ["dbAdmin"]})
 
+# Remove home info from ALL users:
+db.users.update({}, { $unset: { home:"", homeOrder:"" } }, {multi:true})
 
 
 
 
+---------------------------------------------------------------
+                      JS / ES6 concepts
+---------------------------------------------------------------
 
+
+Promise chaining
+----------------
+
+        new Promise(function(resolve, reject) {
+
+                setTimeout(() => resolve(1), 1000); // (*)
+
+        }).then(function(result) { // (**)
+
+                alert(result); // 1
+                return result * 2;
+
+        }).then(function(result) { // (***)
+
+                alert(result); // 2
+                return result * 2;
+
+        }).then(function(result) {
+
+                alert(result); // 4
+                return result * 2;
+
+        });
+
+        The idea is that the result is passed through the chain of .then handlers.
+        Here the flow is:
+        - The initial promise resolves in 1 second (*),
+        - Then the .then handler is called (**).
+        - The value that it returns is passed to the next .then handler (***)
+        …and so on.
+
+        Normally, a value returned by a .then handler is immediately passed to the next handler. But there’s an exception.
+        If the returned value is a promise, then the further execution is suspended until it settles. After that, the result of that promise is given to the next .then handler.
+        For instance:
+
+        new Promise(function(resolve, reject) {
+                setTimeout(() => resolve(1), 1000);
+        }).then(function(result) {
+                alert(result); // 1
+                return new Promise((resolve, reject) => { // (*)
+                        setTimeout(() => resolve(result * 2), 1000);
+                });
+        }).then(function(result) { // (**)
+                alert(result); // 2
+                return new Promise((resolve, reject) => {
+                        setTimeout(() => resolve(result * 2), 1000);
+                });
+        }).then(function(result) {
+                alert(result); // 4
+        });
+
+        Here the first .then shows 1 returns new Promise(…) in the line (*). 
+        After one second it resolves, and the result (the argument of resolve, here it’s result*2) is passed on to handler of the second .then in the line (**).
+        It shows 2 and does the same thing.
+        So the output is 1 → 2 → 4, but with 1 second delay between alert calls.
+        Returning promises allows us to build chains of asynchronous actions.
+
+Currying
+--------
+
+        A curried function is a function that takes multiple arguments one at a time. 
+        Given a function with 3 parameters, the curried version will take one argument 
+        and return a function that takes the next argument, which returns a function 
+        that takes the third argument. 
+        The last function returns the result of applying the function to all of its arguments.
+
+        Ex:
+        const add = a => b => a + b;
+        const result = add(2)(3); // => 5
+
+
+
+Side effects: Currying with promises
+------------------------------------
+
+        A common requirement when chaining promises is to perform some sort of side effect.
+        In other words, execute an action that doesn’t result in data that is passed to the next step in the chain. 
+        A side effect could be the need to send data to some other system, or simply just log some data.
+
+        Ex:
+
+        const sideEffect = fn => d => {
+                fn(d)         // Execute the function placed in the 1st parenthesis
+                return d;     // Pass the content of the 2nd parenthesis to .next without changing it
+        };
+
+
+        getReposForUser('ColinEberhardt')
+        .then(sideEffect(repos => console.log(`repos returned ${repos.length}`)))
+        .then(getRepoWithMostStargazers)
+        .then(console.log)
 
 
 ---------------------------------------------------------------

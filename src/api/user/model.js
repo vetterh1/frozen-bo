@@ -10,6 +10,8 @@ const roles = ['user', 'admin']
 const userSchema = new Schema({
   email: {
     type: String,
+    unique: true,
+    index: true,
     match: /^\S+@\S+\.\S+$/,
     required: true,
     unique: true,

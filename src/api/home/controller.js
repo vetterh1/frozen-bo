@@ -8,7 +8,10 @@ export const create = ({ bodymen: { body } }, res, next) =>
   Home.create(body)
     .then((home) => home.view(true))
     .then(success(res, 201))
-    .catch(next)
+    .catch((err) => {
+      console.log('Home create error:', err);
+      next(err)
+    })
 
 export const index = ({ querymen: { query, select, cursor } }, res, next) =>
   Home.find(query, select, cursor)
@@ -25,7 +28,7 @@ export const show = ({ params }, res, next) =>
 
 
 export const showById2 = ({ params }, res, next) =>
-    Home.findOne({id2: params.id2})
+    Home.findById2(params.id2)
       .then(notFound(res))
       .then((home) => home ? home.view() : null)
       .then(success(res))

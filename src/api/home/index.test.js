@@ -4,7 +4,7 @@ import { signSync } from '../../services/jwt'
 import express from '../../services/express'
 import { User } from '../user'
 import routes, { Home } from '.'
-import { itemCharacteristics } from '../../utils/itemCharacteristics'
+// import { itemCharacteristics } from '../../utils/itemCharacteristics'
 
 const app = () => express(apiRoot, routes)
 

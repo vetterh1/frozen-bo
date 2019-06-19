@@ -6,6 +6,11 @@ export const success = (res, status) => (entity) => {
 }
 
 export const notFound = (res) => (entity) => {
+
+  // Uses Currying to:
+  // - just pass the promise return (above in the promise chain) to the next if it exists
+  // - end the chain by returning a 404 error if promise did not return something
+
   if (entity) {
     return entity
   }

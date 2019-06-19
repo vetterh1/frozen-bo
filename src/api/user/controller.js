@@ -1,5 +1,6 @@
 import { success, notFound } from '../../services/response/'
 import { User } from '.'
+import Home from '../home/model'
 import { sign } from '../../services/jwt'
 
 export const index = ({ querymen: { query, select, cursor } }, res, next) =>
@@ -15,8 +16,10 @@ export const show = ({ params }, res, next) =>
     .then(success(res))
     .catch(next)
 
-export const showMe = ({ user }, res) =>
-  res.json(user.view(true))
+export const showMe = ({ user }, res) => {
+  console.log('user showMe:', user);
+  return res.json(user.view(true))
+}
 
 export const create = ({ bodymen: { body } }, res, next) =>
   User.create(body)
@@ -26,6 +29,8 @@ export const create = ({ bodymen: { body } }, res, next) =>
         .then(success(res, 201))
     })
     .catch((err) => {
+      // console.log('User create error:', err);
+
       /* istanbul ignore else */
       if (err.name === 'MongoError' && err.code === 11000) {
         res.status(409).json({
@@ -44,6 +49,8 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
     .then((result) => {
       if (!result) return null
       console.log('------------------------------------------------------------------------------------ user update 1:', result);
+      console.log('user param:', user);
+      console.log('params param:', params);
       const isAdmin = user.role === 'admin'
       const isSelfUpdate = user.id === result.id
       if (!isSelfUpdate && !isAdmin) {
@@ -89,7 +96,94 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
     .then(success(res))
     .catch(next)
 
-export const updatePassword = ({ bodymen: { body }, params, user }, res, next) =>
+
+
+
+
+    export const joinHome = async ({ bodymen: { body }, params, user }, res, next) => {
+      try {
+        const userFound = await User.findById(params.id === 'me' ? user.id : params.id);
+        if(!userFound) return notFound(res)(userFound);
+        const isAdmin = user.role === 'admin'
+        const isSelfUpdate = user.id === userFound.id
+        // console.log('user joinHome params:', params);
+        // console.log('user joinHome user to update:', user);
+        // console.log('user joinHome user found:', userFound);
+
+        if (!isSelfUpdate && !isAdmin) {
+          res.status(401).json({
+            valid: false,
+            message: 'You can\'t change other user\'s data'
+          })
+          return null
+        }  
+        // console.log('user joinHome body:', body);
+  
+        // Home is already set and the same: return success & null content
+        if(userFound.home === body.home) success(res)(null);
+
+        const homeFound = await Home.findById2(body.home);
+        if(!homeFound) return notFound(res)(null);
+        // console.log('user joinHome found:', homeFound);
+  
+        userFound.home = homeFound.id2;
+        userFound.homeOrder = homeFound.nextHomeOrder++;
+        const resUserSave = await userFound.save();
+        const resHomeSave = await homeFound.save();
+        // console.log('user joinHome resUserSave:', resUserSave);
+        // console.log('user joinHome resHomeSave:', resHomeSave);
+
+        success(res)({home: homeFound, user: resUserSave});
+
+      } catch (error) {
+        console.log('user joinHome error:', error);
+        res.status(500).end()
+      }
+  }
+
+
+
+
+
+
+
+  export const delHomeInfo = async ({ bodymen: { body }, params, user }, res, next) => {
+    try {
+      const userFound = await User.findById(params.id === 'me' ? user.id : params.id);
+      if(!userFound) return notFound(res)(userFound);
+      const isAdmin = user.role === 'admin'
+      const isSelfUpdate = user.id === userFound.id
+      // console.log('user joinHome params:', params);
+      // console.log('user joinHome user to update:', user);
+      // console.log('user joinHome user found:', userFound);
+
+      if (!isSelfUpdate && !isAdmin) {
+        res.status(401).json({
+          valid: false,
+          message: 'You can\'t change other user\'s data'
+        })
+        return null
+      }  
+      // console.log('user joinHome body:', body);
+
+      userFound.home = null;
+      userFound.homeOrder = null;
+      const resUserSave = await userFound.save();
+      // console.log('user joinHome resUserSave:', resUserSave);
+      // console.log('user joinHome resHomeSave:', resHomeSave);
+
+      success(res)({user: resUserSave});
+
+    } catch (error) {
+      console.log('user delHomeInfo error:', error);
+      res.status(500).end()
+    }
+}
+
+
+
+
+  export const updatePassword = ({ bodymen: { body }, params, user }, res, next) =>
   User.findById(params.id === 'me' ? user.id : params.id)
     .then(notFound(res))
     .then((result) => {

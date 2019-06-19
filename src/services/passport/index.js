@@ -39,7 +39,7 @@ export const google = () =>
 export const master = () =>
   passport.authenticate('master', { session: false })
 
-export const token = ({ required, roles = User.roles } = {}) => (req, res, next) =>
+export const token = ({ required, roles = User.roles } = {}) => (req, res, next) => {
   passport.authenticate('token', { session: false }, (err, user, info) => {
     if (err || (required && !user) || (required && !~roles.indexOf(user.role))) {
       console.log('passport.authenticate: error 401 (err):', err, user);
@@ -49,7 +49,7 @@ export const token = ({ required, roles = User.roles } = {}) => (req, res, next)
       if (err) return res.status(401).end()
       next()
     })
-  })(req, res, next)
+  })(req, res, next)}
 
 passport.use('password', new BasicStrategy((email, password, done) => {
   const userSchema = new Schema({ email: schema.tree.email, password: schema.tree.password })
