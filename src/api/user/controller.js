@@ -133,10 +133,53 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
         // console.log('user joinHome resUserSave:', resUserSave);
         // console.log('user joinHome resHomeSave:', resHomeSave);
 
-        success(res)({home: homeFound, user: resUserSave});
+        success(res)({home: resHomeSave, user: resUserSave});
 
       } catch (error) {
         console.log('user joinHome error:', error);
+        res.status(500).end()
+      }
+  }
+
+
+
+
+
+    export const joinNewHome = async ({ body , params, user }, res) => {
+      console.log('user joinNewHome params:', params);
+      console.log('user joinNewHome user:', user);
+      console.log('user joinNewHome body:', body);
+
+      try {
+        const userFound = await User.findById(params.id === 'me' ? user.id : params.id);
+        if(!userFound) return notFound(res)(userFound);
+        const isAdmin = user.role === 'admin'
+        const isSelfUpdate = user.id === userFound.id
+
+        if (!isSelfUpdate && !isAdmin) {
+          res.status(401).json({
+            valid: false,
+            message: 'You can\'t change other user\'s data'
+          })
+          return null
+        }  
+        // console.log('user joinHome body:', body);
+  
+        // User has already a home... should do something... maybe delete old home if no user attached to it...
+        // if(userFound.home) ......
+
+        const homeNew = await Home.create(body);
+        userFound.home = homeNew.id2;
+        userFound.homeOrder = homeNew.nextHomeOrder++;
+        const resUserSave = await userFound.save();
+        const resHomeSave = await homeNew.save();
+        // console.log('user joinHome resUserSave:', resUserSave);
+        // console.log('user joinHome resHomeSave:', resHomeSave);
+
+        success(res)({home: resHomeSave, user: resUserSave});
+
+      } catch (error) {
+        console.log('user joinNewHome error:', error);
         res.status(500).end()
       }
   }

@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { password as passwordAuth, master, token } from '../../services/passport'
-import { index, showMe, show, create, update, joinHome, delHomeInfo, updatePassword, destroy } from './controller'
+import { index, showMe, show, create, update, joinHome, joinNewHome, delHomeInfo, updatePassword, destroy } from './controller'
 import { schema } from './model'
 export User, { schema } from './model'
 
@@ -111,6 +111,25 @@ router.put('/:id/home/join',
   token({ required: true }),
   body({ home }),
   joinHome)
+
+
+/**
+ * @api {put} /users/:id/home/new Add new home to user
+ * @apiName JoinNewHome
+ * @apiGroup User
+ * @apiPermission user
+ * @apiDescription Create a new home and assign it to the user
+ * @apiParam {String} [name] new home name.
+ * @apiSuccess {Object} user User's data.
+ * @apiSuccess {Object} home Home's data.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 401 Current user or admin access only.
+ * @apiError 404 User not found.
+ */
+router.put('/:id/home/new',
+  token({ required: true }),
+  // body({ name, label }),
+  joinNewHome)
 
 
 
