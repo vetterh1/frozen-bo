@@ -241,7 +241,7 @@ test('PUT /users/:id 200 (user)', async () => {
 test('PUT /users/:id 200 (user)', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${user1.id}`)
-    .send({ access_token: session1, email: 'test@test.com', home: '123456', homeOrder: 1, mapCategoriesNextIds: [{category:'B', nextId:1}, {category:'V', nextId:1}, {category:'S', nextId:3}] })
+    .send({ access_token: session1, email: 'test@test.com', home: '123456', homeOrder: 1 })
   expect(status).toBe(200)
   console.log("update user:", body)
   expect(typeof body).toBe('object')
@@ -249,8 +249,6 @@ test('PUT /users/:id 200 (user)', async () => {
   expect(body.home).toBe('123456')
   expect(body.homeOrder).toBe(1)
   expect(body.language).toBe('en')
-  body.mapCategoriesNextIds.forEach(element => { delete element._id});
-  expect(body.mapCategoriesNextIds).toEqual([{category:'B', nextId:1}, {category:'V', nextId:1}, {category:'S', nextId:3}])
 })
 
 test('PUT /users/:id 200 (admin)', async () => {

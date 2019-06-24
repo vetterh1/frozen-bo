@@ -1,20 +1,53 @@
 import { success, notFound, authorOrAdmin } from '../../services/response/'
 import { Item } from '.'
+import { User } from '../user'
 
-const generateCode = (category, homeOrder) => {
-  const nextId = 23;
-  return `${category}${homeOrder}${nextId}`;
+const generateCode = async (category, user) => {
+  try {
+    console.log('item generateCode category, user:', category, user);
 
-  console.log('itemSchema.pre.save:', this);  
+    // Find next id for this category:
+    let nextId = 0;
+    if(user.nextIds) {
+      console.log('1');
+      const nextIdString = user.nextIds.get(category);
+      if(nextIdString) nextId = parseInt(nextIdString);
+    }
+    else {
+      console.log('2');
+      user.nextIds = {};
+    }
+    if(!nextId) {
+      console.log('3');
+      nextId = 0;
+    }
+    console.log('item generateCode nextId:', nextId);
+
+    // Generate the code:
+    const code = `${category}${user.homeOrder}${nextId}`
+    console.log('item generateCode code:', code);
+
+    // Increment the nextId and save it:
+    user.nextIds.set(category, nextId + 1);
+    const res = await user.save()
+    console.log('item generateCode res update category nextId:', res);
+
+    return code;
+    
+  } catch (error) {
+    console.error('item generateCode error:', error);
+    return null;  
+  }
+
 }
 
 
 
 
 
-export const create = ({ user, bodymen: { body } }, res, next) => {
-  const code = generateCode(body.category, user.homeOrder);
-  // console.log('Create item: ', body, user);
+export const create = async ({ user, bodymen: { body } }, res, next) => {
+  console.log('Create item: ', body, user);
+  const code = await generateCode(body.category, user);
   Item.create({ ...body, code, user: user.id })
     // .then((item) => {console.log('item: ', item); return item})
     .then((item) => item.view(true))

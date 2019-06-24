@@ -36,10 +36,10 @@ const userSchema = new Schema({
   homeOrder: {
     type: Number,
   },
-  mapCategoriesNextIds: [{
-    category: String,
-    nextId: Number
-  }],  
+  nextIds: {
+    type: Map,
+    of: String
+  },
   services: {
     facebook: String,
     github: String,
@@ -89,7 +89,7 @@ userSchema.pre('save', function (next) {
 userSchema.methods = {
   view (full) {
     let view = {}
-    let fields = ['id', 'name', 'email', 'language', 'home','homeOrder', 'mapCategoriesNextIds']
+    let fields = ['id', 'name', 'email', 'language', 'home','homeOrder', 'nextIds']
 
     if (full) {
       fields = [...fields, 'picture', 'createdAt']

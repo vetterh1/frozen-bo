@@ -34,6 +34,7 @@ export const authorOrAdmin = (res, user, userField) => (entity) => {
     return null    
   } catch (error) {
     console.error("authorOrAdmin exception: ", error);
+    return null    
   }
 
 }
