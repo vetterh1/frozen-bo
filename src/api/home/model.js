@@ -4,13 +4,9 @@ import shortid from 'shortid'
 
 const homeSchema = new Schema({
   id2: { type: 'String', unique: true, index: true, default: shortid.generate },
-  name: { type: 'String', required: true },
+  name: { type: 'String', required: false },
   label: { type: 'String', required: false },
   nextHomeOrder: { type: 'Number', default: 0 },
-  mapCategoriesNextIds: [{
-    category: String,
-    nextId: Number
-  }]
 }, {
   timestamps: true, // adds createdAt and updatedAt
   toJSON: {
@@ -28,7 +24,6 @@ homeSchema.methods = {
       name: this.name,
       label: this.label,
       nextHomeOrder: this.nextHomeOrder,
-      mapCategoriesNextIds: this.mapCategoriesNextIds,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     }

@@ -3,7 +3,7 @@ import { Home } from '.'
 let home
 
 beforeEach(async () => {
-  home = await Home.create({ name: 'test', label: 'test', id2: 'test', mapCategoriesNextIds: [{category:'B', nextId:1}, {category:'V', nextId:1}, {category:'S', nextId:3}] })
+  home = await Home.create({ name: 'test', label: 'test', id2: 'test' })
 })
 
 describe('view', () => {
@@ -16,8 +16,6 @@ describe('view', () => {
     expect(view.id2).toBe(home.id2)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
-    expect(view.mapCategoriesNextIds).toBe(home.mapCategoriesNextIds)
-
   })
 
   it('returns full view', () => {
@@ -29,6 +27,5 @@ describe('view', () => {
     expect(view.id2).toBe(home.id2)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
-    expect(view.mapCategoriesNextIds).toBe(home.mapCategoriesNextIds)
   })
 })

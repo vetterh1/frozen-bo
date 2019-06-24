@@ -14,7 +14,6 @@ const userSchema = new Schema({
     index: true,
     match: /^\S+@\S+\.\S+$/,
     required: true,
-    unique: true,
     trim: true,
     lowercase: true
   },
@@ -37,6 +36,10 @@ const userSchema = new Schema({
   homeOrder: {
     type: Number,
   },
+  mapCategoriesNextIds: [{
+    category: String,
+    nextId: Number
+  }],  
   services: {
     facebook: String,
     github: String,
@@ -86,7 +89,7 @@ userSchema.pre('save', function (next) {
 userSchema.methods = {
   view (full) {
     let view = {}
-    let fields = ['id', 'name', 'email', 'language', 'home','homeOrder']
+    let fields = ['id', 'name', 'email', 'language', 'home','homeOrder', 'mapCategoriesNextIds']
 
     if (full) {
       fields = [...fields, 'picture', 'createdAt']

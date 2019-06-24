@@ -5,7 +5,8 @@ let user, item
 
 beforeEach(async () => {
   user = await User.create({ email: 'a@a.com', password: '123456' })
-  item = await Item.create({ user, category: 'test', details: 'test', container: 'test', color: 'test', size: 'test', freezer: 'test', location: 'test', name: 'test', expiration: 'test' })
+  item = await Item.create({ user, code: 'T1234', category: 'test', details: 'test', container: 'test', color: 'test',
+   size: 'test', freezer: 'test', location: 'test', name: 'test', expiration: new Date() })
 })
 
 describe('view', () => {
@@ -15,6 +16,7 @@ describe('view', () => {
     expect(view.id).toBe(item.id)
     expect(typeof view.user).toBe('object')
     expect(view.user.id).toBe(user.id)
+    expect(view.code).toBe(item.code)
     expect(view.category).toBe(item.category)
     expect(view.details).toBe(item.details)
     expect(view.container).toBe(item.container)
@@ -34,6 +36,7 @@ describe('view', () => {
     expect(view.id).toBe(item.id)
     expect(typeof view.user).toBe('object')
     expect(view.user.id).toBe(user.id)
+    expect(view.code).toBe(item.code)
     expect(view.category).toBe(item.category)
     expect(view.details).toBe(item.details)
     expect(view.container).toBe(item.container)

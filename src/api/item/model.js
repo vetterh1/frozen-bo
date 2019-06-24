@@ -1,6 +1,12 @@
 import mongoose, { Schema } from 'mongoose'
 
 const itemSchema = new Schema({
+  code: {
+    type: String,
+    unique: true,
+    index: true,
+    required: true
+  },
   user: {
     type: Schema.ObjectId,
     ref: 'User',
@@ -31,7 +37,7 @@ const itemSchema = new Schema({
     type: String
   },
   expiration: {
-    type: String
+    type: Date
   }
 }, {
   timestamps: true, // adds createdAt and updatedAt
@@ -46,6 +52,7 @@ itemSchema.methods = {
     const view = {
       // simple view
       id: this.id,
+      code: this.code,
       user: this.user.view(full),
       category: this.category,
       details: this.details,
@@ -66,6 +73,22 @@ itemSchema.methods = {
     } : view
   }
 }
+
+
+itemSchema.pre('save', function (next) {
+
+  // // Code already exists, don't need to generate it!
+  // if (this.code) return next();
+
+  // const homeOrder = 1;
+  // const nextId = 23;
+  // this.code = `${this.category}${homeOrder}${nextId}`;
+
+  // console.log('itemSchema.pre.save:', this);
+
+
+  next();
+})
 
 const model = mongoose.model('Item', itemSchema)
 

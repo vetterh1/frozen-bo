@@ -48,9 +48,9 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
     .then(notFound(res))
     .then((result) => {
       if (!result) return null
-      console.log('------------------------------------------------------------------------------------ user update 1:', result);
-      console.log('user param:', user);
-      console.log('params param:', params);
+      // console.log('------------------------------------------------------------------------------------ user update 1:', result);
+      // console.log('user param:', user);
+      // console.log('params param:', params);
       const isAdmin = user.role === 'admin'
       const isSelfUpdate = user.id === result.id
       if (!isSelfUpdate && !isAdmin) {
@@ -63,24 +63,24 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
       return result
     })
     .then((user) => {
-      console.log('user update 2 user:', user, user.constructor.name);
-      console.log('user update 2 body:', body, body.constructor.name);      
-      console.log('user update 2 user properties:', Object.getOwnPropertyNames(user));
-      console.log('user update 2 body properties:', Object.getOwnPropertyNames(body));
+      // console.log('user update 2 user:', user, user.constructor.name);
+      // console.log('user update 2 body:', body, body.constructor.name);      
+      // console.log('user update 2 user properties:', Object.getOwnPropertyNames(user));
+      // console.log('user update 2 body properties:', Object.getOwnPropertyNames(body));
 
       const updatedProperties = Object.getOwnPropertyNames(body)
       updatedProperties.forEach(element => {
         if(body[element]) {
-          console.log('update:', element, body[element]);
+          // console.log('update:', element, body[element]);
 
           user[element] = body[element]
         } else {
-          console.log('NO update:', element, body[element]);
+          // console.log('NO update:', element, body[element]);
         }
       });
       // const newUser = user ? Object.assign(user, body) : null
-      console.log('user update 2 user updated:', user, user.constructor.name);
-      console.log('user update 2 user updated properties:', Object.getOwnPropertyNames(user));
+      // console.log('user update 2 user updated:', user, user.constructor.name);
+      // console.log('user update 2 user updated properties:', Object.getOwnPropertyNames(user));
 
       return user.save()
 
@@ -90,7 +90,7 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
 
     })
     .then((user) => {
-      console.log('user update 3:', user);
+      // console.log('user update 3:', user);
       return user ? user.view(true) : null
     })
     .then(success(res))
@@ -136,7 +136,7 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
         success(res)({home: resHomeSave, user: resUserSave});
 
       } catch (error) {
-        console.log('user joinHome error:', error);
+        console.error('user joinHome error:', error);
         res.status(500).end()
       }
   }
@@ -163,9 +163,8 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
           })
           return null
         }  
-        // console.log('user joinHome body:', body);
   
-        // User has already a home... should do something... maybe delete old home if no user attached to it...
+        // If user already has a home... should do something... maybe delete old home if no user attached to it...
         // if(userFound.home) ......
 
         const homeNew = await Home.create(body);

@@ -7,7 +7,7 @@ import { schema } from './model'
 export Home, { schema } from './model'
 
 const router = new Router()
-const { name, label, id2, mapCategoriesNextIds } = schema.tree
+const { name, label, id2 } = schema.tree
 
 /**
  * @api {post} /homes Create home
@@ -90,7 +90,7 @@ router.get('/id2/:id2',
  */
 router.put('/:id',
   token({ required: true }),
-  body({ name, label, id2, mapCategoriesNextIds }),
+  body({ name, label, id2 }),
   update)
 
 /**

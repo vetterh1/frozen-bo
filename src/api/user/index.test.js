@@ -3,14 +3,16 @@ import { masterKey, apiRoot } from '../../config'
 import { signSync } from '../../services/jwt'
 import express from '../../services/express'
 import routes, { User } from '.'
+import { Home } from '../home'
 
 const app = () => express(apiRoot, routes)
 
-let user1, user2, admin, session1, session2, adminSession
+let user1, user2, home, admin, session1, session2, adminSession
 
 beforeEach(async () => {
   user1 = await User.create({ name: 'user', email: 'a@a.com', password: '123456', language:'en' })
   user2 = await User.create({ name: 'user', email: 'b@b.com', password: '123456' })
+  home = await Home.create({name:'homeTest', id2: 'homeId2'})
   admin = await User.create({ email: 'c@c.com', password: '123456', role: 'admin' })
   session1 = signSync(user1.id)
   session2 = signSync(user2.id)
@@ -239,7 +241,7 @@ test('PUT /users/:id 200 (user)', async () => {
 test('PUT /users/:id 200 (user)', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${user1.id}`)
-    .send({ access_token: session1, email: 'test@test.com', home: '123456', homeOrder: 1 })
+    .send({ access_token: session1, email: 'test@test.com', home: '123456', homeOrder: 1, mapCategoriesNextIds: [{category:'B', nextId:1}, {category:'V', nextId:1}, {category:'S', nextId:3}] })
   expect(status).toBe(200)
   console.log("update user:", body)
   expect(typeof body).toBe('object')
@@ -247,6 +249,8 @@ test('PUT /users/:id 200 (user)', async () => {
   expect(body.home).toBe('123456')
   expect(body.homeOrder).toBe(1)
   expect(body.language).toBe('en')
+  body.mapCategoriesNextIds.forEach(element => { delete element._id});
+  expect(body.mapCategoriesNextIds).toEqual([{category:'B', nextId:1}, {category:'V', nextId:1}, {category:'S', nextId:3}])
 })
 
 test('PUT /users/:id 200 (admin)', async () => {
@@ -395,4 +399,133 @@ test('DELETE /users/:id 404 (admin)', async () => {
     .delete(apiRoot + '/123456789098765432123456')
     .send({ access_token: adminSession })
   expect(status).toBe(404)
+})
+
+
+
+
+
+
+
+test('PUT /users/:id/home/join 200 (user)', async () => {
+  const { status, body } = await request(app())
+    .put(`${apiRoot}/${user1.id}/home/join`)
+    .send({ access_token: session1, home: home.id2})
+  console.log("join home:", body)
+  expect(status).toBe(200)
+  expect(typeof body).toBe('object')
+  expect(body.user.home).toBe(home.id2)
+})
+
+test('PUT /users/:id/home/join 200 (admin)', async () => {
+  const { status, body } = await request(app())
+    .put(`${apiRoot}/${user1.id}/home/join`)
+    .send({ access_token: adminSession, home: home.id2 })
+  console.log("join home:", body)
+  expect(status).toBe(200)
+  expect(typeof body).toBe('object')
+})
+
+test('PUT /users/:id/home/join 401 (user) - another user', async () => {
+  const { status } = await request(app())
+    .put(`${apiRoot}/${user1.id}/home/join`)
+    .send({ access_token: session2, home: home.id2 })
+  expect(status).toBe(401)
+})
+
+test('PUT /users/:id/home/join 401', async () => {
+  const { status } = await request(app())
+    .put(`${apiRoot}/${user1.id}/home/join`)
+    .send({ home: home.id2 })
+  expect(status).toBe(401)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+test('PUT /users/:id/home/new 200 (user)', async () => {
+  const { status, body } = await request(app())
+    .put(`${apiRoot}/${user1.id}/home/new`)
+    .send({ access_token: session1, home: home.name})
+  console.log("new home:", body)
+  expect(status).toBe(200)
+  expect(typeof body).toBe('object')
+  expect(body.user.home).toBe(body.home.id2)
+})
+
+test('PUT /users/:id/home/new 200 (admin)', async () => {
+  const { status, body } = await request(app())
+    .put(`${apiRoot}/${user1.id}/home/new`)
+    .send({ access_token: adminSession, home: home.name })
+  console.log("new home:", body)
+  expect(status).toBe(200)
+  expect(typeof body).toBe('object')
+})
+
+test('PUT /users/:id/home/new 401 (user) - another user', async () => {
+  const { status } = await request(app())
+    .put(`${apiRoot}/${user1.id}/home/new`)
+    .send({ access_token: session2, home: home.name })
+  expect(status).toBe(401)
+})
+
+test('PUT /users/:id/home/new 401', async () => {
+  const { status } = await request(app())
+    .put(`${apiRoot}/${user1.id}/home/new`)
+    .send({ home: home.name })
+  expect(status).toBeGreaterThan(399)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+test('PUT /users/:id/home/del 200 (user)', async () => {
+  const { status, body } = await request(app())
+    .put(`${apiRoot}/${user1.id}/home/del`)
+    .send({ access_token: session1})
+  console.log("del home:", body)
+  expect(status).toBe(200)
+  expect(typeof body).toBe('object')
+})
+
+test('PUT /users/:id/home/del 200 (admin)', async () => {
+  const { status, body } = await request(app())
+    .put(`${apiRoot}/${user1.id}/home/del`)
+    .send({ access_token: adminSession })
+  console.log("del home:", body)
+  expect(status).toBe(200)
+  expect(typeof body).toBe('object')
+})
+
+test('PUT /users/:id/home/del 401 (user) - another user', async () => {
+  const { status } = await request(app())
+    .put(`${apiRoot}/${user1.id}/home/del`)
+    .send({ access_token: session2 })
+  expect(status).toBe(401)
+})
+
+test('PUT /users/:id/home/del 401', async () => {
+  const { status } = await request(app())
+    .put(`${apiRoot}/${user1.id}/home/del`)
+    .send({ home: home.id2 })
+  expect(status).toBeGreaterThan(399)
 })

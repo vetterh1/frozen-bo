@@ -39,7 +39,7 @@ export const update = ({ bodymen: { body }, params }, res, next) =>
   Home.findById(params.id)
     .then(notFound(res))
     .then((home) => {
-      console.log("update home:", home)
+      // console.log("update home:", home)
       return home ? Object.assign(home, body).save() : null
     })
     .then((home) => home ? home.view(true) : null)

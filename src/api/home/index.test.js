@@ -21,12 +21,12 @@ beforeEach(async () => {
 test('POST /homes 201 (user)', async () => {
   const { status, body } = await request(app())
     .post(`${apiRoot}`)
-    .send({ access_token: userSession, name: 'test', label: 'test', id2: 'testId2' })
+    .send({ access_token: userSession, name: 'test2', label: 'test2', id2: 'testId22' })
   expect(status).toBe(201)
   expect(typeof body).toEqual('object')
-  expect(body.name).toEqual('test')
-  expect(body.label).toEqual('test')
-  expect(body.id2).toEqual('testId2')
+  expect(body.name).toEqual('test2')
+  expect(body.label).toEqual('test2')
+  expect(body.id2).toEqual('testId22')
 })
 
 test('POST /homes 401', async () => {
@@ -102,15 +102,13 @@ test('GET /homes/id2/:id2 404 (user)', async () => {
 test('PUT /homes/:id 200 (user)', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${home.id}`)
-    .send({ access_token: userSession, name: 'test', label: 'test', id2: 'testId2', mapCategoriesNextIds: [{category:'B', nextId:1}, {category:'V', nextId:1}, {category:'S', nextId:3}] })
+    .send({ access_token: userSession, name: 'test2', label: 'test2', id2: 'testId22' })
   expect(status).toBe(200)
   expect(typeof body).toEqual('object')
   expect(body.id).toEqual(home.id)
-  expect(body.name).toEqual('test')
-  expect(body.label).toEqual('test')
-  expect(body.id2).toEqual('testId2')
-  body.mapCategoriesNextIds.forEach(element => { delete element._id});
-  expect(body.mapCategoriesNextIds).toEqual([{category:'B', nextId:1}, {category:'V', nextId:1}, {category:'S', nextId:3}])
+  expect(body.name).toEqual('test2')
+  expect(body.label).toEqual('test2')
+  expect(body.id2).toEqual('testId22')
 })
 
 test('PUT /homes/:id 401', async () => {
@@ -122,7 +120,7 @@ test('PUT /homes/:id 401', async () => {
 test('PUT /homes/:id 404 (user)', async () => {
   const { status } = await request(app())
     .put(apiRoot + '/123456789098765432123456')
-    .send({ access_token: userSession, name: 'test', label: 'test', id2: 'test' })
+    .send({ access_token: userSession, name: 'test2', label: 'test2', id2: 'test2' })
   expect(status).toBe(404)
 })
 

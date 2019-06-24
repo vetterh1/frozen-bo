@@ -16,7 +16,7 @@ export const token = ({ required, roles = User.roles } = {}) => (req, res, next)
     // console.log('token authenticate: user, err:', user, err);
 
     if (err || (required && !user) || (required && !~roles.indexOf(user.role))) {
-      console.log('passport.authenticate: error 401 (err):', err, user);
+      console.error('passport.authenticate: error 401 (err):', err, user);
       return res.status(401).end()
     }
     req.logIn(user, { session: false }, (err) => {
@@ -34,7 +34,7 @@ export const token = ({ required, roles = User.roles } = {}) => (req, res, next)
       ExtractJwt.fromAuthHeaderWithScheme('Bearer')
     ])
   }, ({ id }, done) => {
-    console.log('use token: id:', id);
+    // console.log('use token: id:', id);
   
     User.findById(id).then((user) => {
       done(null, user)
