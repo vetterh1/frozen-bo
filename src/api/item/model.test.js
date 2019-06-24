@@ -5,8 +5,9 @@ let user, item
 
 beforeEach(async () => {
   user = await User.create({ email: 'a@a.com', password: '123456' })
-  item = await Item.create({ user: user.id, code: 'T1234', category: 'test', details: 'test', container: 'test', color: 'test',
-   size: 'test', freezer: 'test', location: 'test', name: 'test', expiration: new Date() })
+  item = await Item.create({ user: user.id, code: 'T1234', category: 'C', details: 'test', container: 'test', color: 'test',
+    size: 'test', freezer: 'test', location: 'test', name: 'test', expiration: new Date(),
+    nextIds: {} })
 })
 
 describe('view', () => {

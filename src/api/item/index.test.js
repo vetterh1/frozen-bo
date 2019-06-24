@@ -12,14 +12,14 @@ const code = 'T1234';
 let user, userSession, anotherSession, item
 
 beforeEach(async () => {
-  user = await User.create({ email: 'a@a.com', password: '123456', homeOrder: 0 })
+  user = await User.create({ email: 'a@a.com', password: '123456', homeOrder: 0, nextIds: {V:"123"} })
   const anotherUser = await User.create({ email: 'b@b.com', password: '123456' })
   userSession = signSync(user.id)
   anotherSession = signSync(anotherUser.id);
   item = await Item.create({ user: user.id, code })
 })
 
-test('POST /items 201 (user)', async () => {
+test('POST /items 201 (user) - existing category', async () => {
   const now = new Date();
   const { status, body } = await request(app())
     .post(`${apiRoot}`)
@@ -27,6 +27,7 @@ test('POST /items 201 (user)', async () => {
   expect(status).toBe(201)
   expect(typeof body).toEqual('object')
   expect(body.code).toMatch(/V0/);
+  expect(body.code).toEqual('V0123');
   expect(body.category).toEqual('V')
   expect(body.details).toEqual('test')
   expect(body.container).toEqual('test')
@@ -37,6 +38,18 @@ test('POST /items 201 (user)', async () => {
   expect(body.name).toEqual('test')
   expect(body.expiration).toEqual(now.toISOString())
   expect(body.user).toEqual(user.id)
+})
+
+test('POST /items 201 (user) - new category', async () => {
+  const now = new Date();
+  const { status, body } = await request(app())
+    .post(`${apiRoot}`)
+    .send({ access_token: userSession, category: 'N', details: 'test', container: 'test', color: 'test', size: 'test', freezer: 'test', location: 'test', name: 'test', expiration: now })
+  expect(status).toBe(201)
+  expect(typeof body).toEqual('object')
+  expect(body.code).toMatch(/N0/);
+  expect(body.code).toEqual('N00');
+  expect(body.category).toEqual('N')
 })
 
 test('POST /items 401', async () => {

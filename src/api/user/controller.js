@@ -31,7 +31,7 @@ export const create = ({ bodymen: { body } }, res, next) =>
     .catch((err) => {
       // console.log('User create error:', err);
 
-      /* istanbul ignore else */
+      /* istanbul ignore next */
       if (err.name === 'MongoError' && err.code === 11000) {
         res.status(409).json({
           valid: false,
@@ -103,6 +103,7 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
     export const joinHome = async ({ bodymen: { body }, params, user }, res, next) => {
       try {
         const userFound = await User.findById(params.id === 'me' ? user.id : params.id);
+        /* istanbul ignore next */
         if(!userFound) return notFound(res)(userFound);
         const isAdmin = user.role === 'admin'
         const isSelfUpdate = user.id === userFound.id
@@ -120,9 +121,11 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
         // console.log('user joinHome body:', body);
   
         // Home is already set and the same: return success & null content
+        /* istanbul ignore next */
         if(userFound.home === body.home) success(res)(null);
 
         const homeFound = await Home.findById2(body.home);
+        /* istanbul ignore next */
         if(!homeFound) return notFound(res)(null);
         // console.log('user joinHome found:', homeFound);
   
@@ -136,6 +139,7 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
         success(res)({home: resHomeSave, user: resUserSave});
 
       } catch (error) {
+        /* istanbul ignore next */
         console.error('user joinHome error:', error);
         res.status(500).end()
       }
@@ -152,6 +156,7 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
 
       try {
         const userFound = await User.findById(params.id === 'me' ? user.id : params.id);
+        /* istanbul ignore next */
         if(!userFound) return notFound(res)(userFound);
         const isAdmin = user.role === 'admin'
         const isSelfUpdate = user.id === userFound.id
@@ -178,6 +183,7 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
         success(res)({home: resHomeSave, user: resUserSave});
 
       } catch (error) {
+        /* istanbul ignore next */
         console.log('user joinNewHome error:', error);
         res.status(500).end()
       }
@@ -192,6 +198,7 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
   export const delHomeInfo = async ({ bodymen: { body }, params, user }, res, next) => {
     try {
       const userFound = await User.findById(params.id === 'me' ? user.id : params.id);
+      /* istanbul ignore next */
       if(!userFound) return notFound(res)(userFound);
       const isAdmin = user.role === 'admin'
       const isSelfUpdate = user.id === userFound.id

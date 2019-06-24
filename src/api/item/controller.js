@@ -1,36 +1,26 @@
 import { success, notFound, authorOrAdmin } from '../../services/response/'
 import { Item } from '.'
-import { User } from '../user'
+
+
 
 const generateCode = async (category, user) => {
   try {
-    console.log('item generateCode category, user:', category, user);
-
     // Find next id for this category:
     let nextId = 0;
     if(user.nextIds) {
-      console.log('1');
       const nextIdString = user.nextIds.get(category);
       if(nextIdString) nextId = parseInt(nextIdString);
     }
-    else {
-      console.log('2');
+    else 
       user.nextIds = {};
-    }
-    if(!nextId) {
-      console.log('3');
-      nextId = 0;
-    }
-    console.log('item generateCode nextId:', nextId);
+    if(!nextId) nextId = 0;
 
     // Generate the code:
     const code = `${category}${user.homeOrder}${nextId}`
-    console.log('item generateCode code:', code);
 
     // Increment the nextId and save it:
     user.nextIds.set(category, nextId + 1);
     const res = await user.save()
-    console.log('item generateCode res update category nextId:', res);
 
     return code;
     
@@ -46,7 +36,7 @@ const generateCode = async (category, user) => {
 
 
 export const create = async ({ user, bodymen: { body } }, res, next) => {
-  console.log('Create item: ', body, user);
+  // console.log('Create item: ', body, user);
   const code = await generateCode(body.category, user);
   Item.create({ ...body, code, user: user.id })
     // .then((item) => {console.log('item: ', item); return item})
