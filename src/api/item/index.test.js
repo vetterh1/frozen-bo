@@ -9,14 +9,14 @@ const app = () => express(apiRoot, routes)
 
 const code = 'T1234';
 
-let userSession, anotherSession, item
+let user, userSession, anotherSession, item
 
 beforeEach(async () => {
-  const user = await User.create({ email: 'a@a.com', password: '123456', homeOrder: 0 })
+  user = await User.create({ email: 'a@a.com', password: '123456', homeOrder: 0 })
   const anotherUser = await User.create({ email: 'b@b.com', password: '123456' })
   userSession = signSync(user.id)
   anotherSession = signSync(anotherUser.id);
-  item = await Item.create({ user, code })
+  item = await Item.create({ user: user.id, code })
 })
 
 test('POST /items 201 (user)', async () => {
@@ -36,7 +36,7 @@ test('POST /items 201 (user)', async () => {
   expect(body.location).toEqual('test')
   expect(body.name).toEqual('test')
   expect(body.expiration).toEqual(now.toISOString())
-  expect(typeof body.user).toEqual('object')
+  expect(body.user).toEqual(user.id)
 })
 
 test('POST /items 401', async () => {
@@ -51,7 +51,7 @@ test('GET /items 200 (user)', async () => {
     .query({ access_token: userSession })
   expect(status).toBe(200)
   expect(Array.isArray(body)).toBe(true)
-  expect(typeof body[0].user).toEqual('object')
+  expect(body[0].user).toEqual(user.id)
 })
 
 test('GET /items 401', async () => {
@@ -67,7 +67,7 @@ test('GET /items/:id 200 (user)', async () => {
   expect(status).toBe(200)
   expect(typeof body).toEqual('object')
   expect(body.id).toEqual(item.id)
-  expect(typeof body.user).toEqual('object')
+  expect(body.user).toEqual(user.id)
 })
 
 test('GET /items/:id 401', async () => {
@@ -100,7 +100,7 @@ test('PUT /items/:id 200 (user)', async () => {
   expect(body.location).toEqual('test')
   expect(body.name).toEqual('test')
   expect(body.expiration).toEqual(now.toISOString())
-  expect(typeof body.user).toEqual('object')
+  expect(body.user).toEqual(user.id)
 })
 
 test('PUT /items/:id 401 (user) - another user', async () => {

@@ -19,13 +19,21 @@ export const notFound = (res) => (entity) => {
 }
 
 export const authorOrAdmin = (res, user, userField) => (entity) => {
-  if (entity) {
-    const isAdmin = user.role === 'admin'
-    const isAuthor = entity[userField] && entity[userField].equals(user.id)
-    if (isAuthor || isAdmin) {
-      return entity
+  try {
+    if (entity) {
+      const isAdmin = user.role === 'admin'
+      const isAuthor = entity[userField] && entity[userField] === user.id
+  
+      if (isAuthor || isAdmin) {
+        return entity
+      }
+      console.error("authorOrAdmin returns 401 - entity=", entity);
+      res.status(401).end()
     }
-    res.status(401).end()
+    console.error("authorOrAdmin returns null - entity=", entity);
+    return null    
+  } catch (error) {
+    console.error("authorOrAdmin exception: ", error);
   }
-  return null
+
 }

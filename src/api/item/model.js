@@ -8,8 +8,9 @@ const itemSchema = new Schema({
     required: true
   },
   user: {
-    type: Schema.ObjectId,
-    ref: 'User',
+    type: String,
+    // type: Schema.ObjectId,
+    // ref: 'User',
     required: true
   },
   category: {
@@ -53,7 +54,8 @@ itemSchema.methods = {
       // simple view
       id: this.id,
       code: this.code,
-      user: this.user.view(full),
+      user: this.user,
+      // user: this.user.view(full),
       category: this.category,
       details: this.details,
       container: this.container,
