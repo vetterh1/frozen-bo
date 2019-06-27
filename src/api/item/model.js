@@ -26,7 +26,7 @@ const itemSchema = new Schema({
     type: String
   },
   size: {
-    type: String
+    type: Number
   },
   freezer: {
     type: String
@@ -37,8 +37,11 @@ const itemSchema = new Schema({
   name: {
     type: String
   },
-  expiration: {
+  expirationDate: {
     type: Date
+  },
+  expirationInMonths: {
+    type: Number
   }
 }, {
   timestamps: true, // adds createdAt and updatedAt
@@ -64,7 +67,8 @@ itemSchema.methods = {
       freezer: this.freezer,
       location: this.location,
       name: this.name,
-      expiration: this.expiration,
+      expirationDate: this.expirationDate,
+      expirationInMonths: this.expirationInMonths,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }

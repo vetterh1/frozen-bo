@@ -36,10 +36,10 @@ const generateCode = async (category, user) => {
 
 
 export const create = async ({ user, bodymen: { body } }, res, next) => {
-  // console.log('Create item: ', body, user);
+  console.log('Create item: ', body, user);
   const code = await generateCode(body.category, user);
   Item.create({ ...body, code, user: user.id })
-    // .then((item) => {console.log('item: ', item); return item})
+    .then((item) => {console.log('item: ', item); return item})
     .then((item) => item.view(true))
     .then(success(res, 201))
     .catch(next)

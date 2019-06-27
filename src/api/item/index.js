@@ -7,7 +7,7 @@ import { schema } from './model'
 export Item, { schema } from './model'
 
 const router = new Router()
-const { category, details, container, color, size, freezer, location, name, expiration } = schema.tree
+const { category, details, container, color, size, freezer, location, name, expirationDate, expirationInMonth } = schema.tree
 
 /**
  * @api {post} /items Create item
@@ -23,7 +23,8 @@ const { category, details, container, color, size, freezer, location, name, expi
  * @apiParam freezer Item's freezer.
  * @apiParam location Item's location.
  * @apiParam name Item's name.
- * @apiParam expiration Item's expiration.
+ * @apiParam expirationDate Item's expiration date.
+ * @apiParam expirationInMonth Item's expiration in months.
  * @apiSuccess {Object} item Item's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Item not found.
@@ -31,7 +32,7 @@ const { category, details, container, color, size, freezer, location, name, expi
  */
 router.post('/',
   token({ required: true }),
-  body({ category, details, container, color, size, freezer, location, name, expiration }),
+  body({ category, details, container, color, size, freezer, location, name, expirationDate, expirationInMonth }),
   create)
 
 /**
@@ -79,7 +80,8 @@ router.get('/:id',
  * @apiParam freezer Item's freezer.
  * @apiParam location Item's location.
  * @apiParam name Item's name.
- * @apiParam expiration Item's expiration.
+ * @apiParam expirationDate Item's expiration date.
+ * @apiParam expirationInMonth Item's expiration in months.
  * @apiSuccess {Object} item Item's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Item not found.
@@ -87,7 +89,7 @@ router.get('/:id',
  */
 router.put('/:id',
   token({ required: true }),
-  body({ category, details, container, color, size, freezer, location, name, expiration }),
+  body({ category, details, container, color, size, freezer, location, name, expirationDate, expirationInMonth }),
   update)
 
 /**
