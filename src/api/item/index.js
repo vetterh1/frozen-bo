@@ -71,6 +71,7 @@ router.get('/:id',
  * @apiName UpdateItem
  * @apiGroup Item
  * @apiPermission user
+ * @apiDescription It's possible to update only one element :)
  * @apiParam {String} access_token user access token.
  * @apiParam category Item's category.
  * @apiParam details Item's details.

@@ -40,7 +40,7 @@ const itemSchema = new Schema({
   expirationDate: {
     type: Date
   },
-  expirationInMonths: {
+  expirationInMonth: {
     type: Number
   }
 }, {
@@ -68,7 +68,7 @@ itemSchema.methods = {
       location: this.location,
       name: this.name,
       expirationDate: this.expirationDate,
-      expirationInMonths: this.expirationInMonths,
+      expirationInMonth: this.expirationInMonth,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }

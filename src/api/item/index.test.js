@@ -16,27 +16,27 @@ beforeEach(async () => {
   const anotherUser = await User.create({ email: 'b@b.com', password: '123456' })
   userSession = signSync(user.id)
   anotherSession = signSync(anotherUser.id);
-  item = await Item.create({ user: user.id, code })
+  item = await Item.create({ user: user.id, code, category: 'V', details: 'test1,test2' })
 })
 
 test('POST /items 201 (user) - existing category', async () => {
   const now = new Date();
   const { status, body } = await request(app())
     .post(`${apiRoot}`)
-    .send({ access_token: userSession, category: 'V', details: 'test', container: 'test', color: 'test', size: 'test', freezer: 'test', location: 'test', name: 'test', expirationDate: now, expirationInMonths: '6' })
+    .send({ access_token: userSession, category: 'V', details: 'test1,test2', container: 'test', color: 'test', size: '4', freezer: 'test', location: 'test', name: 'test', expirationDate: now, expirationInMonth: '6' })
   expect(status).toBe(201)
   expect(typeof body).toEqual('object')
   expect(body.code).toMatch(/V0/);
   expect(body.code).toEqual('V0123');
   expect(body.category).toEqual('V')
-  expect(body.details).toEqual('test')
+  expect(body.details).toEqual('test1,test2')
   expect(body.container).toEqual('test')
   expect(body.color).toEqual('test')
-  expect(body.size).toEqual('test')
+  expect(body.size).toEqual(4)
   expect(body.freezer).toEqual('test')
   expect(body.location).toEqual('test')
   expect(body.name).toEqual('test')
-  expect(body.expirationInMonths).toEqual('6')
+  expect(body.expirationInMonth).toEqual(6)
   expect(body.expirationDate).toEqual(now.toISOString())
   expect(body.user).toEqual(user.id)
 })
@@ -45,7 +45,7 @@ test('POST /items 201 (user) - new category', async () => {
   const now = new Date();
   const { status, body } = await request(app())
     .post(`${apiRoot}`)
-    .send({ access_token: userSession, category: 'N', details: 'test', container: 'test', color: 'test', size: 'test', freezer: 'test', location: 'test', name: 'test', expirationDate: now, expirationInMonths: '6' })
+    .send({ access_token: userSession, category: 'N', details: 'test1,test2', container: 'test', color: 'test', size: '4', freezer: 'test', location: 'test', name: 'test', expirationDate: now, expirationInMonth: '6' })
   expect(status).toBe(201)
   expect(typeof body).toEqual('object')
   expect(body.code).toMatch(/N0/);
@@ -97,31 +97,44 @@ test('GET /items/:id 404 (user)', async () => {
   expect(status).toBe(404)
 })
 
-test('PUT /items/:id 200 (user)', async () => {
+test('PUT /items/:id 200 (user, all items changed)', async () => {
   const now = new Date();
   const { status, body } = await request(app())
     .put(`${apiRoot}/${item.id}`)
-    .send({ access_token: userSession, category: 'test', details: 'test', container: 'test', color: 'test', size: 'test', freezer: 'test', location: 'test', name: 'test', expirationDate: now, expirationInMonths: '6' })
+    .send({ access_token: userSession, category: 'test', details: 'test1,test2', container: 'test', color: 'test', size: '4', freezer: 'test', location: 'test', name: 'test', expirationDate: now, expirationInMonth: '6' })
   expect(status).toBe(200)
   expect(typeof body).toEqual('object')
   expect(body.id).toEqual(item.id)
   expect(body.category).toEqual('test')
-  expect(body.details).toEqual('test')
+  expect(body.details).toEqual('test1,test2')
   expect(body.container).toEqual('test')
   expect(body.color).toEqual('test')
-  expect(body.size).toEqual('test')
+  expect(body.size).toEqual(4)
   expect(body.freezer).toEqual('test')
   expect(body.location).toEqual('test')
   expect(body.name).toEqual('test')
-  expect(body.expirationInMonths).toEqual('6')
+  expect(body.expirationInMonth).toEqual(6)
   expect(body.expirationDate).toEqual(now.toISOString())
   expect(body.user).toEqual(user.id)
+})
+
+test('PUT /items/:id 200 (user, only date changed)', async () => {
+  const now = new Date();
+  const { status, body } = await request(app())
+    .put(`${apiRoot}/${item.id}`)
+    .send({ access_token: userSession, expirationDate: now })
+  expect(status).toBe(200)
+  expect(typeof body).toEqual('object')
+  expect(body.category).toEqual('V')
+  expect(body.details).toEqual('test1,test2')
+  expect(body.expirationDate).toEqual(now.toISOString())
+  // console.log('body when ony date changes: ', body)
 })
 
 test('PUT /items/:id 401 (user) - another user', async () => {
   const { status } = await request(app())
     .put(`${apiRoot}/${item.id}`)
-    .send({ access_token: anotherSession, code: 'test', category: 'test', details: 'test', container: 'test', color: 'test', size: 'test', freezer: 'test', location: 'test', name: 'test', expirationDate: new Date(), expirationInMonths: '6' })
+    .send({ access_token: anotherSession, code: 'test', category: 'test', details: 'test1,test2', container: 'test', color: 'test', size: '4', freezer: 'test', location: 'test', name: 'test', expirationDate: new Date(), expirationInMonth: '6' })
   expect(status).toBe(401)
 })
 
@@ -134,7 +147,7 @@ test('PUT /items/:id 401', async () => {
 test('PUT /items/:id 404 (user)', async () => {
   const { status } = await request(app())
     .put(apiRoot + '/123456789098765432123456')
-    .send({ access_token: anotherSession, code: 'test', category: 'test', details: 'test', container: 'test', color: 'test', size: 'test', freezer: 'test', location: 'test', name: 'test', expirationDate: new Date(), expirationInMonths: '6' })
+    .send({ access_token: anotherSession, code: 'test', category: 'test', details: 'test1,test2', container: 'test', color: 'test', size: '4', freezer: 'test', location: 'test', name: 'test', expirationDate: new Date(), expirationInMonth: '6' })
   expect(status).toBe(404)
 })
 

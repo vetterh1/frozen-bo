@@ -5,8 +5,8 @@ let user, item
 
 beforeEach(async () => {
   user = await User.create({ email: 'a@a.com', password: '123456' })
-  item = await Item.create({ user: user.id, code: 'T1234', category: 'C', details: 'test', container: 'test', color: 'test',
-    size: 'test', freezer: 'test', location: 'test', name: 'test', expirationDate: new Date(), expirationInMonths: '6',
+  item = await Item.create({ user: user.id, code: 'T1234', category: 'C', details: 'test1,test2', container: 'test', color: 'test',
+    size: '3', freezer: 'test', location: 'test', name: 'test', expirationDate: new Date(), expirationInMonth: '6',
     nextIds: {} })
 })
 
@@ -26,7 +26,7 @@ describe('view', () => {
     expect(view.location).toBe(item.location)
     expect(view.name).toBe(item.name)
     expect(view.expirationDate).toBe(item.expirationDate)
-    expect(view.expirationInMonths).toBe(item.expirationInMonths)
+    expect(view.expirationInMonth).toBe(item.expirationInMonth)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
   })
@@ -46,7 +46,7 @@ describe('view', () => {
     expect(view.location).toBe(item.location)
     expect(view.name).toBe(item.name)
     expect(view.expirationDate).toBe(item.expirationDate)
-    expect(view.expirationInMonths).toBe(item.expirationInMonths)
+    expect(view.expirationInMonth).toBe(item.expirationInMonth)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
   })
