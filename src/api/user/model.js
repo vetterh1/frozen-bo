@@ -29,6 +29,7 @@ const userSchema = new Schema({
   },  
   language: {
     type: String,
+    lowercase: true
   },
   home: {
     type: String,

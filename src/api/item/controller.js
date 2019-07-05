@@ -45,8 +45,9 @@ export const create = async ({ user, bodymen: { body } }, res, next) => {
     .catch(next)
 }
 
-export const index = ({ querymen: { query, select, cursor } }, res, next) =>
-  Item.find(query, select, cursor)
+export const index = ({ user, querymen: { query, select, cursor } }, res, next) =>
+  Item.find({user: user.id}, select, cursor)
+    .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
     // .populate('user')
     .then((items) => items.map((item) => item.view()))
     .then(success(res))

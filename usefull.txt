@@ -4,9 +4,9 @@
 https://food-maniac.com/frozenbo
 
 
-# Use db server (vps494554):
+# Use app server (vps295100):
 ssh lve@51.255.46.214
-(not db server: 51.254.221.25)
+(not db server vps494554: 51.254.221.25)
 
 # Connect on mongo (from app or db server):
 # as admin:
@@ -29,6 +29,10 @@ chmod 755 ./prod_update_server.sh
 
 # tail on logs:
 pm2 log
+
+
+# Front prod return
+http-server ./build -p 5000 --cors
 
 
 
