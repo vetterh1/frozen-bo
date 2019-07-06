@@ -7,4 +7,4 @@ chmod 755 ./prod_update_server.sh
 rm -fr node_modules
 rm package-lock.json
 npm install
-NODE_ENV=production pm2 start npm -- run prod --name boFrozen  --env production
+NODE_ENV=production pm2 start npm  --name boFrozen  --env production -- run prod
