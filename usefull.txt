@@ -182,6 +182,56 @@ Side effects: Currying with promises
         .then(console.log)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------
+                SSL with letsencrypt certbot
+---------------------------------------------------------------
+
+Did not do this:
+  sudo apt install letsencrypt
+
+Instead:
+
+- Renew Letsencrypt certificate:
+    - Ssh on the server
+    - pm2 stop all
+    - sudo systemctl stop nginx
+    - /opt/letsencrypt/letsencrypt-auto renew
+    - pm2 start all
+    result (ceritificate) is there: /etc/letsencrypt/live/food-maniac.com/fullchain.pem 
+
+- Creation process:
+    - sudo git clone https://github.com/letsencrypt/letsencrypt /opt/letsencrypt
+    - cd /opt/letsencrypt
+    - sudo systemctl stop nginx
+    - ./letsencrypt-auto certonly –standalone
+    - sudo nano /etc/nginx/sites-enabled/default
+    - sudo systemctl start nginx
+
+
+- Use of certbot:
+    - sudo add-apt-repository ppa:certbot/certbot
+    - sudo apt-get update
+    - sudo apt-get install python-certbot-nginx
+    - list of existing certificates and expiration dates: sudo certbot certificates
+
+    
+
+
+
+
+
 ---------------------------------------------------------------
         nginx (cohabitation foodManiac & frozenGem)
 ---------------------------------------------------------------
@@ -349,7 +399,7 @@ server {
 # HTTPS - proxy requests on to local Node.js app:
 server {
         listen 443;
-        server_name frozengem.com;
+        server_name frozengem.com www.frozengem.com;
 
         ssl on;
         # Use certificate and key provided by Let's Encrypt:
