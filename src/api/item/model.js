@@ -42,7 +42,12 @@ const itemSchema = new Schema({
   },
   expirationInMonth: {
     type: Number
+  },
+  picture: {
+    type: Boolean,
+    default: false
   }
+
 }, {
   timestamps: true, // adds createdAt and updatedAt
   toJSON: {
@@ -69,6 +74,7 @@ itemSchema.methods = {
       name: this.name,
       expirationDate: this.expirationDate,
       expirationInMonth: this.expirationInMonth,
+      picture: this.picture,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }

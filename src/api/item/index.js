@@ -2,12 +2,12 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token } from '../../services/passport'
-import { create, index, show, update, destroy } from './controller'
+import { create, index, show, update, updatePicture, destroy } from './controller'
 import { schema } from './model'
 export Item, { schema } from './model'
 
 const router = new Router()
-const { category, details, container, color, size, freezer, location, name, expirationDate, expirationInMonth } = schema.tree
+const { category, details, container, color, size, freezer, location, name, expirationDate, expirationInMonth, picture } = schema.tree
 
 /**
  * @api {post} /items Create item
@@ -65,6 +65,23 @@ router.get('/',
 router.get('/:id',
   token({ required: true }),
   show)
+
+/**
+ * @api {put} /items/:id/picture Update item's picture
+ * @apiName UpdatePicture
+ * @apiGroup Item
+ * @apiPermission user
+ * @apiDescription Update the picture of an item
+ * @apiParam {String} access_token user access token.
+ * @apiSuccess {Object} item Item's data.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 404 Item not found.
+ * @apiError 401 user access only.
+ */
+router.put('/:id/picture',
+  token({ required: true }),
+  // body({ pictureData }),
+  updatePicture)
 
 /**
  * @api {put} /items/:id Update item
