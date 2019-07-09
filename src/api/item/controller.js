@@ -123,12 +123,15 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
           // Save the picture locally
           // need to strip the beginning of the pic by removing 'data:image/jpeg;base64,'
           // and save the remaining using the 'base64' encoding option
-          console.log("picture: ", picture);
+          // console.log("picture: ", picture);
           const data = picture.replace(/^data:image\/\w+;base64,/, '');
 
-          const filePath = path.join(__dirname, `${item.id}.jpg`);
+          // Note: __dirname returns this controller.js file location as it's not packaged
+          // it means it looks like: /home/user/.../frozen-bo/src/api/item
+          // We need to get back to the frozen-bo folder and go to a public picture folder
+          // by going ../../../public/pictures/items
+          const filePath = path.join(__dirname, '../../../public/pictures/items', `${item.id}.jpg`);
           console.log('filePath=', filePath);
-          // const filePath = path.join(__dirname, '..', folderStatic, '/pictures/items', `${newItem.picture}.jpg`);
           fs.writeFile(
             filePath,
             data, { encoding: 'base64' },
