@@ -1,4 +1,5 @@
 import express from 'express'
+import path from 'path';
 import cors from 'cors'
 import compression from 'compression'
 import morgan from 'morgan'
@@ -23,7 +24,19 @@ export default (apiRoot, routes) => {
   // app.use(bodyParser.urlencoded({ extended: false }))
   // app.use(bodyParser.json())
 
+
   app.use(apiRoot, routes)
+
+
+  // Serve static assets (pictures,...)
+  const folderStaticAbsolute = path.join(__dirname, '../../..', 'public');
+  console.info(`Public (static) files should be here: ${folderStaticAbsolute}`);
+  app.use('/public', express.static(folderStaticAbsolute));
+
+
+
+
+
   app.use(queryErrorHandler())
   app.use(bodyErrorHandler())
 
