@@ -7,7 +7,7 @@ import morgan from 'morgan'
 import bodyParser from 'body-parser'
 import { errorHandler as queryErrorHandler } from 'querymen'
 import { errorHandler as bodyErrorHandler } from 'bodymen'
-import { env } from '../../config'
+import { env, staticFolders } from '../../config'
 
 export default (apiRoot, routes) => {
   const app = express()
@@ -30,7 +30,7 @@ export default (apiRoot, routes) => {
 
 
   // Serve static assets (pictures,...)
-  const folderStaticAbsolute = path.join(__dirname, '../../..', 'static');
+  const folderStaticAbsolute = path.join(__dirname, staticFolders.relativePaths.fromExpress, staticFolders.static);
   console.info(`Public (static) files should be here: ${folderStaticAbsolute}`);
   // app.use('/public', express.static(folderStaticAbsolute), serveIndex(folderStaticAbsolute, {'icons': true}));
   app.use('/static', express.static(folderStaticAbsolute));

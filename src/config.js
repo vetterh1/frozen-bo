@@ -39,6 +39,17 @@ const config = {
           safe: true,
         }
       },   
+    },
+    staticFolders: {
+      static: '/static',
+      pictures: '/static/pictures',
+      thumbnails: '/static/thumbnails',
+      relativePaths: {
+        fromController: '../../..',
+        fromExpress: '../../..',
+        fromApp: '..',
+        fromUtil: '..',
+      }
     }
   },
   test: { },

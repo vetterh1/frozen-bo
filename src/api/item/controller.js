@@ -2,6 +2,8 @@ import path from 'path';
 import fs from 'fs';
 import { success, notFound, authorOrAdmin } from '../../services/response/'
 import { Item } from '.'
+import { staticFolders } from '../../config'
+import * as GenerateThumbnails from '../../utils/generateThumbnails';
 
 
 
@@ -130,7 +132,7 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
           // it means it looks like: /home/user/.../frozen-bo/src/api/item
           // We need to get back to the frozen-bo folder and go to a static picture folder
           // by going ../../../static/pictures/items
-          const filePath = path.join(__dirname, '../../../static/pictures/items', `${item.id}.jpg`);
+          const filePath = path.join(__dirname, staticFolders.relativePaths.fromController, staticFolders.pictures, '/items', `${item.id}.jpg`);
           console.log('filePath=', filePath);
           fs.writeFile(
             filePath,
@@ -140,11 +142,10 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
                 console.error(`updatePicture ${item.id} - saving image FAILED (path: ${filePath}) !`);
               } else {
                 console.info(`updatePicture ${item.id} - saved image OK (path: ${filePath})`);
-                // const folderStatic = config.get('storage.static');
-                // const folderThumbnails = path.join(__dirname, '..', folderStatic, '/thumbnails');
-                // GenerateThumbnails.generateThumbnail(filePath, folderThumbnails, null, () => {
-                //   console.info(`updatePicture ${item.id} - saved thumbnail OK`);
-                // });
+                const folderThumbnails = path.join(__dirname, staticFolders.relativePaths.fromController, staticFolders.thumbnails, '/items');
+                GenerateThumbnails.generateThumbnail(filePath, folderThumbnails, () => {
+                  console.info(`updatePicture ${item.id} - saved thumbnail OK`);
+                });
               }
           });
 

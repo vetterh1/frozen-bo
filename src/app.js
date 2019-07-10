@@ -1,5 +1,5 @@
 import http from 'http'
-import { env, mongo, port, ip, apiRoot } from './config'
+import { env, mongo, port, ip, apiRoot, staticFolders } from './config'
 import { mongoose, options } from './services/mongoose'
 import express from './services/express'
 import api from './api'
@@ -28,12 +28,12 @@ function mkdirReccursive(completePath) {
 }
 
 // Items Pictures
-const folderPicturesItems = path.join(__dirname, '..', '/static/pictures/items');
+const folderPicturesItems = path.join(__dirname, staticFolders.relativePaths.fromApp, staticFolders.pictures, '/items');
 console.info(`Folder pictures items: ${folderPicturesItems}`);
 mkdirReccursive(folderPicturesItems);
 
 // Items Pictures Thumbnails
-const folderThumbnailsItems = path.join(__dirname, '..', '/static/thumbnails/items');
+const folderThumbnailsItems = path.join(__dirname, staticFolders.relativePaths.fromApp, staticFolders.thumbnails, '/items');
 console.info(`Folder thumbnails Items: ${folderThumbnailsItems}`);
 mkdirReccursive(folderThumbnailsItems);
 
