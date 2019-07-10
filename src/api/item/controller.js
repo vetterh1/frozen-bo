@@ -40,7 +40,7 @@ const generateCode = async (category, user) => {
 
 
 export const create = async ({ user, bodymen: { body } }, res, next) => {
-  // console.log('Create item: ', body, user);
+  console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.create');
   const code = await generateCode(body.category, user);
   Item.create({ ...body, code, user: user.id })
     // .then((item) => {console.log('item: ', item); return item})
@@ -51,7 +51,7 @@ export const create = async ({ user, bodymen: { body } }, res, next) => {
 
 export const index = ({ user, querymen: { query, select, cursor } }, res, next) =>
   Item.find({user: user.id}, select, cursor)
-    .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
+    // .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
     // .populate('user')
     .then((items) => items.map((item) => item.view()))
     .then(success(res))
@@ -67,36 +67,24 @@ export const show = ({ params }, res, next) =>
 
 export const update = ({ user, bodymen: { body }, params }, res, next) => {
   Item.findById(params.id)
-  // .populate('user')
     .then(notFound(res))
     .then(authorOrAdmin(res, user, 'user'))
-    // .then((item) => item ? Object.assign(item, body).save() : null)
     .then((item) => {
-      // console.log('item update 2 item:', item, item.constructor.name);
-      // console.log('item update 2 body:', body, body.constructor.name);      
-      // console.log('item update 2 item properties:', Object.getOwnPropertyNames(item));
-      // console.log('item update 2 body properties:', Object.getOwnPropertyNames(body));
-
-      const updatedProperties = Object.getOwnPropertyNames(body)
+      let dirty = false;
+      const updatedProperties = Object.getOwnPropertyNames(body);
       updatedProperties.forEach(element => {
         if(body[element]) {
-          // console.log('item update:', element, body[element]);
-
-          item[element] = body[element]
-        } else {
-          // console.log('NO update:', element, body[element]);
+          if( item[element] !== body[element] ) {
+            dirty = true;
+            item[element] = body[element]
+            // console.debug('item update:', element, body[element]);
+          }
         }
       });
-      // const newUser = item ? Object.assign(item, body) : null
-      // console.log('item update 2 item updated:', item, item.constructor.name);
-      // console.log('item update 2 item updated properties:', Object.getOwnPropertyNames(item));
-
-      return item.save()
-
-
-      // db.items.updateOne({ _id: ObjectId("5cf7c068ed594933d1ddfcee")}, { '$set': { name: 'updated name'}})
-      // db.items.updateOne({ _id: ObjectId("5cf7c068ed594933d1ddfcee")}, { '$unset': { home: 1, homeOrder:1}})
-
+      if(dirty) {
+        console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.update: ', params.id);
+        return item.save()
+      }
     })    
     .then((item) => item ? item.view(true) : null)
     .then(success(res))
@@ -108,24 +96,15 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
 
   export const updatePicture = ({ body , params, user }, res) => {
     Item.findById(params.id)
-    // .populate('user')
       .then(notFound(res))
       .then(authorOrAdmin(res, user, 'user'))
-      // .then((item) => item ? Object.assign(item, body).save() : null)
       .then((item) => {
-        // console.log('item update 2 item:', item, item.constructor.name);
-        // console.log('item updatePicture 2 body:', body, body.constructor.name);      
-        // console.log('item update 2 item properties:', Object.getOwnPropertyNames(item));
-        // console.log('item update 2 body properties:', Object.getOwnPropertyNames(body));
-  
         const picture = body.picture;
-
         if(picture) {
 
           // Save the picture locally
           // need to strip the beginning of the pic by removing 'data:image/jpeg;base64,'
           // and save the remaining using the 'base64' encoding option
-          // console.log("picture: ", picture);
           const data = picture.replace(/^data:image\/\w+;base64,/, '');
 
           // Note: __dirname returns this controller.js file location as it's not packaged
@@ -149,23 +128,17 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
               }
           });
 
-          // Save the picture URL in the item
-          item['picture'] = true;
+          // Set a flag in the item
+          item.picture = true;
+          // Force update date refresh (if replacing picture)
+          item.updatedAt = Date.now();
 
         } else {
           console.log('NO updatePicture:', body['picture']);
         }
-
-        // const newUser = item ? Object.assign(item, body) : null
-        // console.log('item update 2 item updated:', item, item.constructor.name);
-        // console.log('item update 2 item updated properties:', Object.getOwnPropertyNames(item));
   
+        console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.updatePicture: ', params.id);
         return item.save()
-  
-  
-        // db.items.updateOne({ _id: ObjectId("5cf7c068ed594933d1ddfcee")}, { '$set': { name: 'updated name'}})
-        // db.items.updateOne({ _id: ObjectId("5cf7c068ed594933d1ddfcee")}, { '$unset': { home: 1, homeOrder:1}})
-  
       })    
       .then((item) => item ? item.view(true) : null)
       .then(success(res))
@@ -173,10 +146,12 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
 
 
 
-export const destroy = ({ user, params }, res, next) =>
+export const destroy = ({ user, params }, res, next) => {
+  console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.destroy: ', params.id);
   Item.findById(params.id)
     .then(notFound(res))
     .then(authorOrAdmin(res, user, 'user'))
     .then((item) => item ? item.remove() : null)
     .then(success(res, 204))
     .catch(next)
+}

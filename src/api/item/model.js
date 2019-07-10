@@ -89,6 +89,9 @@ itemSchema.methods = {
 
 itemSchema.pre('save', function (next) {
 
+  // this.updatedAt = Date.now();
+
+  
   // // Code already exists, don't need to generate it!
   // if (this.code) return next();
 
@@ -96,7 +99,7 @@ itemSchema.pre('save', function (next) {
   // const nextId = 23;
   // this.code = `${this.category}${homeOrder}${nextId}`;
 
-  // console.log('itemSchema.pre.save:', this);
+  console.log('itemSchema.pre.save:', this);
 
 
   next();

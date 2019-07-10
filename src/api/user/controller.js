@@ -17,7 +17,7 @@ export const show = ({ params }, res, next) =>
     .catch(next)
 
 export const showMe = ({ user }, res) => {
-  console.log('user showMe:', user);
+  // console.log('user showMe:', user);
   if(user.language)
     user.language.toLowerCase();
   return res.json(user.view(true))

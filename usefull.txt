@@ -81,7 +81,8 @@ db.createUser({ user:"adminFrozen", pwd:"pwdRoot", roles: ["dbAdmin"]})
 # Remove home info from ALL users:
 db.users.update({}, { $unset: { home:"", homeOrder:"" } }, {multi:true})
 
-
+# Remove picture from all items:
+db.items.update({}, { $unset: { picture:"" } }, {multi:true})
 
 
 ---------------------------------------------------------------
@@ -411,20 +412,6 @@ server {
         ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
 
 
-
-
-        # Pass requests for /static to localhost:8065:
-        location /static/ {
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header X-NginX-Proxy true;
-                proxy_pass http://localhost:8065/static/;
-                proxy_ssl_session_reuse off;
-                proxy_set_header Host $http_host;
-                proxy_cache_bypass $http_upgrade;
-                proxy_redirect off;
-        }
-        
 
 
         # Pass requests for /frozenbo to localhost:8065:
