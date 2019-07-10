@@ -28,12 +28,12 @@ function mkdirReccursive(completePath) {
 }
 
 // Items Pictures
-const folderPicturesItems = path.join(__dirname, '..', '/public/pictures/items');
+const folderPicturesItems = path.join(__dirname, '..', '/static/pictures/items');
 console.info(`Folder pictures items: ${folderPicturesItems}`);
 mkdirReccursive(folderPicturesItems);
 
 // Items Pictures Thumbnails
-const folderThumbnailsItems = path.join(__dirname, '..', '/public/thumbnails/items');
+const folderThumbnailsItems = path.join(__dirname, '..', '/static/thumbnails/items');
 console.info(`Folder thumbnails Items: ${folderThumbnailsItems}`);
 mkdirReccursive(folderThumbnailsItems);
 

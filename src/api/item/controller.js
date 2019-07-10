@@ -128,9 +128,9 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
 
           // Note: __dirname returns this controller.js file location as it's not packaged
           // it means it looks like: /home/user/.../frozen-bo/src/api/item
-          // We need to get back to the frozen-bo folder and go to a public picture folder
-          // by going ../../../public/pictures/items
-          const filePath = path.join(__dirname, '../../../public/pictures/items', `${item.id}.jpg`);
+          // We need to get back to the frozen-bo folder and go to a static picture folder
+          // by going ../../../static/pictures/items
+          const filePath = path.join(__dirname, '../../../static/pictures/items', `${item.id}.jpg`);
           console.log('filePath=', filePath);
           fs.writeFile(
             filePath,

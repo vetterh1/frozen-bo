@@ -1,5 +1,5 @@
 import express from 'express'
-var serveIndex = require('serve-index')
+// var serveIndex = require('serve-index')
 import path from 'path';
 import cors from 'cors'
 import compression from 'compression'
@@ -30,9 +30,10 @@ export default (apiRoot, routes) => {
 
 
   // Serve static assets (pictures,...)
-  const folderStaticAbsolute = path.join(__dirname, '../../..', 'public');
+  const folderStaticAbsolute = path.join(__dirname, '../../..', 'static');
   console.info(`Public (static) files should be here: ${folderStaticAbsolute}`);
-  app.use('/public', express.static(folderStaticAbsolute), serveIndex(folderStaticAbsolute, {'icons': true}));
+  // app.use('/public', express.static(folderStaticAbsolute), serveIndex(folderStaticAbsolute, {'icons': true}));
+  app.use('/static', express.static(folderStaticAbsolute));
 
 
 
