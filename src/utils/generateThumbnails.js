@@ -17,7 +17,7 @@ global.regenerateAllThumbnailsInfo = {
 };
 
 
-export function generateThumbnail(picturePath, folderThumbnails, callback = null, width = 345, height = 140, quality = 50, stream = null) {
+export function generateThumbnail(picturePath, folderThumbnails, callback = null, width = 640, height = 480, quality = 60, stream = null) {
   const fileName = path.basename(picturePath);
   const thumbnailCompleteFilePath = path.join(folderThumbnails, fileName);
   Jimp.read(picturePath).then((picture) => {
