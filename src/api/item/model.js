@@ -72,11 +72,11 @@ itemSchema.methods = {
       freezer: this.freezer,
       location: this.location,
       name: this.name,
-      expirationDate: this.expirationDate,
+      expirationDate: this.expirationDate ? this.expirationDate.valueOf() : null,
       expirationInMonth: this.expirationInMonth,
       picture: this.picture,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      createdAt: this.createdAt.valueOf(),
+      updatedAt: this.updatedAt.valueOf()
     }
 
     return full ? {
