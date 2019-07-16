@@ -19,7 +19,7 @@ export default (apiRoot, routes) => {
     app.use(morgan('dev'))
   }
 
-  app.use(bodyParser.json({ limit: '10mb' })); // Mandatory to get body in post requests!
+  app.use(bodyParser.json({ limit: '50mb' })); // Mandatory to get body in post requests!
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
   // app.use(bodyParser.urlencoded({ extended: false }))
