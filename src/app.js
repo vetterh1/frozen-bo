@@ -32,10 +32,10 @@ const folderPicturesItems = path.join(__dirname, staticFolders.relativePaths.fro
 console.info(`Folder pictures items: ${folderPicturesItems}`);
 mkdirReccursive(folderPicturesItems);
 
-// Items Pictures Thumbnails
-const folderThumbnailsItems = path.join(__dirname, staticFolders.relativePaths.fromApp, staticFolders.thumbnails, '/items');
-console.info(`Folder thumbnails Items: ${folderThumbnailsItems}`);
-mkdirReccursive(folderThumbnailsItems);
+// Items Pictures Thumbnails - Not used anymore
+// const folderThumbnailsItems = path.join(__dirname, staticFolders.relativePaths.fromApp, staticFolders.thumbnails, '/items');
+// console.info(`Folder thumbnails Items: ${folderThumbnailsItems}`);
+// mkdirReccursive(folderThumbnailsItems);
 
 
 

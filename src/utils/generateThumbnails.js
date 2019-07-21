@@ -1,3 +1,21 @@
+//
+//
+//   DEPRECATED   -    USE FRONT SIDE RESIZE TO GENERATE THUMBNAIL
+//
+//   See items/index.js and its use of multer
+//
+//
+
+
+
+
+
+
+
+
+
+
+
 // import fs from 'fs-extra';
 // import config from 'config';
 import path from 'path';

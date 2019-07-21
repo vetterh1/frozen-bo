@@ -1,10 +1,12 @@
 import path from 'path';
 import fs from 'fs';
 import { success, notFound, authorOrAdmin } from '../../services/response/'
-import { Item } from '.'
+import Item from './model'
 import { staticFolders } from '../../config'
-import * as GenerateThumbnails from '../../utils/generateThumbnails';
+// import * as GenerateThumbnails from '../../utils/generateThumbnails';
 
+import stringifyOnce from '../../utils/stringifyOnce'
+import sizeInMB from '../../utils/sizeInMB';
 
 
 const generateCode = async (category, user) => {
@@ -93,8 +95,11 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
 
 
 
+/*
+  export const updatePicture = (req, res) => {
+    const { body , params, user, headers } = req;
+    console.log("headers['content-length']=", sizeInMB(headers['content-length']));
 
-  export const updatePicture = ({ body , params, user }, res) => {
     Item.findById(params.id)
       .then(notFound(res))
       .then(authorOrAdmin(res, user, 'user'))
@@ -143,7 +148,45 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
       .then((item) => item ? item.view(true) : null)
       .then(success(res))
     }
+*/
 
+
+
+
+
+
+export const updateBinaryPicture = (req, res) => {
+  // const { body , params, user, headers } = req;
+  // console.log("updateBinaryPicture: headers['content-length']=", sizeInMB(headers['content-length']));
+  // console.log(`updateBinaryPicture: id: ${req.body.id}, token: ${stringifyOnce(req.body.access_token)} - files: ${stringifyOnce(req.files)} - size: ${sizeInMB(req.headers['content-length'])}`);
+
+  Item.findById(req.body.id)
+    .then(notFound(res))
+    // .then(authorOrAdmin(res, user, 'user'))
+    .then((item) => {
+
+      // Delete previon picture & thumbnail
+      if(item.pictureName !== req.files[0].originalname) {
+        const folderPictures = path.join(__dirname, staticFolders.relativePaths.fromController, staticFolders.pictures, '/items');
+        const pictureName = item.pictureName ? path.join(folderPictures, item.pictureName) : null;
+        const thumbnailName = item.thumbnailName ? path.join(folderPictures, item.thumbnailName) : null;
+        if (item.pictureName && fs.existsSync(pictureName)) fs.unlinkSync(pictureName);
+        if (item.thumbnailName && fs.existsSync(thumbnailName)) fs.unlinkSync(thumbnailName);
+      }
+
+      // Store the new names in the item & save it
+      item.pictureName = req.files[0].originalname;
+      item.thumbnailName = req.files[1].originalname;
+      item.updatedAt = Date.now();
+
+      console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.updateBinaryPicture: ', req.body.id, item.pictureName, item.thumbnailName);
+      return item.save()
+    })    
+    .then((item) => item ? item.view(true) : null)
+    .then(success(res))
+  }
+
+  
 
 
 export const destroy = ({ user, params }, res, next) => {

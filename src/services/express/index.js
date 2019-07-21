@@ -8,6 +8,7 @@ import bodyParser from 'body-parser'
 import { errorHandler as queryErrorHandler } from 'querymen'
 import { errorHandler as bodyErrorHandler } from 'bodymen'
 import { env, staticFolders } from '../../config'
+// import binariesRouter from './binariesRouter'
 
 export default (apiRoot, routes) => {
   const app = express()
@@ -19,8 +20,12 @@ export default (apiRoot, routes) => {
     app.use(morgan('dev'))
   }
 
-  app.use(bodyParser.json({ limit: '50mb' })); // Mandatory to get body in post requests!
-  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+  // app.use('/bin', binariesRouter);
+
+  
+
+  app.use(bodyParser.json({ limit: '5mb' })); // Mandatory to get body in post requests!
+  app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 
   // app.use(bodyParser.urlencoded({ extended: false }))
   // app.use(bodyParser.json())

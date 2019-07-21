@@ -43,7 +43,15 @@ const itemSchema = new Schema({
   expirationInMonth: {
     type: Number
   },
-  picture: {
+  pictureName: {
+    type: String,
+    default: null
+  }  ,
+  thumbnailName: {
+    type: String,
+    default: null
+  },
+  deleted: {
     type: Boolean,
     default: false
   }
@@ -74,7 +82,9 @@ itemSchema.methods = {
       name: this.name,
       expirationDate: this.expirationDate ? this.expirationDate.valueOf() : null,
       expirationInMonth: this.expirationInMonth,
-      picture: this.picture,
+      pictureName: this.pictureName,
+      thumbnailName: this.thumbnailName,
+      deleted: this.deleted,
       createdAt: this.createdAt.valueOf(),
       updatedAt: this.updatedAt.valueOf()
     }
