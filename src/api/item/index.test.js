@@ -3,7 +3,8 @@ import { apiRoot } from '../../config'
 import { signSync } from '../../services/jwt'
 import express from '../../services/express'
 import { User } from '../user'
-import routes, { Item } from '.'
+import Item from './model'
+import routes from '.'
 
 const app = () => express(apiRoot, routes)
 
@@ -37,7 +38,7 @@ test('POST /items 201 (user) - existing category', async () => {
   expect(body.location).toEqual('test')
   expect(body.name).toEqual('test')
   expect(body.expirationInMonth).toEqual(6)
-  expect(body.expirationDate).toEqual(now.toISOString())
+  expect(body.expirationDate).toEqual(now.valueOf())
   expect(body.user).toEqual(user.id)
 })
 
@@ -114,7 +115,7 @@ test('PUT /items/:id 200 (user, all items changed)', async () => {
   expect(body.location).toEqual('test')
   expect(body.name).toEqual('test')
   expect(body.expirationInMonth).toEqual(6)
-  expect(body.expirationDate).toEqual(now.toISOString())
+  expect(body.expirationDate).toEqual(now.valueOf())
   expect(body.user).toEqual(user.id)
 })
 
@@ -127,7 +128,7 @@ test('PUT /items/:id 200 (user, only date changed)', async () => {
   expect(typeof body).toEqual('object')
   expect(body.category).toEqual('V')
   expect(body.details).toEqual('test1,test2')
-  expect(body.expirationDate).toEqual(now.toISOString())
+  expect(body.expirationDate).toEqual(now.valueOf())
   // console.log('body when ony date changes: ', body)
 })
 
@@ -150,6 +151,39 @@ test('PUT /items/:id 404 (user)', async () => {
     .send({ access_token: anotherSession, code: 'test', category: 'test', details: 'test1,test2', container: 'test', color: 'test', size: '4', freezer: 'test', location: 'test', name: 'test', expirationDate: new Date(), expirationInMonth: '6' })
   expect(status).toBe(404)
 })
+
+test('POST /items/remove/:id 200 (user)', async () => {
+  const { status, body } = await request(app())
+    .post(`${apiRoot}/remove/${item.id}`)
+    .query({ access_token: userSession })
+  expect(status).toBe(200)
+  expect(body.removed).toBe(true)
+})
+
+test('POST /items/remove/:id 401 (user) - another user', async () => {
+  const { status } = await request(app())
+    .post(`${apiRoot}/remove/${item.id}`)
+    .send({ access_token: anotherSession })
+  expect(status).toBe(401)
+})
+
+test('POST /items/remove/:id 401', async () => {
+  const { status } = await request(app())
+    .post(`${apiRoot}/remove/${item.id}`)
+  expect(status).toBe(401)
+})
+
+test('POST /items/remove/:id 404 (user)', async () => {
+  const { status } = await request(app())
+    .post(apiRoot + '/remove/123456789098765432123456')
+    .query({ access_token: anotherSession })
+  expect(status).toBe(404)
+})
+
+
+
+
+
 
 test('DELETE /items/:id 204 (user)', async () => {
   const { status } = await request(app())

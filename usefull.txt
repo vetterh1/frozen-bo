@@ -9,11 +9,19 @@ ssh lve@51.255.46.214
 (not db server vps494554: 51.254.221.25)
 
 # Connect on mongo (from app or db server):
-# as admin:
+
+# as admin from server:
 mongo 51.254.221.25:27017/admin -u adminFrozen -p frozenPwd --authenticationDatabase admin --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
-# as regular user (dev & prod):
+# as admin from mac:
+mongo 51.254.221.25:27017/admin -u adminFrozen -p frozenPwd --authenticationDatabase admin --ssl --sslPEMKeyFile /Users/lav/ssl/mongodb.pem --sslCAFile /Users/lav/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
+
+# as regular user (dev & prod) from server:
 mongo 51.254.221.25:27017/frozen-dev -u frozen -p gem --authenticationDatabase frozen-dev --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
 mongo 51.254.221.25:27017/frozen -u frozen -p gem --authenticationDatabase frozen --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
+
+# as regular user (dev & prod) from mac:
+mongo 51.254.221.25:27017/frozen-dev -u frozen -p gem --authenticationDatabase frozen-dev --ssl --sslPEMKeyFile /Users/lav/ssl/mongodb.pem --sslCAFile /Users/lav/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
+mongo 51.254.221.25:27017/frozen -u frozen -p gem --authenticationDatabase frozen --ssl --sslPEMKeyFile /Users/lav/ssl/mongodb.pem --sslCAFile /Users/lav/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
 
 
 
@@ -83,6 +91,9 @@ db.users.update({}, { $unset: { home:"", homeOrder:"" } }, {multi:true})
 
 # Remove picture from all items:
 db.items.update({}, { $unset: { picture:"" } }, {multi:true})
+
+# Set remove flag on all items:
+db.items.update({}, { $set: { removed:false } }, {multi:true})
 
 
 ---------------------------------------------------------------

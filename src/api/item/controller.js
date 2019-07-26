@@ -52,13 +52,21 @@ export const create = async ({ user, bodymen: { body } }, res, next) => {
 }
 
 export const index = ({ user, querymen: { query, select, cursor } }, res, next) =>
-  Item.find({user: user.id}, select, cursor)
+  Item.find({user: user.id, removed: false}, select, cursor)
     // .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
     // .populate('user')
     .then((items) => items.map((item) => item.view()))
     .then(success(res))
     .catch(next)
 
+  export const removed = ({ user, querymen: { query, select, cursor } }, res, next) =>
+    Item.find({user: user.id, removed: true}, select, cursor)
+      // .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
+      // .populate('user')
+      .then((items) => items.map((item) => item.view()))
+      .then(success(res))
+      .catch(next)
+  
 export const show = ({ params }, res, next) =>
   Item.findById(params.id)
     // .populate('user')
@@ -92,64 +100,6 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
     .then(success(res))
     .catch(next)
   }
-
-
-
-/*
-  export const updatePicture = (req, res) => {
-    const { body , params, user, headers } = req;
-    console.log("headers['content-length']=", sizeInMB(headers['content-length']));
-
-    Item.findById(params.id)
-      .then(notFound(res))
-      .then(authorOrAdmin(res, user, 'user'))
-      .then((item) => {
-        const picture = body.picture;
-        if(picture) {
-
-          // Save the picture locally
-          // need to strip the beginning of the pic by removing 'data:image/jpeg;base64,'
-          // and save the remaining using the 'base64' encoding option
-          const data = picture.replace(/^data:image\/\w+;base64,/, '');
-
-          // Note: __dirname returns this controller.js file location as it's not packaged
-          // it means it looks like: /home/user/.../frozen-bo/src/api/item
-          // We need to get back to the frozen-bo folder and go to a static picture folder
-          // by going ../../../static/pictures/items
-          const filePath = path.join(__dirname, staticFolders.relativePaths.fromController, staticFolders.pictures, '/items', `${item.id}.jpg`);
-          console.log('filePath=', filePath);
-          fs.writeFile(
-            filePath,
-            data, { encoding: 'base64' },
-            (err) => {
-              if (err) {
-                console.error(`updatePicture ${item.id} - saving image FAILED (path: ${filePath}) !`);
-              } else {
-                console.info(`updatePicture ${item.id} - saved image OK (path: ${filePath})`);
-                const folderThumbnails = path.join(__dirname, staticFolders.relativePaths.fromController, staticFolders.thumbnails, '/items');
-                GenerateThumbnails.generateThumbnail(filePath, folderThumbnails, () => {
-                  console.info(`updatePicture ${item.id} - saved thumbnail OK`);
-                });
-              }
-          });
-
-          // Set a flag in the item
-          item.picture = true;
-          // Force update date refresh (if replacing picture)
-          item.updatedAt = Date.now();
-
-        } else {
-          console.log('NO updatePicture:', body['picture']);
-        }
-  
-        console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.updatePicture: ', params.id);
-        return item.save()
-      })    
-      .then((item) => item ? item.view(true) : null)
-      .then(success(res))
-    }
-*/
-
 
 
 
@@ -187,6 +137,24 @@ export const updateBinaryPicture = (req, res) => {
   }
 
   
+
+
+  export const remove = ({ user, params }, res, next) => {
+    Item.findById(params.id)
+      .then(notFound(res))
+      .then(authorOrAdmin(res, user, 'user'))
+      .then((item) => {
+          item.removed = true;
+          return item.save()
+      })    
+      .then((item) => item ? item.view(true) : null)
+      .then(success(res))
+      .catch(next)
+    }
+  
+  
+  
+
 
 
 export const destroy = ({ user, params }, res, next) => {

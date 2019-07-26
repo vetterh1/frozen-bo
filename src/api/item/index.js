@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token } from '../../services/passport'
-import { create, index, show, update, destroy, updateBinaryPicture } from './controller'
+import { create, index, show, update, destroy, removed, remove, updateBinaryPicture } from './controller'
 import { schema } from './model'
 import { staticFolders } from '../../config'
 import path from 'path';
@@ -71,6 +71,24 @@ router.get('/',
   query(),
   index)
 
+
+/**
+ * @api {get} /removed Retrieve removed items
+ * @apiName removedItems
+ * @apiGroup Item
+ * @apiPermission user
+ * @apiParam {String} access_token user access token.
+ * @apiUse listParams
+ * @apiSuccess {Object[]} items List of items.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 401 user access only.
+ */
+router.get('/removed',
+  token({ required: true }),
+  query(),
+  removed)
+
+
 /**
  * @api {get} /items/:id Retrieve item
  * @apiName RetrieveItem
@@ -86,25 +104,6 @@ router.get('/:id',
   token({ required: true }),
   show)
 
-/**
- * @api {put} /items/:id/picture Update item's picture
- * @apiName UpdatePicture
- * @apiGroup Item
- * @apiPermission user
- * @apiDescription Update the picture of an item
- * @apiParam {String} access_token user access token.
- * @apiSuccess {Object} item Item's data.
- * @apiError {Object} 400 Some parameters may contain invalid values.
- * @apiError 404 Item not found.
- * @apiError 401 user access only.
- */
-
- /*
-router.put('/:id/picture',
-  token({ required: true }),
-  // body({ pictureData }),
-  updatePicture)
-*/
 
 /**
  * @api {put} /items/picture Update item's picture
@@ -158,8 +157,8 @@ router.put('/:id',
   update)
 
 /**
- * @api {delete} /items/:id Delete item
- * @apiName DeleteItem
+ * @api {remove} /items/:id Remove item
+ * @apiName RemoveItem
  * @apiGroup Item
  * @apiPermission user
  * @apiParam {String} access_token user access token.
@@ -167,8 +166,23 @@ router.put('/:id',
  * @apiError 404 Item not found.
  * @apiError 401 user access only.
  */
-router.delete('/:id',
+router.post('/remove/:id',
   token({ required: true }),
-  destroy)
+  remove)
+
+
+  /**
+   * @api {delete} /items/:id Delete item
+   * @apiName DeleteItem
+   * @apiGroup Item
+   * @apiPermission user
+   * @apiParam {String} access_token user access token.
+   * @apiSuccess (Success 204) 204 No Content.
+   * @apiError 404 Item not found.
+   * @apiError 401 user access only.
+   */
+  router.delete('/:id',
+    token({ required: true }),
+    destroy)
 
 export default router

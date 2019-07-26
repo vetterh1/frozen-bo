@@ -1,5 +1,6 @@
-import { Item } from '.'
+import Item from './model'
 import { User } from '../user'
+
 
 let user, item
 
@@ -25,8 +26,11 @@ describe('view', () => {
     expect(view.freezer).toBe(item.freezer)
     expect(view.location).toBe(item.location)
     expect(view.name).toBe(item.name)
-    expect(view.expirationDate).toBe(item.expirationDate)
+    expect(view.expirationDate).toBe(item.expirationDate.valueOf())
     expect(view.expirationInMonth).toBe(item.expirationInMonth)
+    expect(view.pictureName).toBe(item.pictureName)
+    expect(view.thumbnailName).toBe(item.thumbnailName)
+    expect(view.removed).toBe(item.removed)
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
   })
@@ -45,8 +49,11 @@ describe('view', () => {
     expect(view.freezer).toBe(item.freezer)
     expect(view.location).toBe(item.location)
     expect(view.name).toBe(item.name)
-    expect(view.expirationDate).toBe(item.expirationDate)
+    expect(view.expirationDate).toBe(item.expirationDate.valueOf())
     expect(view.expirationInMonth).toBe(item.expirationInMonth)
+    expect(view.pictureName).toBe(item.pictureName)
+    expect(view.thumbnailName).toBe(item.thumbnailName)
+    expect(view.removed).toBe(item.removed)    
     expect(view.createdAt).toBeTruthy()
     expect(view.updatedAt).toBeTruthy()
   })
