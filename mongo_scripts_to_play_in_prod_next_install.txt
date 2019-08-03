@@ -7,4 +7,6 @@
 db.users.createIndex({email:1}, {unique:true});
 db.homes.createIndex({id2:1}, {unique:true});
 db.items.createIndex({code:1}, {unique:false});
+db.items.createIndex({id:1}, {unique:true});
+db.items.createIndex({home:1, removed:1}, {unique:false});
 

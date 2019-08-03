@@ -3,6 +3,7 @@ import { apiRoot } from '../../config'
 import { signSync } from '../../services/jwt'
 import express from '../../services/express'
 import { User } from '../user'
+import { Home } from '../home'
 import Item from './model'
 import routes from '.'
 
@@ -10,14 +11,15 @@ const app = () => express(apiRoot, routes)
 
 const code = 'T1234';
 
-let user, userSession, anotherSession, item
+let home, user, userSession, anotherSession, item
 
 beforeEach(async () => {
-  user = await User.create({ email: 'a@a.com', password: '123456', homeOrder: 0, nextIds: {V:"123"} })
-  const anotherUser = await User.create({ email: 'b@b.com', password: '123456' })
+  home = await Home.create({ name: 'home1', label: 'label home 1' })
+  user = await User.create({ email: 'a@a.com', password: '123456', home: home.id2, homeOrder: 0, nextIds: {V:"123"} })
+  const anotherUser = await User.create({ email: 'b@b.com', password: '123456', home: 'otherHome' })
   userSession = signSync(user.id)
   anotherSession = signSync(anotherUser.id);
-  item = await Item.create({ user: user.id, code, category: 'V', details: 'test1,test2' })
+  item = await Item.create({ user: user.id, home: home.id2, code, category: 'V', details: 'test1,test2' })
 })
 
 test('POST /items 201 (user) - existing category', async () => {

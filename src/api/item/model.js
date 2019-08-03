@@ -9,8 +9,11 @@ const itemSchema = new Schema({
   },
   user: {
     type: String,
-    // type: Schema.ObjectId,
-    // ref: 'User',
+    required: true
+  },
+  home: {
+    type: String,
+    index: true,
     required: true
   },
   category: {
@@ -53,6 +56,7 @@ const itemSchema = new Schema({
   },
   removed: {
     type: Boolean,
+    index: true,
     default: false
   }
 
@@ -71,6 +75,7 @@ itemSchema.methods = {
       id: this.id,
       code: this.code,
       user: this.user,
+      home: this.home,
       // user: this.user.view(full),
       category: this.category,
       details: this.details,

@@ -44,7 +44,7 @@ const generateCode = async (category, user) => {
 export const create = async ({ user, bodymen: { body } }, res, next) => {
   console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.create');
   const code = await generateCode(body.category, user);
-  Item.create({ ...body, code, user: user.id })
+  Item.create({ ...body, code, user: user.id, home: user.home })
     // .then((item) => {console.log('item: ', item); return item})
     .then((item) => item.view(true))
     .then(success(res, 201))
@@ -52,7 +52,7 @@ export const create = async ({ user, bodymen: { body } }, res, next) => {
 }
 
 export const index = ({ user, querymen: { query, select, cursor } }, res, next) =>
-  Item.find({user: user.id, removed: false}, select, cursor)
+  Item.find({home: user.home, removed: false}, select, cursor)
     // .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
     // .populate('user')
     .then((items) => items.map((item) => item.view()))
@@ -60,7 +60,7 @@ export const index = ({ user, querymen: { query, select, cursor } }, res, next) 
     .catch(next)
 
   export const removed = ({ user, querymen: { query, select, cursor } }, res, next) =>
-    Item.find({user: user.id, removed: true}, select, cursor)
+    Item.find({home: user.home, removed: true}, select, cursor)
       // .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
       // .populate('user')
       .then((items) => items.map((item) => item.view()))

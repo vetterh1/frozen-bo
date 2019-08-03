@@ -1,12 +1,14 @@
 import Item from './model'
 import { User } from '../user'
+import { Home } from '../home'
 
 
-let user, item
+let home, user, item
 
 beforeEach(async () => {
-  user = await User.create({ email: 'a@a.com', password: '123456' })
-  item = await Item.create({ user: user.id, code: 'T1234', category: 'C', details: 'test1,test2', container: 'test', color: 'test',
+  home = await Home.create({ name: 'home1', label: 'label home 1' })
+  user = await User.create({ email: 'a@a.com', password: '123456', home: home.id2 })
+  item = await Item.create({ user: user.id, home: home.id2, code: 'T1234', category: 'C', details: 'test1,test2', container: 'test', color: 'test',
     size: '3', freezer: 'test', location: 'test', name: 'test', expirationDate: new Date(), expirationInMonth: '6',
     nextIds: {} })
 })
@@ -17,6 +19,7 @@ describe('view', () => {
     expect(typeof view).toBe('object')
     expect(view.id).toBe(item.id)
     expect(view.user).toBe(user.id)
+    expect(view.home).toBe(home.id2)
     expect(view.code).toBe(item.code)
     expect(view.category).toBe(item.category)
     expect(view.details).toBe(item.details)
@@ -40,6 +43,7 @@ describe('view', () => {
     expect(typeof view).toBe('object')
     expect(view.id).toBe(item.id)
     expect(view.user).toBe(user.id)
+    expect(view.home).toBe(home.id2)
     expect(view.code).toBe(item.code)
     expect(view.category).toBe(item.category)
     expect(view.details).toBe(item.details)

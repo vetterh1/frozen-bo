@@ -34,6 +34,8 @@ const { category, details, container, color, size, freezer, location, name, expi
  * @apiName CreateItem
  * @apiGroup Item
  * @apiPermission user
+ * @apiDescription Create a new item, attached to the user and its home
+ * @apiDescription It means the user should exist and have a valid home
  * @apiParam {String} access_token user access token.
  * @apiParam category Item's category.
  * @apiParam details Item's details.
@@ -76,6 +78,7 @@ router.get('/',
  * @api {get} /removed Retrieve removed items
  * @apiName removedItems
  * @apiGroup Item
+ * @apiDescription Find all the removed items for the home of the current user
  * @apiPermission user
  * @apiParam {String} access_token user access token.
  * @apiUse listParams
