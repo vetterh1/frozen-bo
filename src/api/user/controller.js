@@ -197,7 +197,7 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
 
 
 
-  export const delHomeInfo = async ({ bodymen: { body }, params, user }, res, next) => {
+  export const leaveHome = async ({ bodymen: { body }, params, user }, res, next) => {
     try {
       const userFound = await User.findById(params.id === 'me' ? user.id : params.id);
       /* istanbul ignore next */
@@ -226,7 +226,7 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
       success(res)({user: resUserSave});
 
     } catch (error) {
-      console.log('user delHomeInfo error:', error);
+      console.log('user LeaveHome error:', error);
       res.status(500).end()
     }
 }

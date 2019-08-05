@@ -5,8 +5,8 @@ import Item from './model'
 import { staticFolders } from '../../config'
 // import * as GenerateThumbnails from '../../utils/generateThumbnails';
 
-import stringifyOnce from '../../utils/stringifyOnce'
-import sizeInMB from '../../utils/sizeInMB';
+// import stringifyOnce from '../../utils/stringifyOnce'
+// import sizeInMB from '../../utils/sizeInMB';
 
 
 const generateCode = async (category, user) => {
@@ -51,6 +51,9 @@ export const create = async ({ user, bodymen: { body } }, res, next) => {
     .catch(next)
 }
 
+
+
+
 export const index = ({ user, querymen: { query, select, cursor } }, res, next) =>
   Item.find({home: user.home, removed: false}, select, cursor)
     // .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
@@ -59,7 +62,7 @@ export const index = ({ user, querymen: { query, select, cursor } }, res, next) 
     .then(success(res))
     .catch(next)
 
-  export const removed = ({ user, querymen: { query, select, cursor } }, res, next) =>
+export const removed = ({ user, querymen: { query, select, cursor } }, res, next) =>
     Item.find({home: user.home, removed: true}, select, cursor)
       // .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
       // .populate('user')
@@ -67,6 +70,8 @@ export const index = ({ user, querymen: { query, select, cursor } }, res, next) 
       .then(success(res))
       .catch(next)
   
+
+
 export const show = ({ params }, res, next) =>
   Item.findById(params.id)
     // .populate('user')
@@ -75,10 +80,12 @@ export const show = ({ params }, res, next) =>
     .then(success(res))
     .catch(next)
 
+
+
 export const update = ({ user, bodymen: { body }, params }, res, next) => {
   Item.findById(params.id)
     .then(notFound(res))
-    .then(authorOrAdmin(res, user, 'user'))
+    // .then(authorOrAdmin(res, user, 'user')) <-- other users from the same home should be able to update! 
     .then((item) => {
       let dirty = false;
       const updatedProperties = Object.getOwnPropertyNames(body);
@@ -112,7 +119,7 @@ export const updateBinaryPicture = (req, res) => {
 
   Item.findById(req.body.id)
     .then(notFound(res))
-    // .then(authorOrAdmin(res, user, 'user'))
+    // .then(authorOrAdmin(res, user, 'user')) <-- other users from the same home should be able to update! 
     .then((item) => {
 
       // Delete previon picture & thumbnail
@@ -139,10 +146,10 @@ export const updateBinaryPicture = (req, res) => {
   
 
 
-  export const remove = ({ user, params }, res, next) => {
+export const remove = ({ user, params }, res, next) => {
     Item.findById(params.id)
       .then(notFound(res))
-      .then(authorOrAdmin(res, user, 'user'))
+      // .then(authorOrAdmin(res, user, 'user'))     <-- other users from the same home should be able to remove! 
       .then((item) => {
           item.removed = true;
           return item.save()

@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { password as passwordAuth, master, token } from '../../services/passport'
-import { index, showMe, show, create, update, joinHome, joinNewHome, delHomeInfo, updatePassword, destroy } from './controller'
+import { index, showMe, show, create, update, joinHome, joinNewHome, leaveHome, updatePassword, destroy } from './controller'
 import { schema } from './model'
 export User, { schema } from './model'
 
@@ -134,20 +134,20 @@ router.put('/:id/home/new',
 
 
 /**
- * @api {put} /users/:id/home/del Remove user's home info
- * @apiName DelHome
+ * @api {put} /users/:id/home/leave Remove user's home info
+ * @apiName LeaveHome
  * @apiGroup User
  * @apiPermission user
- * @apiDescription Del home info from user
+ * @apiDescription Leave home info from user
  * @apiSuccess {Object} user User's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 401 Current user or admin access only.
  * @apiError 404 User not found.
  */
-router.put('/:id/home/del',
+router.put('/:id/home/leave',
   token({ required: true }),
   body({ home }),
-  delHomeInfo)
+  leaveHome)
 
 
   
