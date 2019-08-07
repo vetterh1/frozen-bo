@@ -93,11 +93,65 @@ db.items.update({}, { $unset: { picture:"" } }, {multi:true})
 # Set remove flag on all items:
 db.items.update({}, { $set: { removed:false } }, {multi:true})
 
-# Manual backup:
+
+
+
+
+---------------------------------------------------------------
+                     BACKUP
+---------------------------------------------------------------
+
+
+# ----------------------- Manual backup: ----------------------- 
+
 # From app server
 mongodump --uri "mongodb://frozen:gem@51.254.221.25:27017/frozen?ssl=true" --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
 # From mac
 mongodump --uri "mongodb://frozen:gem@51.254.221.25:27017/frozen?ssl=true" --sslPEMKeyFile /Users/lav/ssl/mongodb.pem --sslCAFile /Users/lav/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
+
+
+# ----------------------- Automatic backup: ----------------------- 
+#  (adapted from foodmaniac backup):
+
+# ------------ DB ------------ 
+# (!) backup_frozengem_db.sh script deals with backup & sends result from db server to app server
+# uses keychain (see instructions below)
+
+# ------------  Files (images) ------------ 
+# (!) backup_frozengem_files.sh script deals with backup on app server
+
+# ------------ Crontab instructions ------------
+# list: crontab -l
+# edit: crontab -e
+# ----- DB server -----
+# Add the following 2 lines for a backup twice a day + after every reboot
+0 6,18 * * * /home/lve/backup_frozengem_db.sh &>> /home/lve/backup_frozengem_db.log
+@reboot sleep 60 && /home/lve/backup_frozengem_db.sh &>> /home/lve/backup_frozengem_db.log
+# ----- File server -----
+# Add the following 2 lines for a backup twice a day + after every reboot
+0 6,18 * * * /home/lve/backup_frozengem_files.sh &>> /home/lve/backup_frozengem_files.log
+@reboot sleep 60 && /home/lve/backup_frozengem_files.sh &>> /home/lve/backup_frozengem_files.log
+
+# ------------  Keychain instructions ------------ 
+# Install keychain on db server to use sftp w/out password to send backup to other machine
+# see https://www.cyberciti.biz/faq/ssh-passwordless-login-with-keychain-for-scripts/
+# or better: https://discussions.apple.com/thread/6859137
+sudo apt-get install keychain
+ssh-keygen -t rsa
+(NO passphrase so it runs in crontab)
+add this to user .profile (or .bash_profile if it exists):
+### START-Keychain ###
+# Let  re-use ssh-agent and/or gpg-agent between logins
+/usr/bin/keychain $HOME/.ssh/id_rsa_nophrase
+source $HOME/.keychain/$HOSTNAME-sh
+### End-Keychain ###
+
+# Add the generated public key to all the systems you want to use w/out pwd.
+echo put /home/lve/.ssh/id_rsa_nophrase.pub | sftp -b- lve@51.255.46.214
+
+# it should be added to the .ssh/authorized_keys
+cat id_rsa_nophrase.pub >>$HOME/.ssh/authorized_keys
+
 
 
 ---------------------------------------------------------------
