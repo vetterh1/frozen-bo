@@ -15,15 +15,13 @@ mongo 51.254.221.25:27017/admin -u adminFrozen -p frozenPwd --authenticationData
 # as admin from mac:
 mongo 51.254.221.25:27017/admin -u adminFrozen -p frozenPwd --authenticationDatabase admin --ssl --sslPEMKeyFile /Users/lav/ssl/mongodb.pem --sslCAFile /Users/lav/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
 
-# as regular user (dev & prod) from server:
+# as regular user (dev & prod) from SERVER:
 # when used remote dev db: mongo 51.254.221.25:27017/frozen-dev -u frozen -p gem --authenticationDatabase frozen-dev --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
 mongo 51.254.221.25:27017/frozen -u frozen -p gem --authenticationDatabase frozen --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
 
-# as regular user (dev & prod) from mac:
+# as regular user (dev & prod) from MAC:
 # when used remote dev db: mongo 51.254.221.25:27017/frozen-dev -u frozen -p gem --authenticationDatabase frozen-dev --ssl --sslPEMKeyFile /Users/lav/ssl/mongodb.pem --sslCAFile /Users/lav/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
 mongo 51.254.221.25:27017/frozen -u frozen -p gem --authenticationDatabase frozen --ssl --sslPEMKeyFile /Users/lav/ssl/mongodb.pem --sslCAFile /Users/lav/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
-
-
 
 
 ---------------------------------------------------------------
@@ -94,6 +92,12 @@ db.items.update({}, { $unset: { picture:"" } }, {multi:true})
 
 # Set remove flag on all items:
 db.items.update({}, { $set: { removed:false } }, {multi:true})
+
+# Manual backup:
+# From app server
+mongodump --uri "mongodb://frozen:gem@51.254.221.25:27017/frozen?ssl=true" --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
+# From mac
+mongodump --uri "mongodb://frozen:gem@51.254.221.25:27017/frozen?ssl=true" --sslPEMKeyFile /Users/lav/ssl/mongodb.pem --sslCAFile /Users/lav/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
 
 
 ---------------------------------------------------------------
