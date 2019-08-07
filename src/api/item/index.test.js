@@ -11,15 +11,18 @@ const app = () => express(apiRoot, routes)
 
 const code = 'T1234';
 
-let home, user, userSession, anotherSession, item
+let home, otherHome, user, userSession, anotherSession, anotherSessionOtherHome, item
 
 beforeEach(async () => {
   home = await Home.create({ name: 'home1', label: 'label home 1' })
+  otherHome = await Home.create({ name: 'home2', label: 'label home 2' })
   user = await User.create({ email: 'a@a.com', password: '123456', home: home.id2, homeOrder: 0, nextIds: {V:"123"} })
-  const anotherUser = await User.create({ email: 'b@b.com', password: '123456', home: 'otherHome' })
+  const anotherUser = await User.create({ email: 'b@b.com', password: '123456', home: home.id2 })
+  const anotherUserOtherHome = await User.create({ email: 'c@b.com', password: '123456', home: otherHome.id2 })
   userSession = signSync(user.id)
   anotherSession = signSync(anotherUser.id);
-  item = await Item.create({ user: user.id, home: home.id2, code, category: 'V', details: 'test1,test2' })
+  anotherSessionOtherHome = signSync(anotherUserOtherHome.id);
+  item = await Item.create({ user: user.id, home: home.id2, code, category: 'V', details: 'test1,test2',  size: 6 })
 })
 
 test('POST /items 201 (user) - existing category', async () => {
@@ -134,10 +137,17 @@ test('PUT /items/:id 200 (user, only date changed)', async () => {
   // console.log('body when ony date changes: ', body)
 })
 
-test('PUT /items/:id 401 (user) - another user', async () => {
+test('PUT /items/:id 200 (user) - another user, same home', async () => {
   const { status } = await request(app())
     .put(`${apiRoot}/${item.id}`)
     .send({ access_token: anotherSession, code: 'test', category: 'test', details: 'test1,test2', container: 'test', color: 'test', size: '4', freezer: 'test', location: 'test', name: 'test', expirationDate: new Date(), expirationInMonth: '6' })
+  expect(status).toBe(200)
+})
+
+test('PUT /items/:id 401 (user) - another user, other home', async () => {
+  const { status } = await request(app())
+    .put(`${apiRoot}/${item.id}`)
+    .send({ access_token: anotherSessionOtherHome, code: 'test', category: 'test', details: 'test1,test2', container: 'test', color: 'test', size: '4', freezer: 'test', location: 'test', name: 'test', expirationDate: new Date(), expirationInMonth: '6' })
   expect(status).toBe(401)
 })
 
@@ -154,18 +164,36 @@ test('PUT /items/:id 404 (user)', async () => {
   expect(status).toBe(404)
 })
 
-test('POST /items/remove/:id 200 (user)', async () => {
+test('POST /items/remove/:id 200 (same home, remove all)', async () => {
   const { status, body } = await request(app())
     .post(`${apiRoot}/remove/${item.id}`)
-    .query({ access_token: userSession })
+    .send({ access_token: userSession })
   expect(status).toBe(200)
+  expect(body.size).toBe(6)
   expect(body.removed).toBe(true)
 })
 
-test('POST /items/remove/:id 401 (user) - another user', async () => {
+test('POST /items/remove/:id 200 (same home, remove part)', async () => {
+  const { status, body } = await request(app())
+    .post(`${apiRoot}/remove/${item.id}`)
+    .send({ access_token: userSession, size: '4' })
+  expect(status).toBe(200)
+  expect(body.removed).toBe(false)
+  expect(body.size).toBe(4)
+})
+
+
+test('POST /items/remove/:id 200 (user) - another user, same home', async () => {
   const { status } = await request(app())
     .post(`${apiRoot}/remove/${item.id}`)
     .send({ access_token: anotherSession })
+  expect(status).toBe(200)
+})
+
+test('POST /items/remove/:id 401 (user) - another user, other home', async () => {
+  const { status } = await request(app())
+    .post(`${apiRoot}/remove/${item.id}`)
+    .send({ access_token: anotherSessionOtherHome })
   expect(status).toBe(401)
 })
 

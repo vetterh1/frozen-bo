@@ -7,15 +7,17 @@ import { Home } from '../home'
 
 const app = () => express(apiRoot, routes)
 
-let user1, user2, home, admin, session1, session2, adminSession
+let user1, user2, userWithHome, home, admin, session1, session2, sessionWithHome, adminSession
 
 beforeEach(async () => {
   user1 = await User.create({ name: 'user', email: 'a@a.com', password: '123456', language:'en' })
   user2 = await User.create({ name: 'user', email: 'b@b.com', password: '123456' })
   home = await Home.create({name:'homeTest', id2: 'homeId2'})
+  userWithHome = await User.create({ name: 'userWithHome', email: 'c@b.com', password: '123456', home: home.id })
   admin = await User.create({ email: 'c@c.com', password: '123456', role: 'admin' })
   session1 = signSync(user1.id)
   session2 = signSync(user2.id)
+  sessionWithHome = signSync(userWithHome.id)
   adminSession = signSync(admin.id)
 })
 
@@ -42,7 +44,7 @@ test('GET /users?q=user 200 (admin)', async () => {
     .query({ access_token: adminSession, q: 'user' })
   expect(status).toBe(200)
   expect(Array.isArray(body)).toBe(true)
-  expect(body.length).toBe(2)
+  expect(body.length).toBe(3)
 })
 
 test('GET /users?fields=name 200 (admin)', async () => {
@@ -243,7 +245,7 @@ test('PUT /users/:id 200 (user)', async () => {
     .put(`${apiRoot}/${user1.id}`)
     .send({ access_token: session1, email: 'test@test.com', home: '123456', homeOrder: 1 })
   expect(status).toBe(200)
-  console.log("update user:", body)
+  // console.log("update user:", body)
   expect(typeof body).toBe('object')
   expect(body.email).toBe('a@a.com')
   expect(body.home).toBe('123456')
@@ -409,7 +411,7 @@ test('PUT /users/:id/home/join 200 (user)', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${user1.id}/home/join`)
     .send({ access_token: session1, home: home.id2})
-  console.log("join home:", body)
+  // console.log("join home:", body)
   expect(status).toBe(200)
   expect(typeof body).toBe('object')
   expect(body.user.home).toBe(home.id2)
@@ -419,7 +421,7 @@ test('PUT /users/:id/home/join 200 (admin)', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${user1.id}/home/join`)
     .send({ access_token: adminSession, home: home.id2 })
-  console.log("join home:", body)
+  // console.log("join home:", body)
   expect(status).toBe(200)
   expect(typeof body).toBe('object')
 })
@@ -455,7 +457,7 @@ test('PUT /users/:id/home/new 200 (user)', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${user1.id}/home/new`)
     .send({ access_token: session1, home: home.name})
-  console.log("new home:", body)
+  // console.log("new home:", body)
   expect(status).toBe(200)
   expect(typeof body).toBe('object')
   expect(body.user.home).toBe(body.home.id2)
@@ -465,7 +467,7 @@ test('PUT /users/:id/home/new 200 (admin)', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${user1.id}/home/new`)
     .send({ access_token: adminSession, home: home.name })
-  console.log("new home:", body)
+  // console.log("new home:", body)
   expect(status).toBe(200)
   expect(typeof body).toBe('object')
 })
@@ -496,34 +498,35 @@ test('PUT /users/:id/home/new 401', async () => {
 
 
 
-test('PUT /users/:id/home/del 200 (user)', async () => {
+test('PUT /users/:id/home/leave 200 (user with home)', async () => {
   const { status, body } = await request(app())
-    .put(`${apiRoot}/${user1.id}/home/del`)
-    .send({ access_token: session1})
-  console.log("del home:", body)
+    .put(`${apiRoot}/${userWithHome.id}/home/leave`)
+    .send({ access_token: sessionWithHome})
+  // console.log("///////////////////////// leave home 1:", status, body)
   expect(status).toBe(200)
   expect(typeof body).toBe('object')
 })
 
-test('PUT /users/:id/home/del 200 (admin)', async () => {
+test('PUT /users/:id/home/leave 200 (admin)', async () => {
   const { status, body } = await request(app())
-    .put(`${apiRoot}/${user1.id}/home/del`)
+    .put(`${apiRoot}/${user1.id}/home/leave`)
     .send({ access_token: adminSession })
-  console.log("del home:", body)
+  // console.log("///////////////////////// leave home 2:", status, body)
   expect(status).toBe(200)
   expect(typeof body).toBe('object')
 })
 
-test('PUT /users/:id/home/del 401 (user) - another user', async () => {
-  const { status } = await request(app())
-    .put(`${apiRoot}/${user1.id}/home/del`)
+test('PUT /users/:id/home/leave 401 (user) - another user', async () => {
+  const { status, body } = await request(app())
+    .put(`${apiRoot}/${user1.id}/home/leave`)
     .send({ access_token: session2 })
-  expect(status).toBe(401)
+    // console.log("///////////////////////// leave home 3:", status, body)
+    expect(status).toBe(401)
 })
 
-test('PUT /users/:id/home/del 401', async () => {
+test('PUT /users/:id/home/leave 401', async () => {
   const { status } = await request(app())
-    .put(`${apiRoot}/${user1.id}/home/del`)
+    .put(`${apiRoot}/${user1.id}/home/leave`)
     .send({ home: home.id2 })
   expect(status).toBeGreaterThan(399)
 })

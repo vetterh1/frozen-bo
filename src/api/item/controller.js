@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import { success, notFound, authorOrAdmin } from '../../services/response/'
 import Item from './model'
-import { staticFolders } from '../../config'
+import { env, staticFolders } from '../../config'
 // import * as GenerateThumbnails from '../../utils/generateThumbnails';
 
 // import stringifyOnce from '../../utils/stringifyOnce'
@@ -42,7 +42,8 @@ const generateCode = async (category, user) => {
 
 
 export const create = async ({ user, bodymen: { body } }, res, next) => {
-  console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.create');
+  if (env === 'production' || env === 'development')
+    console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.create');
   const code = await generateCode(body.category, user);
   Item.create({ ...body, code, user: user.id, home: user.home })
     // .then((item) => {console.log('item: ', item); return item})
@@ -85,8 +86,11 @@ export const show = ({ params }, res, next) =>
 export const update = ({ user, bodymen: { body }, params }, res, next) => {
   Item.findById(params.id)
     .then(notFound(res))
-    // .then(authorOrAdmin(res, user, 'user')) <-- other users from the same home should be able to update! 
     .then((item) => {
+
+      // User should belong to the same home!
+      if(user.home !== item.home) return res.status(401).end()
+            
       let dirty = false;
       const updatedProperties = Object.getOwnPropertyNames(body);
       updatedProperties.forEach(element => {
@@ -99,7 +103,8 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
         }
       });
       if(dirty) {
-        console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.update: ', params.id);
+        if (env === 'production' || env === 'development')
+          console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.update: ', params.id);
         return item.save()
       }
     })    
@@ -119,8 +124,10 @@ export const updateBinaryPicture = (req, res) => {
 
   Item.findById(req.body.id)
     .then(notFound(res))
-    // .then(authorOrAdmin(res, user, 'user')) <-- other users from the same home should be able to update! 
     .then((item) => {
+
+      // User should belong to the same home!
+      if(user.home !== item.home) return res.status(401).end()
 
       // Delete previon picture & thumbnail
       if(item.pictureName !== req.files[0].originalname) {
@@ -136,7 +143,8 @@ export const updateBinaryPicture = (req, res) => {
       item.thumbnailName = req.files[1].originalname;
       item.updatedAt = Date.now();
 
-      console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.updateBinaryPicture: ', req.body.id, item.pictureName, item.thumbnailName);
+      if (env === 'production' || env === 'development')
+        console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.updateBinaryPicture: ', req.body.id, item.pictureName, item.thumbnailName);
       return item.save()
     })    
     .then((item) => item ? item.view(true) : null)
@@ -146,12 +154,24 @@ export const updateBinaryPicture = (req, res) => {
   
 
 
-export const remove = ({ user, params }, res, next) => {
+export const remove = ({ user, body, params }, res, next) => {
     Item.findById(params.id)
       .then(notFound(res))
-      // .then(authorOrAdmin(res, user, 'user'))     <-- other users from the same home should be able to remove! 
       .then((item) => {
-          item.removed = true;
+
+          // User should belong to the same home!
+          if(user.home !== item.home) return res.status(401).end()
+
+          // If no size parameter: remove all
+          // otherwise don't mark as removed, but adjust the new size
+
+          if(body['size']){
+            item['removed'] = false
+            item['size'] = parseInt(body['size'])
+          }
+          else {
+            item['removed'] = true;
+          }
           return item.save()
       })    
       .then((item) => item ? item.view(true) : null)
@@ -165,7 +185,8 @@ export const remove = ({ user, params }, res, next) => {
 
 
 export const destroy = ({ user, params }, res, next) => {
-  console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.destroy: ', params.id);
+  if (env === 'production' || env === 'development')
+    console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.destroy: ', params.id);
   Item.findById(params.id)
     .then(notFound(res))
     .then(authorOrAdmin(res, user, 'user'))

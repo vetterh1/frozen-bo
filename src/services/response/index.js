@@ -1,3 +1,6 @@
+import { env } from '../../config'
+
+
 export const success = (res, status) => (entity) => {
   if (entity) {
     res.status(status || 200).json(entity)
@@ -27,13 +30,16 @@ export const authorOrAdmin = (res, user, userField) => (entity) => {
       if (isAuthor || isAdmin) {
         return entity
       }
-      console.error("authorOrAdmin returns 401 - entity=", entity);
+      if (env === 'production' || env === 'development')
+        console.error("authorOrAdmin returns 401 - entity=", entity);
       res.status(401).end()
     }
-    console.error("authorOrAdmin returns null - entity=", entity);
+    if (env === 'production' || env === 'development')
+      console.error("authorOrAdmin returns null - entity=", entity);
     return null    
   } catch (error) {
-    console.error("authorOrAdmin exception: ", error);
+    if (env === 'production' || env === 'development')
+      console.error("authorOrAdmin exception: ", error);
     return null    
   }
 

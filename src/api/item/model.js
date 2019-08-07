@@ -114,7 +114,7 @@ itemSchema.pre('save', function (next) {
   // const nextId = 23;
   // this.code = `${this.category}${homeOrder}${nextId}`;
 
-  console.log('itemSchema.pre.save:', this);
+  // console.log('itemSchema.pre.save:', this);
 
 
   next();

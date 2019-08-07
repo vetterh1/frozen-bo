@@ -36,7 +36,8 @@ export default (apiRoot, routes) => {
 
   // Serve static assets (pictures,...)
   const folderStaticAbsolute = path.join(__dirname, staticFolders.relativePaths.fromExpress, staticFolders.static);
-  console.info(`Public (static) files should be here: ${folderStaticAbsolute}`);
+  if (env === 'production' || env === 'development')
+    console.info(`Public (static) files should be here: ${folderStaticAbsolute}`);
   // app.use('/public', express.static(folderStaticAbsolute), serveIndex(folderStaticAbsolute, {'icons': true}));
   app.use('/static', express.static(folderStaticAbsolute));
 

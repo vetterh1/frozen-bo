@@ -164,6 +164,9 @@ router.put('/:id',
  * @apiName RemoveItem
  * @apiGroup Item
  * @apiPermission user
+ * @apiDescription If no size parameter: remove all
+ * @apiDescription otherwise don't mark as removed, but adjust the new size
+ * @apiParam size Item's new size or nothing (for remove all)
  * @apiParam {String} access_token user access token.
  * @apiSuccess (Success 204) 204 No Content.
  * @apiError 404 Item not found.

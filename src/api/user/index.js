@@ -146,7 +146,6 @@ router.put('/:id/home/new',
  */
 router.put('/:id/home/leave',
   token({ required: true }),
-  body({ home }),
   leaveHome)
 
 

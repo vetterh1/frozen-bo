@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node .",
     "test": "jest",
-    "test:items": "jest src/api/item/index.test.js",
+    "test:item": "jest src/api/item/index.test.js",
+    "test:user": "jest src/api/user/index.test.js",
     "coverage": "npm test -- --coverage",
     "postcoverage": "open-cli coverage/lcov-report/index.html",
     "dev": "nodemon -i \"*.test.js\" .",

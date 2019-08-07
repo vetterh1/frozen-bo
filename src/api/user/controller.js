@@ -152,9 +152,9 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
 
 
     export const joinNewHome = async ({ body , params, user }, res) => {
-      console.log('user joinNewHome params:', params);
-      console.log('user joinNewHome user:', user);
-      console.log('user joinNewHome body:', body);
+      // console.log('user joinNewHome params:', params);
+      // console.log('user joinNewHome user:', user);
+      // console.log('user joinNewHome body:', body);
 
       try {
         const userFound = await User.findById(params.id === 'me' ? user.id : params.id);
@@ -186,7 +186,7 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
 
       } catch (error) {
         /* istanbul ignore next */
-        console.log('user joinNewHome error:', error);
+        console.error('user joinNewHome error:', error);
         res.status(500).end()
       }
   }
@@ -197,16 +197,15 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
 
 
 
-  export const leaveHome = async ({ bodymen: { body }, params, user }, res, next) => {
+  export const leaveHome = async ({ params, user }, res, next) => {
     try {
       const userFound = await User.findById(params.id === 'me' ? user.id : params.id);
       /* istanbul ignore next */
       if(!userFound) return notFound(res)(userFound);
       const isAdmin = user.role === 'admin'
       const isSelfUpdate = user.id === userFound.id
-      // console.log('user joinHome params:', params);
-      // console.log('user joinHome user to update:', user);
-      // console.log('user joinHome user found:', userFound);
+      // console.log('user leaveHome params:', params);
+      // console.log('user leaveHome user found:', userFound);
 
       if (!isSelfUpdate && !isAdmin) {
         res.status(401).json({
@@ -215,18 +214,16 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
         })
         return null
       }  
-      // console.log('user joinHome body:', body);
 
-      userFound.home = null;
-      userFound.homeOrder = null;
+      userFound.home = undefined;
+      userFound.homeOrder = undefined;
       const resUserSave = await userFound.save();
-      // console.log('user joinHome resUserSave:', resUserSave);
-      // console.log('user joinHome resHomeSave:', resHomeSave);
+      // console.log('user leaveHome resUserSave:', resUserSave);
 
       success(res)({user: resUserSave});
 
     } catch (error) {
-      console.log('user LeaveHome error:', error);
+      console.error('user LeaveHome error:', error);
       res.status(500).end()
     }
 }

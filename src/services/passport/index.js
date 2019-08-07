@@ -8,6 +8,7 @@ import * as facebookService from '../facebook'
 import * as githubService from '../github'
 import * as googleService from '../google'
 import User, { schema } from '../../api/user/model'
+import { env } from '../../config'
 
 
 export const token = ({ required, roles = User.roles } = {}) => (req, res, next) => {
@@ -16,7 +17,8 @@ export const token = ({ required, roles = User.roles } = {}) => (req, res, next)
     // console.log('token authenticate: user, err:', user, err);
 
     if (err || (required && !user) || (required && !~roles.indexOf(user.role))) {
-      console.error('passport.authenticate: error 401 (err):', err, user);
+        if (env === 'production' || env === 'development')
+          console.error('passport.authenticate: error 401 (err):', err, user);
       return res.status(401).end()
     }
     req.logIn(user, { session: false }, (err) => {
@@ -73,12 +75,14 @@ export const password = () => (req, res, next) =>
     if (err && err.param) {
       return res.status(400).json(err)
     } else if (err || !user) {
-      console.error('passport.password: param error 401 (err or no user):', err, user);
+      if (env === 'production' || env === 'development')
+        console.error('passport.password: param error 401 (err or no user):', err, user);
       return res.status(401).end()
     }
     req.logIn(user, { session: false }, (err) => {
       if (err){
-        console.error('passport.password: login error 401 (err):', err, user);
+        if (env === 'production' || env === 'development')
+          console.error('passport.password: login error 401 (err):', err, user);
         return res.status(401).end()
       }
       next()
