@@ -160,7 +160,7 @@ router.put('/:id',
   update)
 
 /**
- * @api {remove} /items/:id Remove item
+ * @api {post} /items/remove/:id Remove item
  * @apiName RemoveItem
  * @apiGroup Item
  * @apiPermission user
