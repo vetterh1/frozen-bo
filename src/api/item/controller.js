@@ -118,16 +118,12 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
 
 
 export const updateBinaryPicture = (req, res) => {
-  // const { body , params, user, headers } = req;
-  // console.log("updateBinaryPicture: headers['content-length']=", sizeInMB(headers['content-length']));
-  // console.log(`updateBinaryPicture: id: ${req.body.id}, token: ${stringifyOnce(req.body.access_token)} - files: ${stringifyOnce(req.files)} - size: ${sizeInMB(req.headers['content-length'])}`);
-
   Item.findById(req.body.id)
     .then(notFound(res))
     .then((item) => {
 
       // User should belong to the same home!
-      if(user.home !== item.home) return res.status(401).end()
+      if(req.user.home !== item.home) return res.status(401).end()
 
       // Delete previon picture & thumbnail
       if(item.pictureName !== req.files[0].originalname) {
