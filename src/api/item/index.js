@@ -126,7 +126,7 @@ router.get('/:id',
  */
 
 router.post('/picture', 
-  // token({ required: true }),
+  // token({ required: true }),  <--- TODO  user is not passed as it's FORM-DATA and not form-urlencoded
   upload.array('picture'), 
   updateBinaryPicture)
   

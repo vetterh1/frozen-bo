@@ -117,16 +117,20 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
 
 
 
-export const updateBinaryPicture = (req, res) => {
-  Item.findById(req.body.id)
+export const updateBinaryPicture = ({ body, files, user, headers }, res) => {
+  // console.log("updateBinaryPicture: user=", user);
+  // console.log("updateBinaryPicture: headers['content-length']=", sizeInMB(headers['content-length']));
+  // console.log(`updateBinaryPicture: id: ${body.id}, token: ${stringifyOnce(body.access_token)} - files: ${stringifyOnce(files)} - size: ${sizeInMB(headers['content-length'])}`);
+
+  Item.findById(body.id)
     .then(notFound(res))
     .then((item) => {
 
       // User should belong to the same home!
-      if(req.user.home !== item.home) return res.status(401).end()
+      // if(user.home !== item.home) return res.status(401).end()   <--- TODO  user is not passed as it's FORM-DATA and not form-urlencoded
 
       // Delete previon picture & thumbnail
-      if(item.pictureName !== req.files[0].originalname) {
+      if(item.pictureName !== files[0].originalname) {
         const folderPictures = path.join(__dirname, staticFolders.relativePaths.fromController, staticFolders.pictures, '/items');
         const pictureName = item.pictureName ? path.join(folderPictures, item.pictureName) : null;
         const thumbnailName = item.thumbnailName ? path.join(folderPictures, item.thumbnailName) : null;
@@ -135,12 +139,12 @@ export const updateBinaryPicture = (req, res) => {
       }
 
       // Store the new names in the item & save it
-      item.pictureName = req.files[0].originalname;
-      item.thumbnailName = req.files[1].originalname;
+      item.pictureName = files[0].originalname;
+      item.thumbnailName = files[1].originalname;
       item.updatedAt = Date.now();
 
       if (env === 'production' || env === 'development')
-        console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.updateBinaryPicture: ', req.body.id, item.pictureName, item.thumbnailName);
+        console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.updateBinaryPicture: ', body.id, item.pictureName, item.thumbnailName);
       return item.save()
     })    
     .then((item) => item ? item.view(true) : null)

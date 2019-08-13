@@ -18,7 +18,7 @@ export const token = ({ required, roles = User.roles } = {}) => (req, res, next)
 
     if (err || (required && !user) || (required && !~roles.indexOf(user.role))) {
         if (env === 'production' || env === 'development')
-          console.error('passport.authenticate: error 401 (err):', err, user);
+          console.error('passport.authenticate: error 401 (err, user):', err, user);
       return res.status(401).end()
     }
     req.logIn(user, { session: false }, (err) => {
