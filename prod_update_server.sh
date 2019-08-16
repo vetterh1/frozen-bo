@@ -13,3 +13,14 @@ else
   echo "Simple update, no 'npm install' was done. To do a full install, please add the parameter 'full'"
 fi
 NODE_ENV=production pm2 start npm  --name boFrozen  --env production -- run prod
+
+# Info on backups:
+echo " "
+echo " "
+echo "*******************************************************************"
+echo "Backup disk usage:"
+du -sh ~/frozengem_files_backup/
+du -sh ~/frozengem_db_backup/
+echo "*******************************************************************"
+echo " "
+echo " "
