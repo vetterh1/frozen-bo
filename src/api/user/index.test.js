@@ -10,7 +10,7 @@ const app = () => express(apiRoot, routes)
 let user1, user2, userWithHome, home, admin, session1, session2, sessionWithHome, adminSession
 
 beforeEach(async () => {
-  user1 = await User.create({ name: 'user', email: 'a@a.com', password: '123456', language:'en' })
+  user1 = await User.create({ name: 'user', email: 'a@a.com', password: '123456', language:'en', navigationStyle:2 })
   user2 = await User.create({ name: 'user', email: 'b@b.com', password: '123456' })
   home = await Home.create({name:'homeTest', id2: 'homeId2'})
   userWithHome = await User.create({ name: 'userWithHome', email: 'c@b.com', password: '123456', home: home.id })
@@ -118,6 +118,7 @@ test('POST /users 201 (master)', async () => {
   expect(typeof body.user).toBe('object')
   expect(typeof body.token).toBe('string')
   expect(body.user.email).toBe('d@d.com')
+  expect(body.user.navigationStyle).toBe(0)
 })
 
 test('POST /users 201 (master)', async () => {
@@ -129,6 +130,7 @@ test('POST /users 201 (master)', async () => {
   expect(typeof body.user).toBe('object')
   expect(typeof body.token).toBe('string')
   expect(body.user.email).toBe('d@d.com')
+  expect(body.user.navigationStyle).toBe(0)
 })
 
 test('POST /users 409 (master) - duplicated email', async () => {
@@ -243,7 +245,7 @@ test('PUT /users/:id 200 (user)', async () => {
 test('PUT /users/:id 200 (user)', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${user1.id}`)
-    .send({ access_token: session1, email: 'test@test.com', home: '123456', homeOrder: 1 })
+    .send({ access_token: session1, email: 'test@test.com', home: '123456', homeOrder: 1, navigationStyle: 1 })
   expect(status).toBe(200)
   // console.log("update user:", body)
   expect(typeof body).toBe('object')
@@ -251,6 +253,8 @@ test('PUT /users/:id 200 (user)', async () => {
   expect(body.home).toBe('123456')
   expect(body.homeOrder).toBe(1)
   expect(body.language).toBe('en')
+  expect(body.navigationStyle).toBe(1)
+  
 })
 
 test('PUT /users/:id 200 (admin)', async () => {

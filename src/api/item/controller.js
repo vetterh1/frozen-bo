@@ -164,7 +164,6 @@ export const remove = ({ user, body, params }, res, next) => {
 
           // If no size parameter: remove all
           // otherwise don't mark as removed, but adjust the new size
-          console.log('Remove / Update quantity: ', body['size']);
           if(body['size']){
             item['removed'] = false
             item['size'] = parseInt(body['size'])
