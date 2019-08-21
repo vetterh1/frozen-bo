@@ -153,6 +153,51 @@ echo put /home/lve/.ssh/id_rsa_nophrase.pub | sftp -b- lve@51.255.46.214
 cat id_rsa_nophrase.pub >>$HOME/.ssh/authorized_keys
 
 
+// ------ Restore (prod) dump in DEV db--------
+//
+// automated with dev_restore_with_prod_data.sh
+//
+
+# 1 - save DEV db
+// distant:
+todo
+// localhost:
+mongodump --uri "mongodb://localhost:27017/frozen-dev"  --out ~/dev_backup
+
+# 2 - delete DEV db  
+mongo
+use frozen-dev
+db.dropDatabase();
+exit
+// Note: can be called directly with: mongo < mongo_drop_dev.js
+
+# 3 -  download the archive by browsing these urls
+https://frozengem.com/public-backup/db.tar.gz
+// Unix: wget https://frozengem.com/public-backup/db.tar.gz
+
+# 4 - unzip the files
+// Unix: tar xvf frozen_prod_db.tar.gz
+
+// 5 - rename (if needed) the db folder in the unzipped tree 
+// ex to restore a prod db (frozen) in a dev db (frozen-dev): rename frozen folder in frozen-dev
+
+// 6 - restore!
+mongorestore -u 'frozen' -p 'gem' --authenticationDatabase "frozen" ___dump_folder_containing_the_collection_folder_that_contains_the_json_files___
+ex: mongorestore -u 'frozen' -p 'gem' --authenticationDatabase "frozen" frozen_gem_dump_2019.08.20-06.00.01
+
+// 7 - Restore the files (images) 
+Download them here: https://frozengem.com/public-backup/files.tar.gz
+
+// 8 - Replace the frozen-bo static folder with the content of this zip file
+
+
+
+
+
+
+
+
+
 
 ---------------------------------------------------------------
                       JS / ES6 concepts
@@ -341,6 +386,10 @@ server {
 }
 
 # HTTPS - proxy requests on to local Node.js app:
+
+# 8080: FoodManiac Front
+# 8085: FoodManiac Back
+
 server {
         listen 443;
         server_name food-maniac.com;
@@ -355,42 +404,7 @@ server {
         ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
 
 
-
-
-
-
-        # Pass requests for /frozenbo to localhost:8065:
-        location /frozenbo/ {
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header X-NginX-Proxy true;
-                proxy_pass http://localhost:8065/;
-                proxy_ssl_session_reuse off;
-                proxy_set_header Host $http_host;
-                proxy_cache_bypass $http_upgrade;
-                proxy_redirect off;
-        }
-
-        # Pass requests for /frozengem to localhost:8060:
-        location /frozengem/ {
-                proxy_set_header X-Real-IP $remote_addr;
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                proxy_set_header X-NginX-Proxy true;
-                proxy_pass http://localhost:8060/;
-                proxy_ssl_session_reuse off;
-                proxy_set_header Host $http_host;
-                proxy_cache_bypass $http_upgrade;
-                proxy_redirect off;
-        }
-
-
-
-        
-
-
-
-
-        # Pass requests for /api to localhost:8085:
+        # Pass requests for /api to localhost:8085 (FoodManiac Back):
         location /api/ {
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -402,7 +416,7 @@ server {
                 proxy_redirect off;
         }
 
-        # Pass requests for /util to localhost:8085:
+        # Pass requests for /util to localhost:8085 (FoodManiac Back):
         location /util/ {
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -414,7 +428,7 @@ server {
                 proxy_redirect off;
         }
 
-        # Pass requests for /socket.io to localhost:8085:
+        # Pass requests for /socket.io to localhost:8085 (FoodManiac Back):
         location /socket.io/ {
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -426,7 +440,7 @@ server {
                 proxy_redirect off;
         }
         
-        # Pass requests for /static to localhost:8085:
+        # Pass requests for /static to localhost:8085 (FoodManiac Back):
         location /static/ {
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -438,7 +452,7 @@ server {
                 proxy_redirect off;
         }
         
-        # Pass requests for /logs to localhost:8085:
+        # Pass requests for /logs to localhost:8085 (FoodManiac Back):
         location /logs/ {
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -450,7 +464,8 @@ server {
                 proxy_redirect off;
         }
 
-        # Pass requests for / to localhost:8080:
+
+        # Pass requests for / to localhost:8080 (FoodManiac Front):
         location / {
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -467,6 +482,10 @@ server {
 
 
 # HTTPS - proxy requests on to local Node.js app:
+
+# 8060: frozenGem Front
+# 8065: frozenGem Back
+
 server {
         listen 443;
         server_name frozengem.com www.frozengem.com;
@@ -483,7 +502,8 @@ server {
 
 
 
-        # Pass requests for /frozenbo to localhost:8065:
+
+        # Pass requests for /frozenbo to localhost:8065 (frozenGem Back)
         location /frozenbo/ {
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -498,9 +518,24 @@ server {
 
 
 
+        # Pass requests for publicly available backup files (on frozenGem Front)
+        location /public-backup/ {
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-NginX-Proxy true;
+                proxy_pass http://localhost:8060/frozenbackup/;
+                proxy_ssl_session_reuse off;
+                proxy_set_header Host $http_host;
+                proxy_cache_bypass $http_upgrade;
+                proxy_redirect off;
+        }
 
 
-        # Pass requests for / to localhost:8060:
+
+
+
+
+        # Pass requests for / to localhost:8060 (frozenGem Front):
         location / {
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

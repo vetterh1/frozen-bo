@@ -47,7 +47,7 @@ sftp_user=lve
 
 # Dump & gz variables
 dump_folder_base_name=frozen_gem_dump_
-dump_folder_complete_path=$folder_root/$dump_folder_base_name$current_time
+dump_folder_complete_path=$dump_folder_base_name$current_time
 archive_base_name=frozen_gem_db_backup_
 archive_complete_path=$backup_folder_complete_path/$archive_base_name$current_time.tar.gz
 
