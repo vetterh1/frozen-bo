@@ -1,4 +1,5 @@
 #!/bin/bash
+# File name: cron_job__app_server__backup_frozengem_files.sh
 
 echo 
 echo 
@@ -15,9 +16,11 @@ echo       - Cleans the db backup folder from old files older than 20 days
 echo       - Cleans the foodmaniac folder from old files older than 20 days
 echo
 echo       Use keychain to get a password-less sFTP access with NO passphrase
-echo       Then put this script in crontab for automatic running:
-echo "         @reboot sleep 60 && /home/lve/backup_frozengem_files.sh &>> /home/lve/backup_frozengem_files.log "
-echo "         0 6,18 * * * /home/lve/backup_frozengem_files.sh &>> /home/lve/backup_frozengem_files.log "
+echo       Then put this script in APP server crontab for automatic running:
+echo "         # Create backup for content files on the APP server "
+echo "         # (db backup is done through an equivalent command on the DB server) "
+echo "         @reboot sleep 60 && /home/lve/cron_job__app_server__backup_frozengem_files.sh &>> /home/lve/cron_job__app_server__backup_frozengem_files.log "
+echo "         0 6,18 * * * /home/lve/cron_job__app_server__backup_frozengem_files.sh &>> /home/lve/cron_job__app_server__backup_frozengem_files.log "
 echo 
 echo ---------------------------- Prepares Backup ----------------------------
 echo 
@@ -28,10 +31,12 @@ echo "Start File Backup at $current_time"
 
 
 # Folder Location
-folder_root_source=/home/lve/workspace/frozen-bo/static
+folder_root = /home/lve/workspace/frozen-bo
+folder_root_source=./static
 folder_root_destination=/home/lve/frozengem_files_backup
 db_folder_root_destination=/home/lve/frozengem_db_backup
 foodmaniac_folder_root_destination=/home/lve/db_backup
+
 
 # Backup variables
 # (!) Delete backups older than 20 days (!)
@@ -46,7 +51,7 @@ archive_complete_path=$folder_root_destination/$archive_base_name$current_time.t
 db_archive_base_name=frozen_gem_db_backup_
 foodmaniac_archive_base_name=food_maniac_db_backup_
 
-echo "Folder to archive : $folder_root_source"
+echo "Folder to archive : $folder_root/$folder_root_source"
 echo "Archive name : $archive_complete_path"
 
 
@@ -56,6 +61,7 @@ echo ---------------------------- Compresses source folder ---------------------
 echo 
 echo 
 
+cd $folder_root
 tar cvzf $archive_complete_path $folder_root_source
 
 

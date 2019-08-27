@@ -1,11 +1,12 @@
 #!/bin/bash
+# File name: cron_job__db_server__backup_frozengem_db.sh
 
 echo 
 echo 
 echo 
 echo -----------------------   Frozen Gem DB Backup  -----------------------
 echo 
-echo       To be run from Mongo DB server
+echo       To be run from Mongo DB server 51.254.221.25
 echo 
 echo       Actions:
 echo       - Creates a dump folder
@@ -15,9 +16,11 @@ echo       - Cleans the backup folder from old files older than 15 days
 echo       - Sends it to a remote server
 echo
 echo       Use keychain to get a password-less sFTP access with NO passphrase
-echo       Then put this script in crontab for automatic running:
-echo "         0 6,18 * * * /home/lve/backup_frozengem_db.sh &>> /home/lve/backup_frozengem_db.log "
-echo "         @reboot sleep 60 && /home/lve/backup_frozengem_db.sh &>> /home/lve/backup_frozengem_db.log "
+echo       Then put this script in DB server crontab for automatic running:
+echo "         # Create backup for DB content on the DB server "
+echo "         # (files backup is done through an equivalent command on the APP server) "
+echo "         0 6,18 * * * /home/lve/cron_job__db_server__backup_frozengem_db.sh &>> /home/lve/cron_job__db_server__backup_frozengem_db.log "
+echo "         @reboot sleep 60 && /home/lve/cron_job__db_server__backup_frozengem_db.sh &>> /home/lve/cron_job__db_server__backup_frozengem_db.log "
 echo 
 echo ---------------------------- Prepares Backup ----------------------------
 echo 

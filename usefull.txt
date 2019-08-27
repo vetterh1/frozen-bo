@@ -155,7 +155,7 @@ cat id_rsa_nophrase.pub >>$HOME/.ssh/authorized_keys
 
 // ------ Restore (prod) dump in DEV db--------
 //
-// automated with dev_restore_with_prod_data.sh
+// automated with cron_job__app_server__make_latest_backup_downloadable.sh
 //
 
 # 1 - save DEV db
@@ -181,7 +181,7 @@ https://frozengem.com/public-backup/db.tar.gz
 // 5 - rename (if needed) the db folder in the unzipped tree 
 // ex to restore a prod db (frozen) in a dev db (frozen-dev): rename frozen folder in frozen-dev
 
-// 6 - restore!
+// 6 - restore db
 mongorestore -u 'frozen' -p 'gem' --authenticationDatabase "frozen" ___dump_folder_containing_the_collection_folder_that_contains_the_json_files___
 ex: mongorestore -u 'frozen' -p 'gem' --authenticationDatabase "frozen" frozen_gem_dump_2019.08.20-06.00.01
 

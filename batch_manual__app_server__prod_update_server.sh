@@ -1,3 +1,9 @@
+#!/bin/bash
+# File name: batch_manual__app_server__prod_update_server.sh
+
+filesBackupFolder=~/frozengem_files_backup
+dbBackupFolder=~/frozengem_db_backup
+
 pm2 stop boFrozen
 pm2 delete boFrozen
 git fetch -a
@@ -20,8 +26,8 @@ echo " "
 echo " "
 echo "*******************************************************************"
 echo "Backup disk usage:"
-du -sh ~/frozengem_files_backup/
-du -sh ~/frozengem_db_backup/
+du -sh $filesBackupFolder
+du -sh $dbBackupFolder
 echo "*******************************************************************"
 echo " "
 echo " "
