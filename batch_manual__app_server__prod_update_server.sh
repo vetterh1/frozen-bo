@@ -9,8 +9,8 @@ pm2 delete boFrozen
 git fetch -a
 git stash
 git pull
-chmod 755 ./prod_update_server.sh
-chmod 755 ./dev_restore_with_prod_data.sh
+chmod 755 ./batch_manual__app_server__prod_update_server.sh
+chmod 755 ./batch_manual__dev_machine__dev_restore_with_prod_data.sh
 if [[ $1 == "full" ]]; then
     echo "Full update including'npm install'. To do a simple install, please remove the parameter 'full'"
     rm -fr node_modules

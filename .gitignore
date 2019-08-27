@@ -12,6 +12,7 @@ npm-debug.log
 coverage
 cassette
 *.gz
+/static.sav
 /tmp
 /dump
 /dump_db

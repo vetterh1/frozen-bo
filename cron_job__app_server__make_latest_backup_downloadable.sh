@@ -14,6 +14,7 @@ echo -----------------------   Make backup downloadable from browser  ----------
 #
 #       Should put this script in crontab for automatic running
 #       but the running time should be after the backup time: 8, 18
+# "         # Copy latest db and files from the backup folder to a folder publicly available through the FO server "
 # "         0 7,19 * * * /home/lve/cron_job__app_server__make_latest_backup_downloadable.sh &>> /home/lve/cron_job__app_server__make_latest_backup_downloadable.log "
 # "         @reboot sleep 160 && /home/lve/cron_job__app_server__make_latest_backup_downloadable.sh &>> /home/lve/cron_job__app_server__make_latest_backup_downloadable.log "
 # 

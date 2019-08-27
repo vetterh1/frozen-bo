@@ -31,7 +31,7 @@ echo "Start File Backup at $current_time"
 
 
 # Folder Location
-folder_root = /home/lve/workspace/frozen-bo
+folder_root=/home/lve/workspace/frozen-bo
 folder_root_source=./static
 folder_root_destination=/home/lve/frozengem_files_backup
 db_folder_root_destination=/home/lve/frozengem_db_backup
