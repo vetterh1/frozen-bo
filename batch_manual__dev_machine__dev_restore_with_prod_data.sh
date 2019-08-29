@@ -75,7 +75,18 @@ while [ "$1" != "" ]; do
     shift
 done
 
-echo "--> Frozen-bo root folder: $folder_root"
+
+if [ -z "$folder_root" ]
+then
+    echo "!!!!! No folder root specified !!!!!"
+    echo "Please either use --mac or --pc, or specify a specific folder with --root"
+    echo " "
+    usage
+    exit 1
+else
+    echo "--> Frozen-bo root folder: $folder_root"
+fi
+
 echo "--> Mongo folder: $mongo_root"
 
 
