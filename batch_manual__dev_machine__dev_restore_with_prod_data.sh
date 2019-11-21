@@ -23,13 +23,18 @@ echo "-p or --pc: standard presets for PC. These presets can be modified in the 
 echo "-m or --mac: standard presets for MAC. These presets can be modified in the script"
 echo "-r or --root: (exclusive with --pc & --mac) specify the frozen-bo folder. MUST END WITH /"
 echo "-d or --mongodb: (exclusive with --pc & --mac) specify the mongodb folder. MUST END WITH /"
+echo "-nc or --no_clean: does not clean tmp folder in bo folder"
+echo " "
+echo " ---------- NEW INSTALLATIONS ---------->>>>>>"
+echo "- check the mongo root versions (new versions == new folders especially on Windows)"
+echo "- db frozen-dev must be created first and users must exist (see usefull.txt)"
 echo " "
 echo " "
 folder_root=
 folder_root_pc=c:/workspace/frozen-bo/
 folder_root_mac=~/workspace/frozen-bo/
 mongo_root=
-mongo_root_pc=C:/PROGRA~1/MongoDB/Server/4.0/bin/
+mongo_root_pc=C:/PROGRA~1/MongoDB/Server/4.2/bin/
 mongo_root_mac=
 echo "!!!!!!!!!!!!!!!!!!!!!!!!! CAUTION END !!!!!!!!!!!!!!!!!!!!!!!!!"
 echo " "
@@ -41,7 +46,7 @@ echo " "
 usage()
 {
     echo " "
-    echo "usage: batch_manual__dev_machine__dev_restore_with_prod_data [[--pc ] | [--mac]] | [[-r folder ] [-d folder]] | [-h]]"
+    echo "usage: batch_manual__dev_machine__dev_restore_with_prod_data [[--pc ] | [--mac]] | [[-r folder ] [-d folder]] | [-h] | [-nc]]"
     echo " "
     read -n 1 -p "Press a key to exit."
 }
@@ -65,6 +70,9 @@ while [ "$1" != "" ]; do
         -m | --mac )            echo "Detected --mac option"
                                 folder_root=$folder_root_mac
                                 mongo_root=$mongo_root_mac
+                                ;;
+        -nc | --no_clean )      echo "Detected --no_clean option"
+                                no_clean="true"
                                 ;;
         -h | --help | /? )      usage
                                 exit
@@ -124,6 +132,8 @@ echo "----------------------------------------------"
 echo " "
 echo " "
 echo " 3 -  download the archive by browsing this url & use 7zip..."
+echo "             https://frozengem.com/public-backup/db.tar.gz"
+echo "             https://frozengem.com/public-backup/files.tar.gz"
 echo " "
 echo " "
 cd $folder_root
@@ -197,8 +207,15 @@ echo " "
 echo " 8 - Cleaning "
 echo " "
 echo " "
+
 cd $folder_root
-rm -fr tmp
+if [ -z "$no_clean" ]
+then
+    rm -fr tmp
+else
+    echo "!!!!! No cleaning asked !!!!!"
+fi
+
 #
 #
 read -n 1 -p "Press a key to exit."
