@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
 import { token } from '../../services/passport'
 import { create, index, show, update, destroy, removed, remove, updateBinaryPicture } from './controller'
@@ -70,7 +69,6 @@ router.post('/',
  */
 router.get('/',
   token({ required: true }),
-  query(),
   index)
 
 
@@ -88,7 +86,6 @@ router.get('/',
  */
 router.get('/removed',
   token({ required: true }),
-  query(),
   removed)
 
 

@@ -93,6 +93,14 @@ db.items.update({}, { $unset: { picture:"" } }, {multi:true})
 # Set remove flag on all items:
 db.items.update({}, { $set: { removed:false } }, {multi:true})
 
+# Find all fish items:
+db.items.find({category:'H'})
+
+# Find number of fish items:
+db.items.find({category:'H'}).count()
+
+# Find all my current items:
+db.items.find({"home": "h7j8tqh4L", "removed": false}).count()
 
 
 

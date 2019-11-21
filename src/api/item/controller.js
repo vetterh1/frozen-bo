@@ -53,18 +53,16 @@ export const create = async ({ user, bodymen: { body } }, res, next) => {
 }
 
 
-
-
-export const index = ({ user, querymen: { query, select, cursor } }, res, next) =>
-  Item.find({home: user.home, removed: false}, select, cursor)
+export const index = ({ user }, res, next) =>
+  Item.find({home: user.home, removed: false})
     // .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
     // .populate('user')
     .then((items) => items.map((item) => item.view()))
     .then(success(res))
     .catch(next)
 
-export const removed = ({ user, querymen: { query, select, cursor } }, res, next) =>
-    Item.find({home: user.home, removed: true}, select, cursor)
+export const removed = ({ user }, res, next) =>
+    Item.find({home: user.home, removed: true})
       // .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
       // .populate('user')
       .then((items) => items.map((item) => item.view()))
