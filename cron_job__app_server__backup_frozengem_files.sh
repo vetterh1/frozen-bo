@@ -11,9 +11,9 @@ echo
 echo       Actions:
 echo       - Compresses the static folder with the images
 echo       - Moves it to a local backup folder
-echo       - Cleans the backup folder from old files older than 20 days
-echo       - Cleans the db backup folder from old files older than 20 days
-echo       - Cleans the foodmaniac folder from old files older than 20 days
+echo       - Cleans the backup folder from old files older than 10 days
+echo       - Cleans the db backup folder from old files older than 10 days
+echo       - Cleans the foodmaniac folder from old files older than 10 days
 echo
 echo       Use keychain to get a password-less sFTP access with NO passphrase
 echo       Then put this script in APP server crontab for automatic running:
@@ -39,8 +39,8 @@ foodmaniac_folder_root_destination=/home/lve/db_backup
 
 
 # Backup variables
-# (!) Delete backups older than 20 days (!)
-delete_backups_older_than_this=20
+# (!) Delete backups older than 10 days (!)
+delete_backups_older_than_this=10
 
 
 # Dump & gz variables
