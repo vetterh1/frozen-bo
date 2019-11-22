@@ -48,7 +48,13 @@ NODE_ENV=production pm2 start npm  --name boFrozen  --env production -- run prod
 
 echo " "
 echo "----------------------------------"
-echo "6 - Info on backup disk usage:"
+echo "6 - Create special backup folder"
+echo " "
+./cron_job__app_server__make_latest_backup_downloadable.sh
+
+echo " "
+echo "----------------------------------"
+echo "7 - Info on backup disk usage:"
 echo " "
 du -sh $filesBackupFolder
 du -sh $dbBackupFolder
