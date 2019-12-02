@@ -12,7 +12,7 @@ export const index = ({ querymen: { query, select, cursor } }, res, next) =>
 export const show = ({ params }, res, next) =>
   User.findById(params.id)
     .then(notFound(res))
-    .then((user) => user ? user.view() : null)
+    .then((user) => user ? { user: user.view(true) } : null)
     .then(success(res))
     .catch(next)
 
@@ -20,7 +20,7 @@ export const showMe = ({ user }, res) => {
   // console.log('user showMe:', user);
   if(user.language)
     user.language.toLowerCase();
-  return res.json(user.view(true))
+  return res.json({ user: user.view(true) })
 }
 
 export const create = ({ bodymen: { body } }, res, next) =>
@@ -93,7 +93,7 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
     })
     .then((user) => {
       // console.log('user update 3:', user);
-      return user ? user.view(true) : null
+      return user ? { user: user.view(true) } : null
     })
     .then(success(res))
     .catch(next)
@@ -248,7 +248,7 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
       return result
     })
     .then((user) => user ? user.set({ password: body.password }).save() : null)
-    .then((user) => user ? user.view(true) : null)
+    .then((user) => user ? { user: user.view(true) } : null)
     .then(success(res))
     .catch(next)
 
