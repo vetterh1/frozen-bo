@@ -95,6 +95,11 @@ db.items.update({}, { $set: { removed:false } }, {multi:true})
 
 # Find all fish items:
 db.items.find({category:'H'})
+# Find all soup items sorted by most recent, displays only name & date
+db.items.find({category:'S'}, {name:1, createdAt:1}).sort({createdAt: -1})
+
+# Find all items sorted by most recent, displays only location, most recents 1st:
+db.items.find({}, {name:1, freezer:1, location:1, createdAt:1}).sort({createdAt: -1})
 
 # Find number of fish items:
 db.items.find({category:'H'}).count()
