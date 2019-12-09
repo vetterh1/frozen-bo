@@ -336,7 +336,8 @@ Instead:
     - pm2 stop all
     - sudo systemctl stop nginx
     - /opt/letsencrypt/letsencrypt-auto renew
-    - pm2 start all
+    - update the system (see below) or just sudo shutdown -r now
+
     result (ceritificate) is there: /etc/letsencrypt/live/food-maniac.com/fullchain.pem 
 
 - Creation process:
@@ -358,6 +359,31 @@ Instead:
 
 
 
+
+---------------------------------------------------------------
+                            ubuntu
+---------------------------------------------------------------
+
+Version: 16.04
+Note: get version with: lsb_release -a
+
+Update:
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt autoremove
+sudo apt-get dist-upgrade
+
+Update Ubuntu:
+sudo do-release-upgrade
+
+sudo reboot
+sudo shutdown -r now
+
+------ Nodejs update -------
+With 'n':
+sudo npm install -g n
+sudo n latest
+or sudo n current
 
 
 ---------------------------------------------------------------
