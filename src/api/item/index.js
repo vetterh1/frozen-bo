@@ -57,7 +57,7 @@ router.post('/',
   create)
 
 /**
- * @api {get} /items Retrieve items
+ * @api {get} /items Retrieve all items including the removed ones
  * @apiName RetrieveItems
  * @apiGroup Item
  * @apiPermission user

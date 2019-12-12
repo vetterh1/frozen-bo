@@ -52,9 +52,13 @@ export const create = async ({ user, bodymen: { body } }, res, next) => {
     .catch(next)
 }
 
+//
+// Returns ALL the items for this user, including the old ones
+//
 
 export const index = ({ user }, res, next) =>
-  Item.find({home: user.home, removed: false})
+  Item.find({home: user.home})
+  // Item.find({home: user.home, removed: false})
     // .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
     // .populate('user')
     .then((items) => items.map((item) => item.view()))
