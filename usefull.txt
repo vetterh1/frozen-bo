@@ -588,3 +588,27 @@ server {
 
 
 }
+
+
+
+---------------------------------------------------------------
+                         misc / utilities
+---------------------------------------------------------------
+
+
+Update / upgrade npm packages using ncu:
+npm install -g npm-check-updates
+- list possible updates: ncu
+- update: ncu -u
+
+Bundle size (front only?)
+npm run build
+npm run analyze
+
+Unix cmd lines:
+
+# Delete files (in current folder) older than 10 days:
+# list them:
+find . -type f -mtime +50 -name "*"
+# delete them:
+find . -type f -mtime +50 -name "*" -delete
