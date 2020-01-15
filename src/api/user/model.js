@@ -101,6 +101,7 @@ userSchema.methods = {
     }
 
     fields.forEach((field) => { view[field] = this[field] })
+    if(!view.language) view.language = "en";
     // console.log('user view: ', view)
     return view
   },

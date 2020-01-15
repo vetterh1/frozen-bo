@@ -96,7 +96,7 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
       let dirty = false;
       const updatedProperties = Object.getOwnPropertyNames(body);
       updatedProperties.forEach(element => {
-        if(body[element]) {
+        if(body[element] !== undefined ) {
           if( item[element] !== body[element] ) {
             dirty = true;
             item[element] = body[element]

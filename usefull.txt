@@ -595,6 +595,8 @@ server {
                          misc / utilities
 ---------------------------------------------------------------
 
+Find global packages to update (without ncu)
+npm outdated -g --depth=0
 
 Update / upgrade npm packages using ncu:
 npm install -g npm-check-updates

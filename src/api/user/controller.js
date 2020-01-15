@@ -72,8 +72,8 @@ export const update = ({ bodymen: { body }, params, user }, res, next) =>
 
       const updatedProperties = Object.getOwnPropertyNames(body)
       updatedProperties.forEach(element => {
-        if(body[element]) {
-          // console.log('update:', element, body[element]);
+        if(body[element] !== undefined ) {
+          console.log('update:', element, body[element]);
 
           user[element] = body[element]
         } else {
