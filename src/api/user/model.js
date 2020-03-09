@@ -35,6 +35,10 @@ const userSchema = new Schema({
     type: Number,
     default: 0
   },  
+  detailsHelpCompleted: {
+    type: Boolean,
+    default: false
+  },  
   home: {
     type: String,
   },
@@ -94,7 +98,7 @@ userSchema.pre('save', function (next) {
 userSchema.methods = {
   view (full) {
     let view = {}
-    let fields = ['id', 'name', 'email', 'language', 'navigationStyle', 'home','homeOrder', 'nextIds']
+    let fields = ['id', 'name', 'email', 'language', 'navigationStyle', 'detailsHelpCompleted', 'home','homeOrder', 'nextIds']
 
     if (full) {
       fields = [...fields, 'picture', 'createdAt']
