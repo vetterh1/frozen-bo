@@ -46,7 +46,7 @@ export const create = async ({ user, bodymen: { body } }, res, next) => {
     console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.create');
   const code = await generateCode(body.category, user);
   Item.create({ ...body, code, user: user.id, home: user.home })
-    // .then((item) => {console.log('item: ', item); return item})
+    // .then((item) => {console.debug('item: ', item); return item})
     .then((item) => item.view(true))
     .then(success(res, 201))
     .catch(next)
@@ -113,7 +113,33 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
     .then((item) => item ? item.view(true) : null)
     .then(success(res))
     .catch(next)
-  }
+}
+
+
+
+export const duplicate = async ({ user, params }, res, next) => {
+  // if (env === 'production' || env === 'development')
+    console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.duplicate: ', params.id);
+  Item.findById(params.id)
+    .then(notFound(res))
+    .then((item) => item ? item.view() : null)
+    .then(async (item) => {
+      // User should belong to the same home!
+      if(user.home !== item.home) return res.status(401).end()
+            
+      const code = await generateCode(item.category, user);
+      console.debug('Items.duplicate: originalItem=', item);
+      const newItemBeforeSave = { ...item, code, user: user.id, home: user.home };
+      console.debug('Items.duplicate: newItemBeforeSave=', newItemBeforeSave);
+      const newItem = await Item.create(newItemBeforeSave)
+      console.debug('Items.duplicate: newItem=', newItem);
+      return newItem;
+    })    
+    .then((item) => item ? item.view(true) : null)
+    .then(success(res))
+    .catch(next)
+}
+
 
 
 

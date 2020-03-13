@@ -25,6 +25,11 @@ beforeEach(async () => {
   item = await Item.create({ user: user.id, home: home.id2, code, category: 'V', details: 'test1,test2',  size: 6 })
 })
 
+
+//
+// CREATE
+//
+
 test('POST /items 201 (user) - existing category', async () => {
   const now = new Date();
   const { status, body } = await request(app())
@@ -65,6 +70,13 @@ test('POST /items 401', async () => {
   expect(status).toBe(401)
 })
 
+
+
+//
+// RETREIVE ALL
+//
+
+
 test('GET /items 200 (user)', async () => {
   const { status, body } = await request(app())
     .get(`${apiRoot}`)
@@ -79,6 +91,12 @@ test('GET /items 401', async () => {
     .get(`${apiRoot}`)
   expect(status).toBe(401)
 })
+
+
+
+//
+// RETREIVE ONE
+//
 
 test('GET /items/:id 200 (user)', async () => {
   const { status, body } = await request(app())
@@ -102,6 +120,14 @@ test('GET /items/:id 404 (user)', async () => {
     .query({ access_token: userSession })
   expect(status).toBe(404)
 })
+
+
+
+
+
+//
+// UPDATE
+//
 
 test('PUT /items/:id 200 (user, all items changed)', async () => {
   const now = new Date();
@@ -167,6 +193,41 @@ test('PUT /items/:id 404 (user)', async () => {
   expect(status).toBe(404)
 })
 
+
+
+
+
+//
+// DUPLICATE
+//
+
+test('PUT /items/:id/duplicate 200 (user)', async () => {
+  const { status, body } = await request(app())
+    .put(`${apiRoot}/${item.id}/duplicate`)
+    .send({ access_token: userSession })
+  expect(status).toBe(200)
+  expect(typeof body).toEqual('object')
+  expect(body.id).not.toEqual(item.id)
+  expect(body.category).toEqual(item.category)
+  expect(body.details).toEqual(item.details)
+  expect(body.container).toEqual(item.container)
+  expect(body.color).toEqual(item.color)
+  expect(body.size).toEqual(item.size)
+  expect(body.freezer).toEqual(item.freezer)
+  expect(body.location).toEqual(item.location)
+  expect(body.name).toEqual(item.name)
+  expect(body.expirationInMonth).toEqual(item.expirationInMonth)
+  expect(body.expirationDate).toEqual(item.expirationDate)
+  expect(body.user).toEqual(user.id)
+})
+
+
+
+
+//
+// REMOVE
+//
+
 test('POST /items/remove/:id 200 (same home, remove all)', async () => {
   const { status, body } = await request(app())
     .post(`${apiRoot}/remove/${item.id}`)
@@ -217,6 +278,9 @@ test('POST /items/remove/:id 404 (user)', async () => {
 
 
 
+//
+// DELETE
+//
 
 test('DELETE /items/:id 204 (user)', async () => {
   const { status } = await request(app())

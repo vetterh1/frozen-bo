@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { middleware as body } from 'bodymen'
 import { token } from '../../services/passport'
-import { create, index, show, update, destroy, removed, remove, updateBinaryPicture } from './controller'
+import { create, index, show, update, destroy, removed, remove, duplicate, updateBinaryPicture } from './controller'
 import { schema } from './model'
 import { staticFolders } from '../../config'
 import path from 'path';
@@ -128,6 +128,23 @@ router.post('/picture',
   updateBinaryPicture)
   
 
+
+/**
+ * @api {put} /items/:id/duplicate Duplicate item
+ * @apiName UpdateItem
+ * @apiGroup Item
+ * @apiPermission user
+ * @apiDescription It's possible to duplicate only one element :)
+ * @apiParam {String} access_token user access token.
+ * @apiSuccess {Object} duplicated item's data.
+ * @apiError {Object} 400 Some parameters may contain invalid values.
+ * @apiError 404 Item not found.
+ * @apiError 401 user access only.
+ */
+router.put('/:id/duplicate',
+  token({ required: true }),
+  body({}),
+  duplicate)
 
 /**
  * @api {put} /items/:id Update item
