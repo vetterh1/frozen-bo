@@ -53,7 +53,7 @@ test('GET /users?fields=name 200 (admin)', async () => {
     .query({ access_token: adminSession, fields: 'name' })
   expect(status).toBe(200)
   expect(Array.isArray(body)).toBe(true)
-  expect(Object.keys(body[0])).toEqual(['id', 'name'])
+  expect(Object.keys(body[0])).toEqual(['id', 'name', 'language'])
 })
 
 test('GET /users 401 (user)', async () => {
@@ -73,9 +73,12 @@ test('GET /users/me 200 (user)', async () => {
   const { status, body } = await request(app())
     .get(apiRoot + '/me')
     .query({ access_token: session1 })
+  // console.info('body: ', body);
+
   expect(status).toBe(200)
   expect(typeof body).toBe('object')
-  expect(body.id).toBe(user1.id)
+  expect(typeof body.user).toBe('object')
+  expect(body.user.id).toBe(user1.id)
 })
 
 test('GET /users/me 401', async () => {
@@ -89,7 +92,8 @@ test('GET /users/:id 200', async () => {
     .get(`${apiRoot}/${user1.id}`)
   expect(status).toBe(200)
   expect(typeof body).toBe('object')
-  expect(body.id).toBe(user1.id)
+  expect(typeof body.user).toBe('object')
+  expect(body.user.id).toBe(user1.id)
 })
 
 test('GET /users/:id 404', async () => {
@@ -216,7 +220,8 @@ test('PUT /users/me 200 (user)', async () => {
     .send({ access_token: session1, name: 'test' })
   expect(status).toBe(200)
   expect(typeof body).toBe('object')
-  expect(body.name).toBe('test')
+  expect(typeof body.user).toBe('object')
+  expect(body.user.name).toBe('test')
 })
 
 test('PUT /users/me 200 (user)', async () => {
@@ -225,7 +230,8 @@ test('PUT /users/me 200 (user)', async () => {
     .send({ access_token: session1, email: 'test@test.com' })
   expect(status).toBe(200)
   expect(typeof body).toBe('object')
-  expect(body.email).toBe('a@a.com')
+  expect(typeof body.user).toBe('object')
+  expect(body.user.email).toBe('a@a.com')
 })
 
 test('PUT /users/me 401', async () => {
@@ -241,7 +247,8 @@ test('PUT /users/:id 200 (user)', async () => {
     .send({ access_token: session1, name: 'test' })
   expect(status).toBe(200)
   expect(typeof body).toBe('object')
-  expect(body.name).toBe('test')
+  expect(typeof body.user).toBe('object')
+  expect(body.user.name).toBe('test')
 })
 
 test('PUT /users/:id 200 (user)', async () => {
@@ -251,12 +258,13 @@ test('PUT /users/:id 200 (user)', async () => {
   expect(status).toBe(200)
   // console.log("update user:", body)
   expect(typeof body).toBe('object')
-  expect(body.email).toBe('a@a.com')
-  expect(body.home).toBe('123456')
-  expect(body.homeOrder).toBe(1)
-  expect(body.language).toBe('en')
-  expect(body.navigationStyle).toBe(1)
-  expect(body.detailsHelpCompleted).toBe(true)
+  expect(typeof body.user).toBe('object')
+  expect(body.user.email).toBe('a@a.com')
+  expect(body.user.home).toBe('123456')
+  expect(body.user.homeOrder).toBe(1)
+  expect(body.user.language).toBe('en')
+  expect(body.user.navigationStyle).toBe(1)
+  expect(body.user.detailsHelpCompleted).toBe(true)
 })
 
 test('PUT /users/:id 200 (admin)', async () => {
@@ -265,7 +273,8 @@ test('PUT /users/:id 200 (admin)', async () => {
     .send({ access_token: adminSession, name: 'test' })
   expect(status).toBe(200)
   expect(typeof body).toBe('object')
-  expect(body.name).toBe('test')
+  expect(typeof body.user).toBe('object')
+  expect(body.user.name).toBe('test')
 })
 
 test('PUT /users/:id 401 (user) - another user', async () => {
@@ -301,8 +310,9 @@ test('PUT /users/me/password 200 (user)', async () => {
     .send({ password: '654321' })
   expect(status).toBe(200)
   expect(typeof body).toBe('object')
-  expect(body.email).toBe('a@a.com')
-  expect(await passwordMatch('654321', body.id)).toBe(true)
+  expect(typeof body.user).toBe('object')
+  expect(body.user.email).toBe('a@a.com')
+  expect(await passwordMatch('654321', body.user.id)).toBe(true)
 })
 
 test('PUT /users/me/password 400 (user) - invalid password', async () => {
@@ -336,8 +346,9 @@ test('PUT /users/:id/password 200 (user)', async () => {
     .send({ password: '654321' })
   expect(status).toBe(200)
   expect(typeof body).toBe('object')
-  expect(body.email).toBe('a@a.com')
-  expect(await passwordMatch('654321', body.id)).toBe(true)
+  expect(typeof body.user).toBe('object')
+  expect(body.user.email).toBe('a@a.com')
+  expect(await passwordMatch('654321', body.user.id)).toBe(true)
 })
 
 test('PUT /users/:id/password 400 (user) - invalid password', async () => {

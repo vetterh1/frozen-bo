@@ -1,149 +1,159 @@
-import path from 'path';
-import fs from 'fs';
-import { success, notFound, authorOrAdmin } from '../../services/response/'
-import Item from './model'
-import { env, staticFolders } from '../../config'
+import path from "path";
+import fs from "fs";
+import { success, notFound, authorOrAdmin } from "../../services/response/";
+import Item from "./model";
+import { env, staticFolders } from "../../config";
 // import * as GenerateThumbnails from '../../utils/generateThumbnails';
 
 // import stringifyOnce from '../../utils/stringifyOnce'
 // import sizeInMB from '../../utils/sizeInMB';
 
-
 const generateCode = async (category, user) => {
   try {
     // Find next id for this category:
     let nextId = 0;
-    if(user.nextIds) {
+    if (user.nextIds) {
       const nextIdString = user.nextIds.get(category);
-      if(nextIdString) nextId = parseInt(nextIdString);
-    }
-    else 
-      user.nextIds = {};
-    if(!nextId) nextId = 0;
+      if (nextIdString) nextId = parseInt(nextIdString);
+    } else user.nextIds = {};
+    if (!nextId) nextId = 0;
 
     // Generate the code:
-    const code = `${category}${user.homeOrder}${nextId}`
+    const code = `${category}${user.homeOrder}${nextId}`;
 
     // Increment the nextId and save it:
     user.nextIds.set(category, nextId + 1);
-    const res = await user.save()
+    const res = await user.save();
 
     return code;
-    
   } catch (error) {
-    console.error('item generateCode error:', error);
-    return null;  
+    console.error("item generateCode error:", error);
+    return null;
   }
-
-}
-
-
-
-
+};
 
 export const create = async ({ user, bodymen: { body } }, res, next) => {
-  if (env === 'production' || env === 'development')
-    console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.create');
+  if (env === "production" || env === "development")
+    console.info("|--- MONGO SAVE ---|--- ITEMS ---| Items.create");
   const code = await generateCode(body.category, user);
   Item.create({ ...body, code, user: user.id, home: user.home })
     // .then((item) => {console.debug('item: ', item); return item})
-    .then((item) => item.view(true))
+    .then(item => item.view(true))
     .then(success(res, 201))
-    .catch(next)
-}
+    .catch(next);
+};
 
 //
 // Returns ALL the items for this user, including the old ones
 //
 
 export const index = ({ user }, res, next) =>
-  Item.find({home: user.home})
-  // Item.find({home: user.home, removed: false})
+  Item.find({ home: user.home })
+    // Item.find({home: user.home, removed: false})
     // .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
     // .populate('user')
-    .then((items) => items.map((item) => item.view()))
+    .then(items => items.map(item => item.view()))
     .then(success(res))
-    .catch(next)
+    .catch(next);
 
 export const removed = ({ user }, res, next) =>
-    Item.find({home: user.home, removed: true})
-      // .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
-      // .populate('user')
-      .then((items) => items.map((item) => item.view()))
-      .then(success(res))
-      .catch(next)
-  
-
+  Item.find({ home: user.home, removed: true })
+    // .then((items) => {console.error('items=', items, ' \n - user.id: ', user.id ); return items})
+    // .populate('user')
+    .then(items => items.map(item => item.view()))
+    .then(success(res))
+    .catch(next);
 
 export const show = ({ params }, res, next) =>
   Item.findById(params.id)
     // .populate('user')
     .then(notFound(res))
-    .then((item) => item ? item.view() : null)
+    .then(item => (item ? item.view() : null))
     .then(success(res))
-    .catch(next)
-
-
+    .catch(next);
 
 export const update = ({ user, bodymen: { body }, params }, res, next) => {
   Item.findById(params.id)
     .then(notFound(res))
-    .then((item) => {
-
+    .then(item => {
       // User should belong to the same home!
-      if(user.home !== item.home) return res.status(401).end()
-            
+      if (user.home !== item.home) return res.status(401).end();
+
       let dirty = false;
       const updatedProperties = Object.getOwnPropertyNames(body);
       updatedProperties.forEach(element => {
-        if(body[element] !== undefined ) {
-          if( item[element] !== body[element] ) {
+        if (body[element] !== undefined) {
+          if (item[element] !== body[element]) {
             dirty = true;
-            item[element] = body[element]
+            item[element] = body[element];
             // console.debug('item update:', element, body[element]);
           }
         }
       });
-      if(dirty) {
-        if (env === 'production' || env === 'development')
-          console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.update: ', params.id);
-        return item.save()
+      if (dirty) {
+        if (env === "production" || env === "development")
+          console.info(
+            "|--- MONGO SAVE ---|--- ITEMS ---| Items.update: ",
+            params.id
+          );
+        return item.save();
       }
-    })    
-    .then((item) => item ? item.view(true) : null)
+    })
+    .then(item => (item ? item.view(true) : null))
     .then(success(res))
-    .catch(next)
-}
+    .catch(next);
+};
 
+export const duplicate = async ({ user, body, params }, res, next) => {
+  if (env === "production" || env === "development")
+    console.info(
+      "|--- MONGO SAVE ---|--- ITEMS ---| Items.duplicate: ",
+      params.id
+    );
 
+  /* ex of body: {
+    access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjZWE5NTEwYTE5YTY3MGYwODMzYmVjZSIsImlhdCI6MTU4MzI0Mzc2Nn0.EsSu8ZmZ8qgThMK720qkA_zWT0m1VPxS907FNJLUpgg',
+    duplicated_picture_name: '5da9c9b0f3fc6403dd8f88cf-picture-1584269726701.jpg',
+    duplicated_thumbnail_name: '5da9c9b0f3fc6403dd8f88cf-thumbnail-1584269726701.jpg'
+  } */
 
-export const duplicate = async ({ user, params }, res, next) => {
-  // if (env === 'production' || env === 'development')
-    console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.duplicate: ', params.id);
   Item.findById(params.id)
     .then(notFound(res))
-    .then((item) => item ? item.view() : null)
-    .then(async (item) => {
+    .then(item => (item ? item.view() : null))
+    .then(async item => {
       // User should belong to the same home!
-      if(user.home !== item.home) return res.status(401).end()
-            
+      if (user.home !== item.home) return res.status(401).end();
+
+      // Duplicate the pictures
+      _duplicatePicture(
+        item.pictureName,
+        item.thumbnailName,
+        body.duplicated_picture_name,
+        body.duplicated_thumbnail_name
+      );
+
       const code = await generateCode(item.category, user);
-      console.debug('Items.duplicate: originalItem=', item);
-      const newItemBeforeSave = { ...item, code, user: user.id, home: user.home };
-      console.debug('Items.duplicate: newItemBeforeSave=', newItemBeforeSave);
-      const newItem = await Item.create(newItemBeforeSave)
-      console.debug('Items.duplicate: newItem=', newItem);
+      // console.debug('Items.duplicate: originalItem=', item);
+      const newItemBeforeSave = {
+        ...item,
+        _id: undefined,
+        id: undefined,
+        code,
+        user: user.id,
+        home: user.home,
+        pictureName: body.duplicated_picture_name,
+        thumbnailName: body.duplicated_thumbnail_name
+      };
+      // console.debug('Items.duplicate: newItemBeforeSave=', newItemBeforeSave);
+      const newItem = await Item.create(newItemBeforeSave);
+      // console.debug('Items.duplicate: newItem=', newItem);
+
       return newItem;
-    })    
-    .then((item) => item ? item.view(true) : null)
-    .then(success(res))
-    .catch(next)
-}
-
-
-
-
-
+    })
+    .then(item => (item ? item.view(true) : null))
+    .then(success(res, 201))
+    .catch(next);
+};
 
 export const updateBinaryPicture = ({ body, files, user, headers }, res) => {
   // console.log("updateBinaryPicture: user=", user);
@@ -152,18 +162,28 @@ export const updateBinaryPicture = ({ body, files, user, headers }, res) => {
 
   Item.findById(body.id)
     .then(notFound(res))
-    .then((item) => {
-
+    .then(item => {
       // User should belong to the same home!
       // if(user.home !== item.home) return res.status(401).end()   <--- TODO  user is not passed as it's FORM-DATA and not form-urlencoded
 
       // Delete previon picture & thumbnail
-      if(item.pictureName !== files[0].originalname) {
-        const folderPictures = path.join(__dirname, staticFolders.relativePaths.fromController, staticFolders.pictures, '/items');
-        const pictureName = item.pictureName ? path.join(folderPictures, item.pictureName) : null;
-        const thumbnailName = item.thumbnailName ? path.join(folderPictures, item.thumbnailName) : null;
-        if (item.pictureName && fs.existsSync(pictureName)) fs.unlinkSync(pictureName);
-        if (item.thumbnailName && fs.existsSync(thumbnailName)) fs.unlinkSync(thumbnailName);
+      if (item.pictureName !== files[0].originalname) {
+        const folderPictures = path.join(
+          __dirname,
+          staticFolders.relativePaths.fromController,
+          staticFolders.pictures,
+          "/items"
+        );
+        const pictureName = item.pictureName
+          ? path.join(folderPictures, item.pictureName)
+          : null;
+        const thumbnailName = item.thumbnailName
+          ? path.join(folderPictures, item.thumbnailName)
+          : null;
+        if (item.pictureName && fs.existsSync(pictureName))
+          fs.unlinkSync(pictureName);
+        if (item.thumbnailName && fs.existsSync(thumbnailName))
+          fs.unlinkSync(thumbnailName);
       }
 
       // Store the new names in the item & save it
@@ -171,53 +191,86 @@ export const updateBinaryPicture = ({ body, files, user, headers }, res) => {
       item.thumbnailName = files[1].originalname;
       item.updatedAt = Date.now();
 
-      if (env === 'production' || env === 'development')
-        console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.updateBinaryPicture: ', body.id, item.pictureName, item.thumbnailName);
-      return item.save()
-    })    
-    .then((item) => item ? item.view(true) : null)
-    .then(success(res))
-  }
+      if (env === "production" || env === "development")
+        console.info(
+          "|--- MONGO SAVE ---|--- ITEMS ---| Items.updateBinaryPicture: ",
+          body.id,
+          item.pictureName,
+          item.thumbnailName
+        );
+      return item.save();
+    })
+    .then(item => (item ? item.view(true) : null))
+    .then(success(res));
+};
 
-  
+export const _duplicatePicture = (
+  pictureName,
+  thumbnailName,
+  duplicated_picture_name,
+  duplicated_thumbnail_name
+) => {
+  const folderPictures = path.join(
+    __dirname,
+    staticFolders.relativePaths.fromController,
+    staticFolders.pictures,
+    "/items"
+  );
+  const originalPictureName = pictureName
+    ? path.join(folderPictures, pictureName)
+    : null;
+  const originalThumbnailName = thumbnailName
+    ? path.join(folderPictures, thumbnailName)
+    : null;
+  const newPictureName = pictureName
+    ? path.join(folderPictures, duplicated_picture_name)
+    : null;
+  const newThumbnailName = thumbnailName
+    ? path.join(folderPictures, duplicated_thumbnail_name)
+    : null;
 
+  console.log("_duplicatePicture - picture : ", originalPictureName, " --> ", newPictureName);
+  console.log("_duplicatePicture - thumbnail : ", originalThumbnailName, " --> ", newThumbnailName);
+
+  if (originalPictureName && fs.existsSync(originalPictureName) && newPictureName)
+    fs.copyFileSync(originalPictureName, newPictureName);
+
+  if (originalThumbnailName && fs.existsSync(originalThumbnailName) && newThumbnailName)
+    fs.copyFileSync(originalThumbnailName, newThumbnailName);
+};
 
 export const remove = ({ user, body, params }, res, next) => {
-    Item.findById(params.id)
-      .then(notFound(res))
-      .then((item) => {
-
-          // User should belong to the same home!
-          if(user.home !== item.home) return res.status(401).end()
-
-          // If no size parameter: remove all
-          // otherwise don't mark as removed, but adjust the new size
-          if(body['size']){
-            item['removed'] = false
-            item['size'] = parseInt(body['size'])
-          }
-          else {
-            item['removed'] = true;
-          }
-          return item.save()
-      })    
-      .then((item) => item ? item.view(true) : null)
-      .then(success(res))
-      .catch(next)
-    }
-  
-  
-  
-
-
-
-export const destroy = ({ user, params }, res, next) => {
-  if (env === 'production' || env === 'development')
-    console.info('|--- MONGO SAVE ---|--- ITEMS ---| Items.destroy: ', params.id);
   Item.findById(params.id)
     .then(notFound(res))
-    .then(authorOrAdmin(res, user, 'user'))
-    .then((item) => item ? item.remove() : null)
+    .then(item => {
+      // User should belong to the same home!
+      if (user.home !== item.home) return res.status(401).end();
+
+      // If no size parameter: remove all
+      // otherwise don't mark as removed, but adjust the new size
+      if (body["size"]) {
+        item["removed"] = false;
+        item["size"] = parseInt(body["size"]);
+      } else {
+        item["removed"] = true;
+      }
+      return item.save();
+    })
+    .then(item => (item ? item.view(true) : null))
+    .then(success(res))
+    .catch(next);
+};
+
+export const destroy = ({ user, params }, res, next) => {
+  if (env === "production" || env === "development")
+    console.info(
+      "|--- MONGO SAVE ---|--- ITEMS ---| Items.destroy: ",
+      params.id
+    );
+  Item.findById(params.id)
+    .then(notFound(res))
+    .then(authorOrAdmin(res, user, "user"))
+    .then(item => (item ? item.remove() : null))
     .then(success(res, 204))
-    .catch(next)
-}
+    .catch(next);
+};

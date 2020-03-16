@@ -13,10 +13,11 @@ const requireProcessEnv = (name) => {
 /* istanbul ignore next */
 if (process.env.NODE_ENV !== 'production') {
   const dotenv = require('dotenv-safe')
-  dotenv.load({
-    path: path.join(__dirname, '../.env'),
-    sample: path.join(__dirname, '../.env.example')
-  })
+  // dotenv.load({
+  //   path: path.join(__dirname, '../.env'),
+  //   sample: path.join(__dirname, '../.env.example')
+  // })
+  dotenv.config();
 }
 
 const config = {
@@ -35,9 +36,10 @@ const config = {
         useNewUrlParser: true,
         useFindAndModify: false,
         useCreateIndex: true,
-        db: {
-          safe: true,
-        }
+        useUnifiedTopology: true,
+        // db: {  does not work with new mongoose version :/
+        //   safe: true,
+        // }
       },   
     },
     staticFolders: {

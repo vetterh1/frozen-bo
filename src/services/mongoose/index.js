@@ -91,8 +91,8 @@ const options = {
   autoIndex: false, // Don't build indexes
   keepAlive: 1,
   connectTimeoutMS: 30000,
-  reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
-  reconnectInterval: 2000,
+  // reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
+  // reconnectInterval: 2000,
   bufferCommands: false, // Disable buffering of mongoose commands
   poolSize: 10, // Maintain up to 10 socket connections
   user: 'frozen',
