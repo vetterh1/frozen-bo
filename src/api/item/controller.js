@@ -124,16 +124,74 @@ export const duplicate = async ({ user, body, params }, res, next) => {
       // User should belong to the same home!
       if (user.home !== item.home) return res.status(401).end();
 
-      // Duplicate the pictures
-      _duplicatePicture(
-        item.pictureName,
-        item.thumbnailName,
-        body.duplicated_picture_name,
-        body.duplicated_thumbnail_name
+      const folderPictures = path.join(
+        __dirname,
+        staticFolders.relativePaths.fromController,
+        staticFolders.pictures,
+        "/items"
       );
+      const originalPictureName = item.pictureName
+        ? path.join(folderPictures, item.pictureName)
+        : null;
+      const originalThumbnailName = item.thumbnailName
+        ? path.join(folderPictures, item.thumbnailName)
+        : null;
+      const newPictureName = body.duplicated_picture_name
+        ? path.join(folderPictures, body.duplicated_picture_name)
+        : null;
+      const newThumbnailName = body.duplicated_thumbnail_name
+        ? path.join(folderPictures, body.duplicated_thumbnail_name)
+        : null;
+      let copyPossible = true;
 
+      if (originalPictureName && fs.existsSync(originalPictureName)) {
+        if (newPictureName) {
+          console.log(
+            "_duplicatePicture - picture : ",
+            originalPictureName,
+            " --> ",
+            newPictureName
+          );
+          fs.copyFileSync(originalPictureName, newPictureName);
+        } else {
+          console.log(
+            "_duplicatePicture - no picture duplicate: new picture name null"
+          );
+          copyPossible = false;
+        }
+      } else {
+        console.log(
+          "_duplicatePicture - no picture duplicate: original does not exist",
+          originalPictureName
+        );
+        copyPossible = false;
+      }
+
+      if (originalThumbnailName && fs.existsSync(originalThumbnailName)) {
+        if (newThumbnailName) {
+          console.log(
+            "_duplicatePicture - thumbnail : ",
+            originalThumbnailName,
+            " --> ",
+            newThumbnailName
+          );
+          fs.copyFileSync(originalThumbnailName, newThumbnailName);
+        } else {
+          console.log(
+            "_duplicatePicture - no thumbnail duplicate: new thumbnail name null"
+          );
+          copyPossible = false;
+        }
+      } else {
+        console.log(
+          "_duplicatePicture - no thumbnail duplicate: original does not exist",
+          originalThumbnailName
+        );
+        copyPossible = false;
+      }
+  
       const code = await generateCode(item.category, user);
-      // console.debug('Items.duplicate: originalItem=', item);
+      // console.info("Items.duplicate: originalItem=", item);
       const newItemBeforeSave = {
         ...item,
         _id: undefined,
@@ -141,12 +199,18 @@ export const duplicate = async ({ user, body, params }, res, next) => {
         code,
         user: user.id,
         home: user.home,
-        pictureName: body.duplicated_picture_name,
-        thumbnailName: body.duplicated_thumbnail_name
+        pictureName:
+          copyPossible && body.duplicated_picture_name
+            ? body.duplicated_picture_name
+            : null,
+        thumbnailName:
+          copyPossible && body.duplicated_thumbnail_name
+            ? body.duplicated_thumbnail_name
+            : null
       };
-      // console.debug('Items.duplicate: newItemBeforeSave=', newItemBeforeSave);
+      // console.info("Items.duplicate: newItemBeforeSave=", newItemBeforeSave);
       const newItem = await Item.create(newItemBeforeSave);
-      // console.debug('Items.duplicate: newItem=', newItem);
+      // console.info("Items.duplicate: newItem=", newItem);
 
       return newItem;
     })
@@ -202,41 +266,6 @@ export const updateBinaryPicture = ({ body, files, user, headers }, res) => {
     })
     .then(item => (item ? item.view(true) : null))
     .then(success(res));
-};
-
-export const _duplicatePicture = (
-  pictureName,
-  thumbnailName,
-  duplicated_picture_name,
-  duplicated_thumbnail_name
-) => {
-  const folderPictures = path.join(
-    __dirname,
-    staticFolders.relativePaths.fromController,
-    staticFolders.pictures,
-    "/items"
-  );
-  const originalPictureName = pictureName
-    ? path.join(folderPictures, pictureName)
-    : null;
-  const originalThumbnailName = thumbnailName
-    ? path.join(folderPictures, thumbnailName)
-    : null;
-  const newPictureName = pictureName
-    ? path.join(folderPictures, duplicated_picture_name)
-    : null;
-  const newThumbnailName = thumbnailName
-    ? path.join(folderPictures, duplicated_thumbnail_name)
-    : null;
-
-  console.log("_duplicatePicture - picture : ", originalPictureName, " --> ", newPictureName);
-  console.log("_duplicatePicture - thumbnail : ", originalThumbnailName, " --> ", newThumbnailName);
-
-  if (originalPictureName && fs.existsSync(originalPictureName) && newPictureName)
-    fs.copyFileSync(originalPictureName, newPictureName);
-
-  if (originalThumbnailName && fs.existsSync(originalThumbnailName) && newThumbnailName)
-    fs.copyFileSync(originalThumbnailName, newThumbnailName);
 };
 
 export const remove = ({ user, body, params }, res, next) => {
