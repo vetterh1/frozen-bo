@@ -26,7 +26,7 @@ const upload = multer({ storage: storage })
 
 
 const router = new Router()
-const { category, details, container, color, size, freezer, location, name, expirationDate, expirationInMonth, picture } = schema.tree
+const { category, details, container, color, size, freezer, location, description, expirationDate, expirationInMonth, picture } = schema.tree
 
 /**
  * @api {post} /items Create item
@@ -43,7 +43,7 @@ const { category, details, container, color, size, freezer, location, name, expi
  * @apiParam size Item's size.
  * @apiParam freezer Item's freezer.
  * @apiParam location Item's location.
- * @apiParam name Item's name.
+ * @apiParam description Item's description.
  * @apiParam expirationDate Item's expiration date.
  * @apiParam expirationInMonth Item's expiration in months.
  * @apiSuccess {Object} item Item's data.
@@ -53,7 +53,7 @@ const { category, details, container, color, size, freezer, location, name, expi
  */
 router.post('/',
   token({ required: true }),
-  body({ category, details, container, color, size, freezer, location, name, expirationDate, expirationInMonth }),
+  body({ category, details, container, color, size, freezer, location, description, expirationDate, expirationInMonth }),
   create)
 
 /**
@@ -160,7 +160,7 @@ router.put('/:id/duplicate',
  * @apiParam size Item's size.
  * @apiParam freezer Item's freezer.
  * @apiParam location Item's location.
- * @apiParam name Item's name.
+ * @apiParam description Item's description.
  * @apiParam expirationDate Item's expiration date.
  * @apiParam expirationInMonth Item's expiration in months.
  * @apiSuccess {Object} item Item's data.
@@ -170,7 +170,7 @@ router.put('/:id/duplicate',
  */
 router.put('/:id',
   token({ required: true }),
-  body({ category, details, container, color, size, freezer, location, name, expirationDate, expirationInMonth }),
+  body({ category, details, container, color, size, freezer, location, description, expirationDate, expirationInMonth }),
   update)
 
 /**

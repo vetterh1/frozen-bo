@@ -47,7 +47,7 @@ beforeEach(async () => {
     user: user.id,
     home: home.id2,
     code,
-    name: "test",
+    description: "test",
     category: "V",
     details: "test1,test2",
     size: 6,
@@ -73,7 +73,7 @@ test("POST /items 201 (user) - existing category", async () => {
       size: "4",
       freezer: "test",
       location: "test",
-      name: "test",
+      description: "test",
       expirationDate: now.getTime(),
       expirationInMonth: "6"
     });
@@ -88,7 +88,7 @@ test("POST /items 201 (user) - existing category", async () => {
   expect(body.size).toEqual(4);
   expect(body.freezer).toEqual("test");
   expect(body.location).toEqual("test");
-  expect(body.name).toEqual("test");
+  expect(body.description).toEqual("test");
   expect(body.expirationInMonth).toEqual(6);
   expect(body.expirationDate).toEqual(now.getTime());
   expect(body.user).toEqual(user.id);
@@ -107,7 +107,7 @@ test("POST /items 201 (user) - new category", async () => {
       size: "4",
       freezer: "test",
       location: "test",
-      name: "test",
+      description: "test",
       expirationDate: now,
       expirationInMonth: "6"
     });
@@ -184,7 +184,7 @@ test("PUT /items/:id 200 (user, all items changed)", async () => {
       size: "4",
       freezer: "test",
       location: "test",
-      name: "test",
+      description: "test",
       expirationDate: now.getTime(),
       expirationInMonth: "6"
     });
@@ -198,7 +198,7 @@ test("PUT /items/:id 200 (user, all items changed)", async () => {
   expect(body.size).toEqual(4);
   expect(body.freezer).toEqual("test");
   expect(body.location).toEqual("test");
-  expect(body.name).toEqual("test");
+  expect(body.description).toEqual("test");
   expect(body.expirationInMonth).toEqual(6);
   expect(body.expirationDate).toEqual(now.getTime());
   expect(body.user).toEqual(user.id);
@@ -231,7 +231,7 @@ test("PUT /items/:id 200 (user) - another user, same home", async () => {
       size: "4",
       freezer: "test",
       location: "test",
-      name: "test",
+      description: "test",
       expirationDate: d.getTime(),
       expirationInMonth: "6"
     });
@@ -252,7 +252,7 @@ test("PUT /items/:id 401 (user) - another user, other home", async () => {
       size: "4",
       freezer: "test",
       location: "test",
-      name: "test",
+      description: "test",
       expirationDate: d.getTime(),
       expirationInMonth: "6"
     });
@@ -278,7 +278,7 @@ test("PUT /items/:id 404 (user)", async () => {
       size: "4",
       freezer: "test",
       location: "test",
-      name: "test",
+      description: "test",
       expirationDate: d.getTime(),
       expirationInMonth: "6"
     });
@@ -303,7 +303,7 @@ test("PUT /items/:id/duplicate 200 (user)", async () => {
   expect(body.category).toEqual(item.category);
   expect(body.details).toEqual(item.details);
   expect(body.size).toEqual(item.size);
-  expect(body.name).toEqual(item.name);
+  expect(body.description).toEqual(item.description);
   expect(body.home).toEqual(item.home);
   expect(body.user).toEqual(user.id);
 });

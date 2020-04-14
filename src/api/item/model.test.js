@@ -10,7 +10,7 @@ beforeEach(async () => {
   home = await Home.create({ name: 'home1', label: 'label home 1' })
   user = await User.create({ email: 'a@a.com', password: '123456', home: home.id2 })
   item = await Item.create({ user: user.id, home: home.id2, code: 'T1234', category: 'C', details: 'test1,test2', container: 'test', color: 'test',
-    size: '3', freezer: 'test', location: 'test', name: 'test', expirationDate: d.getTime(), expirationInMonth: '6',
+    size: '3', freezer: 'test', location: 'test', description: 'test', expirationDate: d.getTime(), expirationInMonth: '6',
     nextIds: {} })
 })
 
@@ -29,7 +29,7 @@ describe('view', () => {
     expect(view.size).toBe(item.size)
     expect(view.freezer).toBe(item.freezer)
     expect(view.location).toBe(item.location)
-    expect(view.name).toBe(item.name)
+    expect(view.description).toBe(item.description)
     expect(view.expirationDate).toBe(item.expirationDate.getTime())
     expect(view.expirationInMonth).toBe(item.expirationInMonth)
     expect(view.pictureName).toBe(item.pictureName)
@@ -53,7 +53,7 @@ describe('view', () => {
     expect(view.size).toBe(item.size)
     expect(view.freezer).toBe(item.freezer)
     expect(view.location).toBe(item.location)
-    expect(view.name).toBe(item.name)
+    expect(view.description).toBe(item.description)
     expect(view.expirationDate).toBe(item.expirationDate.getTime())
     expect(view.expirationInMonth).toBe(item.expirationInMonth)
     expect(view.pictureName).toBe(item.pictureName)

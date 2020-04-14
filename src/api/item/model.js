@@ -37,7 +37,7 @@ const itemSchema = new Schema({
   location: {
     type: String
   },
-  name: {
+  description: {
     type: String
   },
   expirationDate: {
@@ -84,7 +84,7 @@ itemSchema.methods = {
       size: this.size,
       freezer: this.freezer,
       location: this.location,
-      name: this.name,
+      description: this.description,
       expirationDate: this.expirationDate ? this.expirationDate.valueOf() : null,
       expirationInMonth: this.expirationInMonth,
       pictureName: this.pictureName,

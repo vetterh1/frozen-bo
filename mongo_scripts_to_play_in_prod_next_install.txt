@@ -16,3 +16,7 @@ db.items.createIndex({home:1}, {unique:false});
 db.items.createIndex({removed:1}, {unique:false});
 db.items.createIndex({home:1, removed:1}, {unique:false});
 
+
+
+
+db.items.updateMany( {}, { $rename: { "name": "description" } } )

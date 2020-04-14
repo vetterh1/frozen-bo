@@ -15,7 +15,7 @@ beforeEach(async () => {
   const admin = await User.create({ email: 'c@c.com', password: '123456', role: 'admin' })
   userSession = signSync(user.id)
   adminSession = signSync(admin.id)
-  category = await Category.create({name: 'test', label: 'test', id2: 'test'})
+  category = await Category.create({description: 'test', label: 'test', id2: 'test'})
 })
 
 test('POST /categories/initWithDefault 201 (admin)', async () => {
@@ -25,18 +25,18 @@ test('POST /categories/initWithDefault 201 (admin)', async () => {
   expect(status).toBe(201)
   expect(typeof body).toEqual('object')
   expect(body.length).toEqual(defaultCharacteristics.categories.length);
-  const namesInResults = body.map(item => item.name).sort();
-  const namesInDefaults = defaultCharacteristics.categories.map(item => item.name).sort();
+  const namesInResults = body.map(item => item.description).sort();
+  const namesInDefaults = defaultCharacteristics.categories.map(item => item.description).sort();
   expect(namesInResults).toEqual(namesInDefaults);
 })
 
 test('POST /categories 201 (admin)', async () => {
   const { status, body } = await request(app())
     .post(`${apiRoot}`)
-    .send({ access_token: adminSession, name: 'test', label: 'test', id2: 'test' })
+    .send({ access_token: adminSession, description: 'test', label: 'test', id2: 'test' })
   expect(status).toBe(201)
   expect(typeof body).toEqual('object')
-  expect(body.name).toEqual('test')
+  expect(body.description).toEqual('test')
   expect(body.label).toEqual('test')
   expect(body.id2).toEqual('test')
 })
@@ -93,11 +93,11 @@ test('GET /categories/:id 404 (user)', async () => {
 test('PUT /categories/:id 200 (admin)', async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${category.id}`)
-    .send({ access_token: adminSession, name: 'test', label: 'test', id2: 'test' })
+    .send({ access_token: adminSession, description: 'test', label: 'test', id2: 'test' })
   expect(status).toBe(200)
   expect(typeof body).toEqual('object')
   expect(body.id).toEqual(category.id)
-  expect(body.name).toEqual('test')
+  expect(body.description).toEqual('test')
   expect(body.label).toEqual('test')
   expect(body.id2).toEqual('test')
 })
@@ -118,7 +118,7 @@ test('PUT /categories/:id 401', async () => {
 test('PUT /categories/:id 404 (admin)', async () => {
   const { status } = await request(app())
     .put(apiRoot + '/123456789098765432123456')
-    .send({ access_token: adminSession, name: 'test', label: 'test', id2: 'test' })
+    .send({ access_token: adminSession, description: 'test', label: 'test', id2: 'test' })
   expect(status).toBe(404)
 })
 
