@@ -23,6 +23,7 @@ if (process.env.NODE_ENV !== 'production') {
 const config = {
   all: {
     env: process.env.NODE_ENV || 'development',
+    slow_mode: process.env.SLOW_MODE || undefined,
     root: path.join(__dirname, '..'),
     port: process.env.PORT || 9000,
     ip: process.env.IP || '0.0.0.0',

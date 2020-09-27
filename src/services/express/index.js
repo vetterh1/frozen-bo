@@ -7,7 +7,7 @@ import morgan from 'morgan'
 import bodyParser from 'body-parser'
 import { errorHandler as queryErrorHandler } from 'querymen'
 import { errorHandler as bodyErrorHandler } from 'bodymen'
-import { env, staticFolders } from '../../config'
+import { env, slow_mode, staticFolders } from '../../config'
 // import binariesRouter from './binariesRouter'
 
 export default (apiRoot, routes) => {
@@ -30,6 +30,12 @@ export default (apiRoot, routes) => {
   // app.use(bodyParser.urlencoded({ extended: false }))
   // app.use(bodyParser.json())
 
+
+  if(slow_mode) {
+    app.use((req,res,next) => {
+      setTimeout(next, slow_mode)
+    });
+  }
 
   app.use(apiRoot, routes)
 
