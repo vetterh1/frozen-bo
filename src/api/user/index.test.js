@@ -6,12 +6,6 @@ import routes, { User } from '.'
 import { Home } from '../home'
 
 
-const time = require('../../utils/time');
-const sinon = require('sinon');
-sinon.stub(time, 'setTimeout');
-
-
-
 const app = () => express(apiRoot, routes)
 
 let user1, user2, userWithHome, home, admin, session1, session2, sessionWithHome, adminSession
