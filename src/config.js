@@ -27,7 +27,7 @@ const config = {
     root: path.join(__dirname, '..'),
     port: process.env.PORT || 9000,
     ip: process.env.IP || '0.0.0.0',
-    apiRoot: process.env.API_ROOT || '/',
+    apiRoot: process.env.API_ROOT || '',
     defaultEmail: 'no-reply@frozen-bo.com',
     sendgridKey: requireProcessEnv('SENDGRID_KEY'),
     masterKey: requireProcessEnv('MASTER_KEY'),
@@ -55,7 +55,13 @@ const config = {
       }
     }
   },
-  test: { },
+  test: {
+    mongo: {
+      options: {
+        debug: false
+      }
+    }    
+  },
   development: {
     mongo: {
       uri: 'mongodb://localhost/frozen-dev',
