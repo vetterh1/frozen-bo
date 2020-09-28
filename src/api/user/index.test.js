@@ -5,17 +5,14 @@ import express from '../../services/express'
 import routes, { User } from '.'
 import { Home } from '../home'
 
+
+const time = require('../../utils/time');
+const sinon = require('sinon');
+sinon.stub(time, 'setTimeout');
+
+
+
 const app = () => express(apiRoot, routes)
-
-console.log("apiRoot: ", apiRoot)
-
-
-test('GET /users 401', async () => {
-  const { status } = await request(app())
-    .get(apiRoot)
-  expect(status).toBe(401)
-})
-/*
 
 let user1, user2, userWithHome, home, admin, session1, session2, sessionWithHome, adminSession
 
@@ -557,4 +554,3 @@ test('PUT /users/:id/home/leave 401', async () => {
     .send({ home: home.id2 })
   expect(status).toBeGreaterThan(399)
 })
-*/
