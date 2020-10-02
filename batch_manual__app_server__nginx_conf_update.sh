@@ -3,6 +3,7 @@
 #
 
 restart_nginx=
+os=
 restart_nginx_pc=
 restart_nginx_mac="brew services restart nginx"
 restart_nginx_ubuntu="systemctl restart nginx"
@@ -44,7 +45,7 @@ echo "-u or --ubuntu: standard presets for Ubuntu. These presets can be modified
 echo " "
 echo " "
 echo "(!) nginx main config file should import configurations from a '$nginx_specific_conf_folder' subfolder (!)"
-echo "(!) need sudo on Ubuntu for restarting nginx (!)"
+echo "(!) need sudo on Ubuntu (!)"
 echo " "
 
 echo "!!!!!!!!!!!!!!!!!!!!!!!!! CAUTION END !!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -67,16 +68,19 @@ usage()
 while [ "$1" != "" ]; do
     case $1 in
         -p | --pc )             echo "Detected --pc option"
+                                os="pc"
                                 folder_root=$folder_root_pc
                                 folder_nginx_conf_files=$folder_nginx_conf_files_pc
                                 restart_nginx=$restart_nginx_pc
                                 ;;
         -m | --mac )            echo "Detected --mac option"
+                                os="mac"
                                 folder_root=$folder_root_mac
                                 folder_nginx_conf_files=$folder_nginx_conf_files_mac
                                 restart_nginx=$restart_nginx_mac
                                 ;;
         -u | --ubuntu )         echo "Detected --ubuntu option"
+                                os="ubuntu"
                                 folder_root=$folder_root_ubuntu
                                 folder_nginx_conf_files=$folder_nginx_conf_files_ubuntu
                                 restart_nginx=$restart_nginx_ubuntu
@@ -129,10 +133,10 @@ echo " "
 echo " 2 - Replace them with ones in project "
 echo " "
 echo " "
-echo "List of files in $folder_root/$project_server_conf_files_folder to be copied in $folder_nginx_conf_files:"
+echo "List of files in $folder_root/$project_server_conf_files_folder/$os to be copied in $folder_nginx_conf_files:"
 echo " "
-ls -al $folder_root/$project_server_conf_files_folder
-cp $folder_root/$project_server_conf_files_folder/* $folder_nginx_conf_files
+ls -al $folder_root/$project_server_conf_files_folder/$os
+cp $folder_root/$project_server_conf_files_folder/$os/* $folder_nginx_conf_files
 echo " "
 echo " "
 echo "----------------------------------------------"
