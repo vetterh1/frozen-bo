@@ -390,29 +390,107 @@ or sudo n current
         nginx (cohabitation foodManiac & frozenGem)
 ---------------------------------------------------------------
 
+--> Install on Ubuntu (18):
+sudo apt update
+sudo apt install nginx
 
-cd /etc/nginx/
-more nginx.conf
-
-        include /etc/nginx/conf.d/*.conf;
-        include /etc/nginx/sites-enabled/*;
-
-IMPORTANT NOTE ON ADDING PATHES TO THE SERVER: look comment in boServer.js
+--> Install on Mac:
+brew install nginx  
+/usr/local/etc/nginx
+mkdir servers
+copy the project specific nginx conf there (ex: nginx_osx_frozengem.conf)
 
 
----------------------- Logs & debug ---------------
+--> Actions on Ubuntu:
+systemctl status nginx
+Stop / Start 
+If init.d: /etc/init.d/nginx restart
+sudo systemctl stop nginx
+sudo systemctl start nginx
+sudo systemctl restart nginx
+sudo systemctl reload nginx
+Test BoServer (NOT nginx) accessible locally, from server machine: curl localhost:8085/api
 
-LOG file here: /var/log/nginx
+--> Actions on Mac:
+Start (after restarts too): brew services start nginx
+brew services stop nginx
+brew services restart nginx
+brew services reload nginx
+
+--> Locations on Ubuntu:
+Main location: /etc/nginx/
+Main configuration file: /etc/nginx/nginx.conf
+Other configuration files folder: /etc/nginx/sites-available
+Configuration for API & BO servers: /etc/nginx/sites-available/default
+------> IMPORTANT NOTE ON ADDING PATHES TO THE SERVER: look comment in boServer.js
+
+--> Locations on Mac:
+Docroot is: /usr/local/var/www
+Main location: /etc/nginx/
+Main configuration file: /usr/local/etc/nginx/nginx.conf
+Other configuration files folder: /usr/local/etc/nginx/servers/
+Configuration for API & BO servers: N/A
+------> IMPORTANT NOTE ON ADDING PATHES TO THE SERVER: look comment in boServer.js
+
+--> Logs & debug on Ubuntu:
+Log files folder: /var/log/nginx
 sudo less /var/log/nginx/error.log
 
 
-Test BoServer (NOT nginx) accessible locally, from server machine: curl localhost:8085/api
+
+    #gzip  on;
+
+    server {
+        listen       8080;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root   html;
+            index  index.html index.htm;
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+
+        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+        #
+        #location ~ \.php$ {
+        #    proxy_pass   http://127.0.0.1;
+        #}
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        #
+        #location ~ \.php$ {
+        #    root           html;
+        #    fastcgi_pass   127.0.0.1:9000;
+        #    fastcgi_index  index.php;
+        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+        #    include        fastcgi_params;
+        #}
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        #location ~ /\.ht {
+        #    deny  all;
+        #}
+    }
 
 
 
-------------------  To restart nginx  ------------
 
-/etc/init.d/nginx restart
+
+
 
 
 ------------------ File: sudo nano /etc/nginx/sites-available/default ------------------

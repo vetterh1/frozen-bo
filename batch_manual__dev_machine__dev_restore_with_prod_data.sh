@@ -46,7 +46,7 @@ echo " "
 usage()
 {
     echo " "
-    echo "usage: batch_manual__dev_machine__dev_restore_with_prod_data [[--pc ] | [--mac]] | [[-r folder ] [-d folder]] | [-h] | [-nc]]"
+    echo "usage: batch_manual__dev_machine__dev_restore_with_prod_data [[--pc ] | [--mac]] | [[-r folder ] [-d folder]] | [-h] | [-nc]"
     echo " "
     read -n 1 -p "Press a key to exit."
 }
