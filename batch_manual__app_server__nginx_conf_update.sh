@@ -15,7 +15,7 @@ nginx_specific_conf_folder=servers
 folder_nginx_conf_files=
 folder_nginx_conf_files_pc=
 folder_nginx_conf_files_mac=/usr/local/etc/nginx/$nginx_specific_conf_folder
-folder_nginx_conf_files_ubuntu=/usr/local/etc/nginx/$nginx_specific_conf_folder
+folder_nginx_conf_files_ubuntu=/etc/nginx/$nginx_specific_conf_folder
 
 echo " "
 echo " "
