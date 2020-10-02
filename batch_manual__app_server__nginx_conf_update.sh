@@ -2,6 +2,10 @@
 # File name: batch_manual__app_server__nginx_conf_update.sh
 #
 
+restart_nginx=
+restart_nginx_pc=
+restart_nginx_mac="brew services restart nginx"
+restart_nginx_ubuntu="systemctl restart nginx"
 folder_root=
 folder_root_pc=c:/workspace/frozen-bo
 folder_root_mac=~/workspace/frozen-bo
@@ -23,6 +27,7 @@ echo " "
 echo "      Actions:"
 echo "      - Backup old conf files "
 echo "      - Replace them with ones in project"
+echo "      - Restart nginx "
 echo " "
 echo " "
 echo " "
@@ -39,6 +44,7 @@ echo "-u or --ubuntu: standard presets for Ubuntu. These presets can be modified
 echo " "
 echo " "
 echo "(!) nginx main config file should import configurations from a '$nginx_specific_conf_folder' subfolder (!)"
+echo "(!) need sudo on Ubuntu for restarting nginx (!)"
 echo " "
 
 echo "!!!!!!!!!!!!!!!!!!!!!!!!! CAUTION END !!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -63,14 +69,17 @@ while [ "$1" != "" ]; do
         -p | --pc )             echo "Detected --pc option"
                                 folder_root=$folder_root_pc
                                 folder_nginx_conf_files=$folder_nginx_conf_files_pc
+                                restart_nginx=$restart_nginx_pc
                                 ;;
         -m | --mac )            echo "Detected --mac option"
                                 folder_root=$folder_root_mac
                                 folder_nginx_conf_files=$folder_nginx_conf_files_mac
+                                restart_nginx=$restart_nginx_mac
                                 ;;
         -u | --ubuntu )         echo "Detected --ubuntu option"
                                 folder_root=$folder_root_ubuntu
                                 folder_nginx_conf_files=$folder_nginx_conf_files_ubuntu
+                                restart_nginx=$restart_nginx_ubuntu
                                 ;;
         * )                     usage
                                 exit 1
@@ -126,7 +135,15 @@ ls -al $folder_root/$project_server_conf_files_folder
 cp $folder_root/$project_server_conf_files_folder/* $folder_nginx_conf_files
 echo " "
 echo " "
-
+echo "----------------------------------------------"
+echo " "
+echo " "
+echo " 3 - Restart nginx "
+echo " "
+echo " "
+$restart_nginx
+echo " "
+echo " "
 
 #
 #
