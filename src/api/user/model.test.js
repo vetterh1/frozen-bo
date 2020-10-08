@@ -4,7 +4,7 @@ import { User } from '.'
 let user
 
 beforeEach(async () => {
-  user = await User.create({ name: 'user', email: 'a@a.com', password: '123456', navigationStyle: 1, detailsHelpCompleted: true, language: 'fr'})
+  user = await User.create({ name: 'user', email: 'a@a.com', password: '123456', navigationStyle: 1, detailsHelpCompleted: true, language: 'fr', density: 3})
 })
 
 describe('set email', () => {
@@ -40,6 +40,7 @@ describe('view', () => {
     expect(view.name).toBe(user.name)
     expect(view.email).toBe(user.email)
     expect(view.language).toBe(user.language)
+    expect(view.density).toBe(user.density)
     expect(view.homeOrder).toBe(user.homeOrder)
   })
 
@@ -50,6 +51,7 @@ describe('view', () => {
     expect(view.name).toBe(user.name)
     expect(view.email).toBe(user.email)
     expect(view.language).toBe(user.language)
+    expect(view.density).toBe(user.density)
     expect(view.homeOrder).toBe(user.homeOrder)
     expect(view.picture).toBe(user.picture)
     expect(view.createdAt).toEqual(user.createdAt)
