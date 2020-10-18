@@ -46,7 +46,6 @@ const config = {
     staticFolders: {
       static: '/static',
       pictures: '/static/pictures',
-      // thumbnails: '/static/thumbnails',
       relativePaths: {
         fromController: '../../..',
         fromExpress: '../../..',

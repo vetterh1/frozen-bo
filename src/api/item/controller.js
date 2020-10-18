@@ -3,7 +3,6 @@ import fs from "fs";
 import { success, notFound, authorOrAdmin } from "../../services/response/";
 import Item from "./model";
 import { env, staticFolders } from "../../config";
-// import * as GenerateThumbnails from '../../utils/generateThumbnails';
 
 // import stringifyOnce from '../../utils/stringifyOnce'
 // import sizeInMB from '../../utils/sizeInMB';
@@ -104,6 +103,7 @@ export const update = ({ user, bodymen: { body }, params }, res, next) => {
     .catch(next);
 };
 
+// Note on thumbnail: This methode only duplicates the main image. the thumbnails will be generated on-th-fly when needed
 export const duplicate = async ({ user, body, params }, res, next) => {
   if (env === "production" || env === "development")
     console.info(
@@ -114,7 +114,6 @@ export const duplicate = async ({ user, body, params }, res, next) => {
   /* ex of body: {
     access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjZWE5NTEwYTE5YTY3MGYwODMzYmVjZSIsImlhdCI6MTU4MzI0Mzc2Nn0.EsSu8ZmZ8qgThMK720qkA_zWT0m1VPxS907FNJLUpgg',
     duplicated_picture_name: '5da9c9b0f3fc6403dd8f88cf-picture-1584269726701.jpg',
-    duplicated_thumbnail_name: '5da9c9b0f3fc6403dd8f88cf-thumbnail-1584269726701.jpg'
   } */
 
   Item.findById(params.id)
@@ -133,14 +132,8 @@ export const duplicate = async ({ user, body, params }, res, next) => {
       const originalPictureName = item.pictureName
         ? path.join(folderPictures, item.pictureName)
         : null;
-      const originalThumbnailName = item.thumbnailName
-        ? path.join(folderPictures, item.thumbnailName)
-        : null;
       const newPictureName = body.duplicated_picture_name
         ? path.join(folderPictures, body.duplicated_picture_name)
-        : null;
-      const newThumbnailName = body.duplicated_thumbnail_name
-        ? path.join(folderPictures, body.duplicated_thumbnail_name)
         : null;
       let copyPossible = true;
 
@@ -167,29 +160,6 @@ export const duplicate = async ({ user, body, params }, res, next) => {
         copyPossible = false;
       }
 
-      if (originalThumbnailName && fs.existsSync(originalThumbnailName)) {
-        if (newThumbnailName) {
-          console.log(
-            "_duplicatePicture - thumbnail : ",
-            originalThumbnailName,
-            " --> ",
-            newThumbnailName
-          );
-          fs.copyFileSync(originalThumbnailName, newThumbnailName);
-        } else {
-          console.log(
-            "_duplicatePicture - no thumbnail duplicate: new thumbnail name null"
-          );
-          copyPossible = false;
-        }
-      } else {
-        console.log(
-          "_duplicatePicture - no thumbnail duplicate: original does not exist",
-          originalThumbnailName
-        );
-        copyPossible = false;
-      }
-  
       const code = await generateCode(item.category, user);
       // console.info("Items.duplicate: originalItem=", item);
       const newItemBeforeSave = {
@@ -203,10 +173,6 @@ export const duplicate = async ({ user, body, params }, res, next) => {
           copyPossible && body.duplicated_picture_name
             ? body.duplicated_picture_name
             : null,
-        thumbnailName:
-          copyPossible && body.duplicated_thumbnail_name
-            ? body.duplicated_thumbnail_name
-            : null
       };
       // console.info("Items.duplicate: newItemBeforeSave=", newItemBeforeSave);
       const newItem = await Item.create(newItemBeforeSave);
@@ -219,7 +185,7 @@ export const duplicate = async ({ user, body, params }, res, next) => {
     .catch(next);
 };
 
-export const updateBinaryPicture = ({ body, files, user, headers }, res) => {
+export const updateBinaryPicture = ({ body, file, user, headers }, res) => {
   // console.log("updateBinaryPicture: user=", user);
   // console.log("updateBinaryPicture: headers['content-length']=", sizeInMB(headers['content-length']));
   // console.log(`updateBinaryPicture: id: ${body.id}, token: ${stringifyOnce(body.access_token)} - files: ${stringifyOnce(files)} - size: ${sizeInMB(headers['content-length'])}`);
@@ -230,8 +196,8 @@ export const updateBinaryPicture = ({ body, files, user, headers }, res) => {
       // User should belong to the same home!
       // if(user.home !== item.home) return res.status(401).end()   <--- TODO  user is not passed as it's FORM-DATA and not form-urlencoded
 
-      // Delete previon picture & thumbnail
-      if (item.pictureName !== files[0].originalname) {
+      // Delete previon picture
+      if (item.pictureName !== file.originalname) {
         const folderPictures = path.join(
           __dirname,
           staticFolders.relativePaths.fromController,
@@ -241,26 +207,21 @@ export const updateBinaryPicture = ({ body, files, user, headers }, res) => {
         const pictureName = item.pictureName
           ? path.join(folderPictures, item.pictureName)
           : null;
-        const thumbnailName = item.thumbnailName
-          ? path.join(folderPictures, item.thumbnailName)
-          : null;
         if (item.pictureName && fs.existsSync(pictureName))
           fs.unlinkSync(pictureName);
-        if (item.thumbnailName && fs.existsSync(thumbnailName))
-          fs.unlinkSync(thumbnailName);
+
+        // TODO: delete all the thumbnails
       }
 
       // Store the new names in the item & save it
-      item.pictureName = files[0].originalname;
-      item.thumbnailName = files[1].originalname;
+      item.pictureName = file.originalname;
       item.updatedAt = Date.now();
 
       if (env === "production" || env === "development")
         console.info(
           "|--- MONGO SAVE ---|--- ITEMS ---| Items.updateBinaryPicture: ",
           body.id,
-          item.pictureName,
-          item.thumbnailName
+          item.pictureName
         );
       return item.save();
     })

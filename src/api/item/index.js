@@ -110,12 +110,11 @@ router.get('/:id',
  * @apiName UpdatePicture
  * @apiGroup Item
  * @apiPermission none yet, should be user
- * @apiDescription Update the picture of an item and it's thumbnail through a form-data multipart call
- * @apiDescription (!) the picture & thumbnail names MUST be passed with the pictures (in originalname)
+ * @apiDescription Update the picture of an item through a form-data multipart call
+ * @apiDescription (!) the picture name MUST be passed with the pictures (in originalname)
  * @apiParam in multipart {String} id : item id.
  * @apiParam in multipart {String} access_token : user access token.
- * @apiParam in multipart {String} picture : item 1st picture is the picture itself.
- * @apiParam in multipart {String} picture : item 2nd picture is the thumbnail.
+ * @apiParam in multipart {String} picture : item picture
  * @apiSuccess {Object} item Item's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Item not found.
@@ -124,7 +123,7 @@ router.get('/:id',
 
 router.post('/picture', 
   // token({ required: true }),  <--- TODO  user is not passed as it's FORM-DATA and not form-urlencoded
-  upload.array('picture'), 
+  upload.single('picture'), 
   updateBinaryPicture)
   
 

@@ -630,7 +630,6 @@ PUT /items/:id
 ## <a name='Update-item&#39;s-picture'></a> Update item&#39;s picture
 [Back to top](#top)
 
-<p>(!) the picture &amp; thumbnail names MUST be passed with the pictures (in originalname)</p>
 
 ```
 PUT /items/picture
