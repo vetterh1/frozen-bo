@@ -2,7 +2,8 @@ import path from "path";
 import fs from "fs";
 import { success, notFound, authorOrAdmin } from "../../services/response/";
 import Item from "./model";
-import { env, staticFolders } from "../../config";
+import {deleteRelatedCustomSizeImages} from "../customSizeImage/controller";
+import { env, foldersPaths } from "../../config";
 
 // import stringifyOnce from '../../utils/stringifyOnce'
 // import sizeInMB from '../../utils/sizeInMB';
@@ -125,8 +126,8 @@ export const duplicate = async ({ user, body, params }, res, next) => {
 
       const folderPictures = path.join(
         __dirname,
-        staticFolders.relativePaths.fromController,
-        staticFolders.pictures,
+        foldersPaths.relativePaths.fromController,
+        foldersPaths.pictures,
         "/items"
       );
       const originalPictureName = item.pictureName
@@ -200,8 +201,8 @@ export const updateBinaryPicture = ({ body, file, user, headers }, res) => {
       if (item.pictureName !== file.originalname) {
         const folderPictures = path.join(
           __dirname,
-          staticFolders.relativePaths.fromController,
-          staticFolders.pictures,
+          foldersPaths.relativePaths.fromController,
+          foldersPaths.pictures,
           "/items"
         );
         const pictureName = item.pictureName
@@ -210,7 +211,9 @@ export const updateBinaryPicture = ({ body, file, user, headers }, res) => {
         if (item.pictureName && fs.existsSync(pictureName))
           fs.unlinkSync(pictureName);
 
-        // TODO: delete all the thumbnails
+        // Delete all the custom size images (former thumbnails)
+        deleteRelatedCustomSizeImages(pictureName);
+
       }
 
       // Store the new names in the item & save it

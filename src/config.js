@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import path from 'path'
 import merge from 'lodash/merge'
+import stringifyOnce from './utils/stringifyOnce'
 
 /* istanbul ignore next */
 const requireProcessEnv = (name) => {
@@ -43,9 +44,10 @@ const config = {
         // }
       },   
     },
-    staticFolders: {
+    foldersPaths: {
       static: '/static',
       pictures: '/static/pictures',
+      customSizeImages: '/custom-size-image',
       relativePaths: {
         fromController: '../../..',
         fromExpress: '../../..',
@@ -92,6 +94,9 @@ const config = {
     }
   }
 }
+
+
+console.log(`Config : ${stringifyOnce(config)}`);
 
 module.exports = merge(config.all, config[config.all.env])
 export default module.exports

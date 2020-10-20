@@ -3,7 +3,7 @@ import { middleware as body } from 'bodymen'
 import { token } from '../../services/passport'
 import { create, index, show, update, destroy, removed, remove, duplicate, updateBinaryPicture } from './controller'
 import { schema } from './model'
-import { staticFolders } from '../../config'
+import { foldersPaths } from '../../config'
 import path from 'path';
 
 // export Item, { schema } from './model'
@@ -14,7 +14,7 @@ import path from 'path';
 //
 // Configure multer, the multipart middleware for form-data posts used to store item pictures
 // 
-const folderPictures = path.join(__dirname, staticFolders.relativePaths.fromController, staticFolders.pictures, '/items');
+const folderPictures = path.join(__dirname, foldersPaths.relativePaths.fromController, foldersPaths.pictures, '/items');
 const multer  =   require('multer');
 const storage = multer.diskStorage({
   destination: folderPictures,
