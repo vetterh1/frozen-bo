@@ -1,5 +1,5 @@
 import http from 'http'
-import { env, mongo, port, ip, apiRoot, staticFolders } from './config'
+import { env, mongo, port, ip, apiRoot, foldersPaths } from './config'
 import { mongoose, options } from './services/mongoose'
 import express from './services/express'
 import api from './api'
@@ -27,15 +27,15 @@ function mkdirReccursive(completePath) {
   });
 }
 
-// Items Pictures
-const folderPicturesItems = path.join(__dirname, staticFolders.relativePaths.fromApp, staticFolders.pictures, '/items');
+// Items & custom sized Pictures
+const folderPicturesItems = path.join(__dirname, foldersPaths.relativePaths.fromApp, foldersPaths.pictures, '/items');
 console.info(`Folder pictures items: ${folderPicturesItems}`);
 mkdirReccursive(folderPicturesItems);
 
-// Items Pictures Thumbnails - Not used anymore
-// const folderThumbnailsItems = path.join(__dirname, staticFolders.relativePaths.fromApp, staticFolders.thumbnails, '/items');
-// console.info(`Folder thumbnails Items: ${folderThumbnailsItems}`);
-// mkdirReccursive(folderThumbnailsItems);
+const folderCustomSizeImages = path.join(__dirname, foldersPaths.relativePaths.fromApp, foldersPaths.customSizeImages);
+console.info(`Folder custom size images: ${folderCustomSizeImages}`);
+mkdirReccursive(folderCustomSizeImages);
+
 
 
 

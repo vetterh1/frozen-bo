@@ -49,10 +49,6 @@ const itemSchema = new Schema({
   pictureName: {
     type: String,
     default: null
-  }  ,
-  thumbnailName: {
-    type: String,
-    default: null
   },
   removed: {
     type: Boolean,
@@ -88,7 +84,6 @@ itemSchema.methods = {
       expirationDate: this.expirationDate ? this.expirationDate.valueOf() : null,
       expirationInMonth: this.expirationInMonth,
       pictureName: this.pictureName,
-      thumbnailName: this.thumbnailName,
       removed: this.removed,
       createdAt: this.createdAt.valueOf(),
       updatedAt: this.updatedAt.valueOf()

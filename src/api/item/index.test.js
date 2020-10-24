@@ -52,7 +52,6 @@ beforeEach(async () => {
     details: "test1,test2",
     size: 6,
     pictureName: "picture-name",
-    thumbnailName: "thumbnail-name",
   });
 });
 
@@ -292,7 +291,7 @@ test("PUT /items/:id 404 (user)", async () => {
 test("PUT /items/:id/duplicate 200 (user)", async () => {
   const { status, body } = await request(app())
     .put(`${apiRoot}/${item.id}/duplicate`)
-    .send({ access_token: userSession, duplicated_picture_name: "new-picture", duplicated_thumbnail_name: "new-thumbnail" });
+    .send({ access_token: userSession, duplicated_picture_name: "new-picture" });
 
   // console.info('test - original item: ', item);
   // console.info('test - duplicated item: ', body);

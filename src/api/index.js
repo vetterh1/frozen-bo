@@ -4,6 +4,7 @@ import auth from './auth'
 import passwordReset from './password-reset'
 import home from './home'
 import item from './item'
+import customSizeImage from './customSizeImage'
 import characteristics from './characteristics'
 
 const router = new Router()
@@ -37,5 +38,6 @@ router.use('/password-resets', passwordReset)
 router.use('/homes', home)
 router.use('/items', item)
 router.use('/characteristics', characteristics)
+router.use('/custom-size-image', customSizeImage)
 
 export default router

@@ -21,7 +21,7 @@
 import path from 'path';
 import Jimp from 'jimp';
 // import klaw from 'klaw';
-// import { staticFolders } from '../config'
+// import { foldersPaths } from '../config'
 
 
 global.regenerateAllThumbnailsInfo = {
@@ -89,7 +89,7 @@ export function generateOneThumbnail(req, res) {
     res.status(400).json(error);
   } else {
 
-    const folderThumbnails = path.join(__dirname, staticFolderss.relativePaths.fromUtil, staticFolderss.thumbnails);
+    const folderThumbnails = path.join(__dirname, foldersPathss.relativePaths.fromUtil, foldersPathss.thumbnails);
 
     generateThumbnail(req.body.picturePath, folderThumbnails, null, (code, details) => {
       res.json({ code, details });
