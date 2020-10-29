@@ -132,15 +132,15 @@ echo "----------------------------------------------"
 echo " "
 echo " "
 echo " 3 -  download the archive by browsing this url & use 7zip..."
-echo "             https://frozengem.com/public-backup/db.tar.gz"
-echo "             https://frozengem.com/public-backup/files.tar.gz"
+echo "             https://frozengem.com/frozenbackup/db.tar.gz"
+echo "             https://frozengem.com/frozenbackup/files.tar.gz"
 echo " "
 echo " "
 cd $folder_root
 rm -fr tmp
 mkdir tmp
-curl -L -k https://frozengem.com/public-backup/db.tar.gz -o tmp/db.tar.gz
-curl -L -k https://frozengem.com/public-backup/files.tar.gz -o tmp/files.tar.gz
+curl -L -k https://frozengem.com/frozenbackup/db.tar.gz -o tmp/db.tar.gz
+curl -L -k https://frozengem.com/frozenbackup/files.tar.gz -o tmp/files.tar.gz
 #
 echo " "
 echo " "

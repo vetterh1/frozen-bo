@@ -9,8 +9,8 @@ echo -----------------------   Make backup downloadable from browser  ----------
 #       - Copy latest db and files from the backup folder to a folder publicly available through the FO server
 # 
 #       Results: they are available here:
-#       - https://frozengem.com/public-backup/files.tar.gz
-#       - https://frozengem.com/public-backup/db.tar.gz
+#       - https://frozengem.com/frozenbackup/files.tar.gz
+#       - https://frozengem.com/frozenbackup/db.tar.gz
 #
 #       Should put this script in crontab for automatic running
 #       but the running time should be after the backup time: 8, 18

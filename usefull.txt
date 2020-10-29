@@ -185,8 +185,8 @@ exit
 // Note: can be called directly with: mongo < mongo_drop_dev.js
 
 # 3 -  download the archive by browsing these urls
-https://frozengem.com/public-backup/db.tar.gz
-// Unix: wget https://frozengem.com/public-backup/db.tar.gz
+https://frozengem.com/frozenbackup/db.tar.gz
+// Unix: wget https://frozengem.com/frozenbackup/db.tar.gz
 
 # 4 - unzip the files
 // Unix: tar xvf frozen_prod_db.tar.gz
@@ -199,7 +199,7 @@ mongorestore -u 'frozen' -p 'gem' --authenticationDatabase "frozen" ___dump_fold
 ex: mongorestore -u 'frozen' -p 'gem' --authenticationDatabase "frozen" frozen_gem_dump_2019.08.20-06.00.01
 
 // 7 - Restore the files (images) 
-Download them here: https://frozengem.com/public-backup/files.tar.gz
+Download them here: https://frozengem.com/frozenbackup/files.tar.gz
 
 // 8 - Replace the frozen-bo static folder with the content of this zip file
 
