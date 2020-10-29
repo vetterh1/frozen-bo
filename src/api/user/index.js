@@ -7,7 +7,7 @@ import { schema } from './model'
 export User, { schema } from './model'
 
 const router = new Router()
-const { email, password, name, language, density, navigationStyle, detailsHelpCompleted, home, homeOrder, picture, role } = schema.tree
+const { email, password, name, language, density, navigationStyle, helpMessageSeen, home, homeOrder, picture, role } = schema.tree
 
 /**
  * @api {get} /users Retrieve users
@@ -81,7 +81,7 @@ router.post('/',
  * @apiParam {String} [name] User's name.
  * @apiParam {String} [language] User's language.
  * @apiParam {String} [navigationStyle] User's navigationStyle preference (0: bottom, 1: top, 2: float). Default is 0
- * @apiParam {String} [detailsHelpCompleted] Has user completed the help wizard in Details (default: false)
+ * @apiParam {String} [helpMessageSeen] Has user completed the help wizard in Details (default: false)
  * @apiParam {String} [home] User's home id .
  * @apiParam {Number} [homeOrder] User's home order (1: 1st user in this house, 2:...).
  * @apiParam {String} [picture] User's picture.
@@ -92,7 +92,7 @@ router.post('/',
  */
 router.put('/:id',
   token({ required: true }),
-  body({ name, language, density, navigationStyle, detailsHelpCompleted, home, homeOrder, picture }),
+  body({ name, language, density, navigationStyle, helpMessageSeen, home, homeOrder, picture }),
   update)
 
 

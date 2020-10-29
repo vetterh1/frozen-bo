@@ -39,7 +39,7 @@ const userSchema = new Schema({
     type: Number,
     default: 0
   },  
-  detailsHelpCompleted: {
+  helpMessageSeen: {
     type: Boolean,
     default: false
   },  
@@ -102,7 +102,7 @@ userSchema.pre('save', function (next) {
 userSchema.methods = {
   view (full) {
     let view = {}
-    let fields = ['id', 'name', 'email', 'language', 'density', 'navigationStyle', 'detailsHelpCompleted', 'home','homeOrder', 'nextIds']
+    let fields = ['id', 'name', 'email', 'language', 'density', 'navigationStyle', 'helpMessageSeen', 'home','homeOrder', 'nextIds']
 
     if (full) {
       fields = [...fields, 'picture', 'createdAt']

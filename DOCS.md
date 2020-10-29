@@ -1061,7 +1061,7 @@ PUT /users/:id
 | name | `String` | **optional**<p>User's name.</p> |
 | language | `String` | **optional**<p>User's language.</p> |
 | navigationStyle | `String` | **optional**<p>User's navigationStyle preference (0: bottom, 1: top, 2: float). Default is 0</p> |
-| detailsHelpCompleted | `String` | **optional**<p>Has user completed the help wizard in Details (default: false)</p> |
+| helpMessageSeen | `String` | **optional**<p>Has user completed the help wizard in Details (default: false)</p> |
 | home | `String` | **optional**<p>User's home id .</p> |
 | homeOrder | `Number` | **optional**<p>User's home order (1: 1st user in this house, 2:...).</p> |
 | picture | `String` | **optional**<p>User's picture.</p> |
