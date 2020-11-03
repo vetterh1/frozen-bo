@@ -98,8 +98,10 @@ export const GetCustomSizeImage = ({ params, query }, res, next) => {
 
 
 export const deleteRelatedCustomSizeImages = (filename) => {
+  if(!filename) return;
+  
   console.log("DeleteRelatedCustomSizeImages: ", filename);
-  const filenameWithoutExtension = filename.replace(/\.[^/.]+$/, "");
+  const filenameWithoutExtension = filename?.replace(/\.[^/.]+$/, "");
   const regexpSearch = new RegExp(`^${filenameWithoutExtension}`)
   const folderCustomSizeImage = path.join(
     __dirname, 

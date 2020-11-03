@@ -198,21 +198,19 @@ export const updateBinaryPicture = ({ body, file, user, headers }, res) => {
       // if(user.home !== item.home) return res.status(401).end()   <--- TODO  user is not passed as it's FORM-DATA and not form-urlencoded
 
       // Delete previon picture
-      if (item.pictureName !== file.originalname) {
+      if(item.pictureName && item.pictureName !== file.originalname) {
         const folderPictures = path.join(
           __dirname,
           foldersPaths.relativePaths.fromController,
           foldersPaths.pictures,
           "/items"
         );
-        const pictureName = item.pictureName
-          ? path.join(folderPictures, item.pictureName)
-          : null;
-        if (item.pictureName && fs.existsSync(pictureName))
-          fs.unlinkSync(pictureName);
+        const pictureFullPath = path.join(folderPictures, item.pictureName);
+        if(fs.existsSync(pictureFullPath))
+          fs.unlinkSync(pictureFullPath);
 
         // Delete all the custom size images (former thumbnails)
-        deleteRelatedCustomSizeImages(pictureName);
+        deleteRelatedCustomSizeImages(pictureFullPath);
 
       }
 
