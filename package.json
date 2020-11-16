@@ -5,7 +5,9 @@
   "private": true,
   "scripts": {
     "start": "node .",
+    "slow05s": "cross-env SLOW_MODE=500 node .",
     "slow1s": "cross-env SLOW_MODE=1000 node .",
+    "slow2s": "cross-env SLOW_MODE=2000 node .",
     "slow5s": "cross-env SLOW_MODE=5000 node .",
     "slow10s": "cross-env SLOW_MODE=10000 node .",
     "slow60s": "cross-env SLOW_MODE=60000 node .",
