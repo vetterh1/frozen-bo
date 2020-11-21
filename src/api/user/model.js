@@ -120,6 +120,7 @@ userSchema.methods = {
   }
 }
 
+// Note: Schema Statics are methods that can be invoked directly by a Model
 userSchema.statics = {
   roles,
 

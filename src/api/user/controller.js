@@ -4,10 +4,16 @@ import Home from '../home/model'
 import { sign } from '../../services/jwt'
 
 export const index = ({ querymen: { query, select, cursor } }, res, next) =>
-  User.find(query, select, cursor)
-    .then((users) => users.map((user) => user.view()))
+{
+  console.log(' ------------- >>>> users list <<<< ------------- : ');
+  return User.find(query, select, cursor)
+    .then((users) => {
+      users.map((user) => {console.log(' -------------', user.view())});
+      return users;
+    })
     .then(success(res))
     .catch(next)
+}
 
 export const show = ({ params }, res, next) =>
   User.findById(params.id)
@@ -17,7 +23,7 @@ export const show = ({ params }, res, next) =>
     .catch(next)
 
 export const showMe = ({ user }, res) => {
-  // console.log('user showMe:', user);
+  console.log(' ------------- >>>> user showMe:', user);
   if(user.language)
     user.language.toLowerCase();
   return res.json({ user: user.view(true) })

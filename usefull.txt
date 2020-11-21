@@ -69,6 +69,8 @@ curl -X GET http://0.0.0.0:9000/categories -i -d "access_token=TOKEN"
                 Mongo
 ---------------------------------------------------------------
 
+
+------------------ Mongo db preparation ------------------
 mongo
 use admin
 db.createUser({ user:"adminFrozen", pwd:"frozenPwd", roles:[{role:"root", db:"admin"}]})
@@ -83,6 +85,15 @@ db.createUser({ user:"adminFrozen", pwd:"pwdRoot", roles: ["dbAdmin"]})
 use frozen
 db.createUser({ user:"frozen", pwd:"gem", roles:["readWrite"] })
 db.createUser({ user:"adminFrozen", pwd:"pwdRoot", roles: ["dbAdmin"]})
+
+
+------------------ FrozenGem db manipulation ------------------
+
+# Update an existing FrozenGem user with admin rights:
+db.users.update({email: "admin@frozengem.com"}, { $set: { role:"admin" } }, {multi:false})
+
+# Delete user:
+db.users.remove({email: "admin@frozengem.com"})
 
 # Remove home info from ALL users:
 db.users.update({}, { $unset: { home:"", homeOrder:"" } }, {multi:true})
