@@ -1,0 +1,22 @@
+// Use here: https://next.json-generator.com/VyhvYOVcF
+
+{
+    products: [ 
+        {
+            'repeat(100, 100)': {        
+                    name: '{{lorem(3, "words")}}',
+                    price: '{{integer(1000, 400000)}}',
+                    short: '{{lorem(1, "sentences")}}',
+                    image: '/getmetafile/{{guid()}}/{{lorem(1, "words")}}-{{lorem(1, "words")}}-{{lorem(1, "words")}}-{{lorem(1, "words")}}-l-{{integer()}}-w-{{integer()}}-h-{{integer()}}-cm-?width={{integer()}}',
+                    public_status: '{{guid()}}',
+                    brand: '{{guid()}}',
+                    category: '{{guid()}}',
+                    budget_class: '{{guid()}}',
+                    collection: '{{guid()}}',
+                    style: '{{guid()}}',
+            }
+        }
+    ]
+}
+
+
