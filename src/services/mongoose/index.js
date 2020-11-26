@@ -102,7 +102,7 @@ const options = {
 
 
 /* istanbul ignore next */
-Object.keys(mongo.options).forEach((key) => {
+Object.keys(mongo.options || { }).forEach((key) => {
   mongoose.set(key, mongo.options[key])
 })
 
