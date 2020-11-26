@@ -105,7 +105,7 @@ userSchema.methods = {
     let fields = ['id', 'name', 'email', 'language', 'density', 'navigationStyle', 'helpMessageSeen', 'home','homeOrder', 'nextIds']
 
     if (full) {
-      fields = [...fields, 'picture', 'createdAt']
+      fields = [...fields, 'picture', 'createdAt', 'role']
     }
 
     fields.forEach((field) => { view[field] = this[field] })

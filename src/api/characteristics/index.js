@@ -14,7 +14,7 @@ const router = new Router()
  * @apiError 401 user access only.
  */
 router.get('/',
-  // token({ required: true }),
+  token({ required: true }),
   (b, res) => { success(res, 200)(itemCharacteristics); }  
 )
 

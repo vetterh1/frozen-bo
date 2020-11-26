@@ -1,12 +1,16 @@
 -------------  0 - TL;DR ---------------
 
 # PROD URL:
-https://food-maniac.com/frozenbo
+# FO:
+https://frozengem.com
+# BO:
+https://frozengem.com/frozenbo
 
 
-# Use app server (vps295100):
+# App server (vps295100):
 ssh lve@51.255.46.214
-(not db server vps494554: 51.254.221.25)
+# DB server (vps494554):
+ssh lve@51.254.221.25
 
 # Connect on mongo (from app or db server):
 
@@ -48,13 +52,15 @@ http-server ./build -p 5000 --cors
 
 Create user:
 curl -X POST http://0.0.0.0:9000/users -i -d "email=test@example.com&password=123456&access_token=S9EqDPByR2z5mnCMaRFk7b552RWaFcnn"
-curl -X POST http://51.254.221.25:8080/users -i -d "email=test@example.com&password=123456&access_token=S9EqDPByR2z5mnCMaRFk7b552RWaFcnn"
+curl -X POST https://frozengem.com/frozenbo/users -i -d "email=test@example.com&password=123456&access_token=S9EqDPByR2z5mnCMaRFk7b552RWaFcnn"
 curl -X POST http://0.0.0.0:9000/users -i -d "role=admin&email=admin@example.com&password=123456&access_token=S9EqDPByR2z5mnCMaRFk7b552RWaFcnn"
+curl -X POST https://frozengem.com/frozenbo/users -i -d "role=admin&email=admin@frozengem.com&password=123456&access_token=S9EqDPByR2z5mnCMaRFk7b552RWaFcnn"
 
 
 Login user:
 curl -X POST http://0.0.0.0:9000/auth -i -u 123@123.com:123456 -d "access_token=S9EqDPByR2z5mnCMaRFk7b552RWaFcnn"
 curl -X POST http://0.0.0.0:9000/auth -i -u test@example.com:123456 -d "access_token=S9EqDPByR2z5mnCMaRFk7b552RWaFcnn"
+
 
 See articles (not working):
 curl -X POST http://0.0.0.0:9000/articles -i -d "title=Awesome Article&content=Yeah Baby&access_token=S9EqDPByR2z5mnCMaRFk7b552RWaFcnn"
@@ -89,8 +95,9 @@ db.createUser({ user:"adminFrozen", pwd:"pwdRoot", roles: ["dbAdmin"]})
 
 ------------------ FrozenGem db manipulation ------------------
 
-# Update an existing FrozenGem user with admin rights:
-db.users.update({email: "admin@frozengem.com"}, { $set: { role:"admin" } }, {multi:false})
+# Update an existing FrozenGem user.
+# (!) does not work with rights! Use curl for this.
+db.users.update({email: "admin@frozengem.com"}, { $set: { language:"EN" } }, {multi:false})
 
 # Delete user:
 db.users.remove({email: "admin@frozengem.com"})
