@@ -16,7 +16,7 @@ const router = new Router()
  * @apiError 404 Item not found.
  */
 router.get('/:filename',
-  token({ required: true }),
+  // token({ required: true }),
   GetCustomSizeImage)
 
 
