@@ -71,7 +71,7 @@ passport.use('master', new BearerStrategy((token, done) => {
 
 export const password = () => (req, res, next) =>
   passport.authenticate('password', { session: false }, (err, user, info) => {
-    console.log('passport.password:', err, user, info);
+    // console.log('passport.password:', err, user, info);
     if (err && err.param) {
       return res.status(400).json(err)
     } else if (err || !user) {
