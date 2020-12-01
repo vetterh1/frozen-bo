@@ -11,7 +11,7 @@ db.homes.createIndex({id2:1}, {unique:true});
 -- db.items.createIndex({id:1}, {unique:true});
 db.items.dropIndex({id:1});
 db.items.dropIndex({code:1});
-db.items.createIndex({code:1}, {unique:true});
+db.items.createIndex({code:1}, {unique:false});
 db.items.createIndex({home:1}, {unique:false});
 db.items.createIndex({removed:1}, {unique:false});
 db.items.createIndex({home:1, removed:1}, {unique:false});
