@@ -3,7 +3,7 @@ import mongoose, { Schema } from 'mongoose'
 const itemSchema = new Schema({
   code: {
     type: String,
-    unique: true,
+    // unique: true,  <-- 2 items from different homes / users can have the same id
     index: true,
     required: true
   },
