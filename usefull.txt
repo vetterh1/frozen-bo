@@ -29,6 +29,19 @@ mongo 51.254.221.25:27017/frozen -u frozen -p gem --authenticationDatabase froze
 
 
 ---------------------------------------------------------------
+               New install
+---------------------------------------------------------------
+
+- PC only: install WSL
+- install node LTS, npm, mongo, mongodb
+- clone the 2 repos
+- install the ssl certifs in /etc/ssl/ (mac: /Users/lav/ssl/) from mail containing mongodb.pem
+- run the scripts in the mongo section below
+- get the data from prod by running frozen-bo/batch_manual__dev_machine__dev_restore_with_prod_data.sh (might need to create dev_backup or dump_db 1st)
+
+
+
+---------------------------------------------------------------
                 PROD utilities
 ---------------------------------------------------------------
 
