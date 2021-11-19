@@ -19,3 +19,4 @@ cassette
 /dump_files
 /dev_backup
 /custom-size-image
+package-lock.json

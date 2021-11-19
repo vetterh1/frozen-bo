@@ -18,7 +18,7 @@ if (process.env.NODE_ENV !== 'production') {
   //   path: path.join(__dirname, '../.env'),
   //   sample: path.join(__dirname, '../.env.example')
   // })
-  dotenv.config();
+  dotenv.config()
 }
 
 const config = {
@@ -38,11 +38,11 @@ const config = {
         useNewUrlParser: true,
         useFindAndModify: false,
         useCreateIndex: true,
-        useUnifiedTopology: true,
+        useUnifiedTopology: true
         // db: {  does not work with new mongoose version :/
         //   safe: true,
         // }
-      },   
+      }
     },
     foldersPaths: {
       static: '/static',
@@ -52,7 +52,7 @@ const config = {
         fromController: '../../..',
         fromExpress: '../../..',
         fromApp: '..',
-        fromUtil: '..',
+        fromUtil: '..'
       }
     }
   },
@@ -61,7 +61,7 @@ const config = {
       options: {
         debug: false
       }
-    }    
+    }
   },
   development: {
     mongo: {
@@ -73,11 +73,20 @@ const config = {
         debug: true
       },
       ssl: {
-        sslMode : false,
-        sslKeyPath : "/Users/lav/ssl/mongodb.pem",
-        sslCertPath : "/Users/lav/ssl/mongodb-cert.crt",
-   
-      }      
+        sslMode: false,
+        sslKeyPath: '/etc/ssl/mongodb.pem',
+        sslCertPath: '/etc/ssl/mongodb-cert.crt'
+      },
+      ssl_ubuntu: {
+        sslMode: false,
+        sslKeyPath: '/etc/ssl/mongodb.pem',
+        sslCertPath: '/etc/ssl/mongodb-cert.crt'
+      },
+      ssl_mac_save: {
+        sslMode: false,
+        sslKeyPath: '/Users/lav/ssl/mongodb.pem',
+        sslCertPath: '/Users/lav/ssl/mongodb-cert.crt'
+      }
     }
   },
   production: {
@@ -87,16 +96,15 @@ const config = {
       uri: 'mongodb://frozen:gem@51.254.221.25:27017/frozen',
       uriOld: process.env.MONGODB_URI || 'mongodb://localhost/frozen',
       ssl: {
-        sslMode : true,
-        sslKeyPath : "/etc/ssl/mongodb.pem",
-        sslCertPath : "/etc/ssl/mongodb-cert.crt",      
+        sslMode: true,
+        sslKeyPath: '/etc/ssl/mongodb.pem',
+        sslCertPath: '/etc/ssl/mongodb-cert.crt'
       }
     }
   }
 }
 
-
-console.log(`Config : ${stringifyOnce(config)}`);
+console.log(`Config : ${stringifyOnce(config)}`)
 
 module.exports = merge(config.all, config[config.all.env])
 export default module.exports

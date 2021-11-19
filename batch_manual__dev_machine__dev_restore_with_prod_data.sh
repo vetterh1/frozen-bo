@@ -151,6 +151,12 @@ echo " "
 echo " 4 - unzip the db"
 echo " "
 echo " "
+#
+echo "    cmds:"
+echo "        cd $folder_root/tmp"
+echo "        mkdir dump_db"
+echo "        tar xvf db.tar.gz -C dump_db"
+#
 cd $folder_root/tmp
 mkdir dump_db
 tar xvf db.tar.gz -C dump_db
@@ -165,9 +171,15 @@ echo " 5 - rename the db folder in the unzipped tree "
 echo "    to restore a prod db (frozen) in a dev db (frozen-dev): rename frozen folder in frozen-dev"
 echo " "
 echo " "
+#
 cd dump_db
 latest_folder_name=`ls -dftr1 * | tail -1`
-echo "        cd here: $latest_folder_name"
+#
+echo "    cmds:"
+echo "        cd dump_db"
+echo "        cd $latest_folder_name"
+echo "        mv frozen frozen-dev"
+#
 cd $latest_folder_name
 mv frozen frozen-dev
 #
@@ -180,9 +192,15 @@ echo " "
 echo " 6 - restore db:"
 echo " "
 echo " "
-cd $folder_root/tmp/dump_db
 mongorestore=mongorestore
-$mongo_root$mongorestore -u 'frozen' -p 'gem' --authenticationDatabase "frozen" $latest_folder_name
+#
+echo "    cmds:"
+echo "        cd $folder_root/tmp/dump_db"
+echo "        $mongo_root$mongorestore $latest_folder_name"
+#
+cd $folder_root/tmp/dump_db
+# old: $mongo_root$mongorestore -u 'frozen' -p 'gem' --authenticationDatabase "frozen" $latest_folder_name
+$mongo_root$mongorestore $latest_folder_name
 #
 echo " "
 echo " "

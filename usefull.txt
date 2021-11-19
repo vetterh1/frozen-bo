@@ -83,15 +83,17 @@ db.createUser({ user:"adminFrozen", pwd:"frozenPwd", roles:[{role:"root", db:"ad
 exit
 
 # Must create these users (admin & regular) for prod & dev dbs:
+mongo
 use admin
 db.getUsers()
 use frozen-dev
 db.createUser({ user:"frozen", pwd:"gem", roles:["readWrite"] })
 db.createUser({ user:"adminFrozen", pwd:"pwdRoot", roles: ["dbAdmin"]})
+db.test.insert({name:'init db'});
 use frozen
 db.createUser({ user:"frozen", pwd:"gem", roles:["readWrite"] })
 db.createUser({ user:"adminFrozen", pwd:"pwdRoot", roles: ["dbAdmin"]})
-
+db.test.insert({name:'init db'});
 
 ------------------ FrozenGem db manipulation ------------------
 
