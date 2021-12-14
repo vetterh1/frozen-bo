@@ -16,8 +16,7 @@ echo       - Cleans the backup folder from old files older than 15 days
 echo
 echo       Then put this script in APP server crontab for automatic running:
 echo "         # Create backup for DB content on the APP server "
-echo "         # (files backup is done through an equivalent command on the same APP server) "
-echo "         0 6,18 * * * /home/lve/cron_job__app_server__backup_frozengem_db.sh &>> /home/lve/cron_job__app_server__backup_frozengem_db.log "
+echo "         0 5,17 * * * /home/lve/cron_job__app_server__backup_frozengem_db.sh &>> /home/lve/cron_job__app_server__backup_frozengem_db.log "
 echo "         @reboot sleep 60 && /home/lve/cron_job__app_server__backup_frozengem_db.sh &>> /home/lve/cron_job__app_server__backup_frozengem_db.log "
 echo 
 echo ---------------------------- Prepares Backup ----------------------------

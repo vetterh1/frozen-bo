@@ -18,7 +18,6 @@ echo
 echo       Use keychain to get a password-less sFTP access with NO passphrase
 echo       Then put this script in APP server crontab for automatic running:
 echo "         # Create backup for content files on the APP server "
-echo "         # (db backup is done through an equivalent command on the DB server) "
 echo "         @reboot sleep 60 && /home/lve/cron_job__app_server__backup_frozengem_files.sh &>> /home/lve/cron_job__app_server__backup_frozengem_files.log "
 echo "         0 6,18 * * * /home/lve/cron_job__app_server__backup_frozengem_files.sh &>> /home/lve/cron_job__app_server__backup_frozengem_files.log "
 echo 
