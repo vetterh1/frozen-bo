@@ -1,35 +1,24 @@
-
-
-DEPRECATED : DB SERVER DOES NOT EXIST ANYMORE, REPLACED WITH ATLAS
-BACKUP IS NOW DONE FROM APP SERVER BY cron_job__app_server__backup_frozengem_db.sh
-
-
-
-
-
 #!/bin/bash
-# File name: cron_job__db_server__backup_frozengem_db.sh
+# File name: cron_job__app_server__backup_frozengem_db.sh
 
 echo 
 echo 
 echo 
 echo -----------------------   Frozen Gem DB Backup  -----------------------
 echo 
-echo       To be run from Mongo DB server 51.254.221.25
+echo       To be run from App server (or on Mac)
 echo 
 echo       Actions:
 echo       - Creates a dump folder
 echo       - Compresses this dump and timestamp it
 echo       - Moves it to a local backup folder
 echo       - Cleans the backup folder from old files older than 15 days
-echo       - Sends it to a remote server
 echo
-echo       Use keychain to get a password-less sFTP access with NO passphrase
-echo       Then put this script in DB server crontab for automatic running:
-echo "         # Create backup for DB content on the DB server "
-echo "         # (files backup is done through an equivalent command on the APP server) "
-echo "         0 6,18 * * * /home/lve/cron_job__db_server__backup_frozengem_db.sh &>> /home/lve/cron_job__db_server__backup_frozengem_db.log "
-echo "         @reboot sleep 60 && /home/lve/cron_job__db_server__backup_frozengem_db.sh &>> /home/lve/cron_job__db_server__backup_frozengem_db.log "
+echo       Then put this script in APP server crontab for automatic running:
+echo "         # Create backup for DB content on the APP server "
+echo "         # (files backup is done through an equivalent command on the same APP server) "
+echo "         0 6,18 * * * /home/lve/cron_job__app_server__backup_frozengem_db.sh &>> /home/lve/cron_job__app_server__backup_frozengem_db.log "
+echo "         @reboot sleep 60 && /home/lve/cron_job__app_server__backup_frozengem_db.sh &>> /home/lve/cron_job__app_server__backup_frozengem_db.log "
 echo 
 echo ---------------------------- Prepares Backup ----------------------------
 echo 
@@ -38,15 +27,8 @@ echo
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
 echo "Start DB Backup at $current_time"
 
-# DB variables 
-server_host=51.254.221.25:27017
-db=frozen
-user=frozen
-password=gem
-authenticationDatabase=admin
-
 # Folder Location
-folder_root=/home/lve
+folder_root=~
 
 # Backup & sFTP variables
 # (!) Delete backups older than 50 days (!)
@@ -72,7 +54,7 @@ echo ---------------------------- Runs Backup ----------------------------
 echo 
 echo 
 
-mongodump --uri "mongodb://$user:$password@$server_host/$db?ssl=true"  --out $dump_folder_complete_path --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
+mongodump --uri mongodb+srv://adminFrozen:frozenPwd@frozengemcluster.1uuuf.mongodb.net/frozen --forceTableScan --out $dump_folder_complete_path
 
 
 echo 
@@ -97,18 +79,6 @@ echo "List of files removed:"
 find $backup_folder_complete_path -type f -mtime +$delete_backups_older_than_this -name "$archive_base_name*.gz"
 find $backup_folder_complete_path -type f -mtime +$delete_backups_older_than_this -name "$archive_base_name*.gz" -delete
 
-
-echo 
-echo 
-echo ---------------------------- sFTP to App server ----------------------------
-echo 
-echo 
-
-# Use keychain to avoid interactive input of password for sFTP
-/usr/bin/keychain $HOME/.ssh/id_rsa_nophrase
-source $HOME/.keychain/$HOSTNAME-sh
-
-echo put $archive_complete_path | sftp -b- $sftp_user@$sftp_host:./$remote_backup_folder
 
 current_end_time=$(date "+%Y.%m.%d-%H.%M.%S")
 echo "End DB Backup at $current_end_time"

@@ -10,29 +10,8 @@ https://frozengem.com/frozenbo
 # App server (vps295100):
 ssh lve@51.255.46.214
 
-
-_________________________________________________________________________
-______________                OLD DB SERVER              ________________
-
-# DB server (vps494554):
-ssh lve@51.254.221.25
-
-# Connect on mongo (from app or db server):
-
-# as admin from server:
-mongo 51.254.221.25:27017/admin -u adminFrozen -p frozenPwd --authenticationDatabase admin --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
-# as admin from mac:
-mongo 51.254.221.25:27017/admin -u adminFrozen -p frozenPwd --authenticationDatabase admin --ssl --sslPEMKeyFile /Users/lav/ssl/mongodb.pem --sslCAFile /Users/lav/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
-
-# as regular user (dev & prod) from SERVER:
-# when used remote dev db: mongo 51.254.221.25:27017/frozen-dev -u frozen -p gem --authenticationDatabase frozen-dev --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
-mongo 51.254.221.25:27017/frozen -u frozen -p gem --authenticationDatabase frozen --ssl --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
-
-# as regular user (dev & prod) from MAC:
-# when used remote dev db: mongo 51.254.221.25:27017/frozen-dev -u frozen -p gem --authenticationDatabase frozen-dev --ssl --sslPEMKeyFile /Users/lav/ssl/mongodb.pem --sslCAFile /Users/lav/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
-mongo 51.254.221.25:27017/frozen -u frozen -p gem --authenticationDatabase frozen --ssl --sslPEMKeyFile /Users/lav/ssl/mongodb.pem --sslCAFile /Users/lav/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
-_________________________________________________________________________
-
+# DB: mongo DB hosted on AWS (free Atlas plan)
+mongosh "mongodb+srv://frozengemcluster.1uuuf.mongodb.net/frozen" -u adminFrozen -p frozenPwd    
 
 
 
@@ -44,7 +23,6 @@ _________________________________________________________________________
 - PC only: install WSL
 - install node LTS, npm, mongo, mongodb
 - clone the 2 repos
-- install the ssl certifs in /etc/ssl/ (mac: /Users/lav/ssl/) from mail containing mongodb.pem
 - run the scripts in the mongo section below
 - get the data from prod by running frozen-bo/batch_manual__dev_machine__dev_restore_with_prod_data.sh (might need to create dev_backup or dump_db 1st)
 
@@ -158,54 +136,19 @@ db.items.find({"home": "h7j8tqh4L", "removed": false}).count()
 
 
 # ----------------------- Manual backup: ----------------------- 
-
-# From app server
-mongodump --uri "mongodb://frozen:gem@51.254.221.25:27017/frozen?ssl=true" --sslPEMKeyFile /etc/ssl/mongodb.pem --sslCAFile /etc/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
-# From mac
-mongodump --uri "mongodb://frozen:gem@51.254.221.25:27017/frozen?ssl=true" --sslPEMKeyFile /Users/lav/ssl/mongodb.pem --sslCAFile /Users/lav/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
+mongodump --uri mongodb+srv://adminFrozen:frozenPwd@frozengemcluster.1uuuf.mongodb.net/frozen --forceTableScan
 
 
 # ----------------------- Automatic backup: ----------------------- 
-#  (adapted from foodmaniac backup):
-
-# ------------ DB ------------ 
-# (!) backup_frozengem_db.sh script deals with backup & sends result from db server to app server
-# uses keychain (see instructions below)
-
-# ------------  Files (images) ------------ 
-# (!) backup_frozengem_files.sh script deals with backup on app server
+# (!) DB: cron_job__app_server__backup_frozengem_db.sh script deals with backup from atlas db from the app server
+# (!) Files: cron_job__app_server__backup_frozengem_files.sh script deals with backup on app server
 
 # ------------ Crontab instructions ------------
 # list: crontab -l
 # edit: crontab -e
-# ----- DB server -----
-# Add the following 2 lines for a backup twice a day + after every reboot
-0 6,18 * * * /home/lve/backup_frozengem_db.sh &>> /home/lve/backup_frozengem_db.log
-@reboot sleep 60 && /home/lve/backup_frozengem_db.sh &>> /home/lve/backup_frozengem_db.log
-# ----- File server -----
-# Add the following 2 lines for a backup twice a day + after every reboot
-0 6,18 * * * /home/lve/backup_frozengem_files.sh &>> /home/lve/backup_frozengem_files.log
-@reboot sleep 60 && /home/lve/backup_frozengem_files.sh &>> /home/lve/backup_frozengem_files.log
+# See in the scripts what to put in cron
 
-# ------------  Keychain instructions ------------ 
-# Install keychain on db server to use sftp w/out password to send backup to other machine
-# see https://www.cyberciti.biz/faq/ssh-passwordless-login-with-keychain-for-scripts/
-# or better: https://discussions.apple.com/thread/6859137
-sudo apt-get install keychain
-ssh-keygen -t rsa
-(NO passphrase so it runs in crontab)
-add this to user .profile (or .bash_profile if it exists):
-### START-Keychain ###
-# Let  re-use ssh-agent and/or gpg-agent between logins
-/usr/bin/keychain $HOME/.ssh/id_rsa_nophrase
-source $HOME/.keychain/$HOSTNAME-sh
-### End-Keychain ###
 
-# Add the generated public key to all the systems you want to use w/out pwd.
-echo put /home/lve/.ssh/id_rsa_nophrase.pub | sftp -b- lve@51.255.46.214
-
-# it should be added to the .ssh/authorized_keys
-cat id_rsa_nophrase.pub >>$HOME/.ssh/authorized_keys
 
 
 // ------ Restore (prod) dump in DEV db--------
@@ -214,8 +157,8 @@ cat id_rsa_nophrase.pub >>$HOME/.ssh/authorized_keys
 //
 
 # 1 - save DEV db
-// distant:
-todo
+// distant (in ./dump folder):
+mongodump --uri mongodb+srv://adminFrozen:frozenPwd@frozengemcluster.1uuuf.mongodb.net/frozen-dev --forceTableScan
 // localhost:
 mongodump --uri "mongodb://localhost:27017/frozen-dev"  --out ~/dev_backup
 
@@ -237,8 +180,7 @@ https://frozengem.com/frozenbackup/db.tar.gz
 // ex to restore a prod db (frozen) in a dev db (frozen-dev): rename frozen folder in frozen-dev
 
 // 6 - restore db
-mongorestore -u 'frozen' -p 'gem' --authenticationDatabase "frozen" ___dump_folder_containing_the_collection_folder_that_contains_the_json_files___
-ex: mongorestore -u 'frozen' -p 'gem' --authenticationDatabase "frozen" frozen_gem_dump_2019.08.20-06.00.01
+use mongorestore using the Atlas "Connect" help
 
 // 7 - Restore the files (images) 
 Download them here: https://frozengem.com/frozenbackup/files.tar.gz
@@ -406,7 +348,7 @@ Instead:
                             ubuntu
 ---------------------------------------------------------------
 
-Version: 16.04
+Version: 20
 Note: get version with: lsb_release -a
 
 Update:
