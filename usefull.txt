@@ -9,6 +9,11 @@ https://frozengem.com/frozenbo
 
 # App server (vps295100):
 ssh lve@51.255.46.214
+
+
+_________________________________________________________________________
+______________                OLD DB SERVER              ________________
+
 # DB server (vps494554):
 ssh lve@51.254.221.25
 
@@ -26,6 +31,10 @@ mongo 51.254.221.25:27017/frozen -u frozen -p gem --authenticationDatabase froze
 # as regular user (dev & prod) from MAC:
 # when used remote dev db: mongo 51.254.221.25:27017/frozen-dev -u frozen -p gem --authenticationDatabase frozen-dev --ssl --sslPEMKeyFile /Users/lav/ssl/mongodb.pem --sslCAFile /Users/lav/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
 mongo 51.254.221.25:27017/frozen -u frozen -p gem --authenticationDatabase frozen --ssl --sslPEMKeyFile /Users/lav/ssl/mongodb.pem --sslCAFile /Users/lav/ssl/mongodb-cert.crt --sslAllowInvalidHostnames
+_________________________________________________________________________
+
+
+
 
 
 ---------------------------------------------------------------
